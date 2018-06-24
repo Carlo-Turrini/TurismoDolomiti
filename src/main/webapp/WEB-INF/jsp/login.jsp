@@ -16,10 +16,8 @@
 			::placeholder {
 				color: white;
 			}
-			.container {
-				position: absolute;
-				top: 200px;
-				left: 200px;
+			.container.myContainer {
+				margin-top:170px;
 			}
 			* {
 			  margin: 0;
@@ -120,10 +118,10 @@
 			
 			
 		</style>
-		<title>Insert title here</title>
+		<title>Turismo Dolomiti</title>
 	</head>
 	<body>
-		<div class="container">
+		<div class="container myContainer">
 			<div class="row">
 				<div class="col-md-15">
 					<div class="wrap">

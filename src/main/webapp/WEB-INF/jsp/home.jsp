@@ -17,22 +17,39 @@
 		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<style>
+			footer {
+				margin-left:auto;
+				margin-right:auto;
+				margin-top: 20px;
+			  	padding:20px 40px;
+			  	border-top: 1px solid #d4d4d4;
+				text-align:right;
+				font-size:11px;
+				background-color:white;
+				max-width: 1219px;
+			}
+			
+			footer a{
+			  	text-decoration:none;
+			  	color:#5E5956;
+			}
+			
+			footer #privacy {
+			  	float:right;
+			}
 			* {
-			  margin: 0;
-			  padding: 0;
+			  	margin: 0;
+			  	padding: 0;
 			}
 			.container {
 				position:absolute;
 				right:0px;
 			}
-			.col-sm-1.log {
-				position:absolute;
-				right:0px;
+			.log {
+				
+				padding-right:10px;
 			}
-			.col-sm-1.profile {
-				position:absolute;
-				right:45px;
-			}
+
 			body {
 				margin-top: 0;
 				padding-top: 0;
@@ -42,15 +59,14 @@
 			.home {
 				position: relative;
 				margin-top: 0;
-				max-width: 1400px;
-				height: 450px;
+				max-width: 1219px;
+				height: 400px;
 				margin-left: auto;
 				margin-right: auto;
 				text-align: center;
 				background-image: url("/sfondo1.jpg");
 				background-repeat: no-repeat;
-				background-attachment: fixed;
-				background-size: contain;
+				background-size: cover;
 				margin-bottom: 20px;
 				border-radius: 5px;
 				
@@ -73,7 +89,7 @@
 				
 			}
 			.title > pre {
-				font-size: 150%;
+				font-size: 120%;
 				font-style: italic;
 				font-family: "Bahnschrift Light Condensed", Bahnschrift, serif;			
 				}
@@ -88,8 +104,7 @@
 				
 			}
 			.card {
-				max-height: 250px;
-				max-width: 
+				max-height: 230px;
 			}
 			.card-img-top {
 				object-fit: cover;
@@ -109,7 +124,7 @@
 			
 
 		</style>
-		
+		<title> Turismo Dolomiti </title>
 		
 	</head>
 	<body>
@@ -182,6 +197,6 @@ le volte di porpora scintillanti ti stelle."
 			<% } %>
 			<%  } %>
 		</div>
-
+		<%@ include file="/include/footer.txt" %>
 	</body>
 </html>

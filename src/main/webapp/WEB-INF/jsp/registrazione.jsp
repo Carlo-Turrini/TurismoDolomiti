@@ -15,7 +15,7 @@
 				color: white;
 			}
 			.row.reg {
-				margin-top: 70px;
+				margin-top: 50px;
 			}
 			* {
 			  margin: 0;
@@ -142,11 +142,11 @@
 				 		
 				 		<div class="form-check form-check-inline">
 					 	<springForm:radiobutton cssClass="form-check-input" name="SessoOptions" id="inline1" value="M" path="sesso"/>
-					  	<label class="form-check-label" for="inline1">Maschio</label>
+					  	<label class="form-check-label" for="inline1">Uomo</label>
 						</div>
 						<div class="form-check form-check-inline">
 					  	<springForm:radiobutton cssClass="form-check-input" name="SessoOptions" id="inline2" value="F" path="sesso"/>
-					  	<label class="form-check-label" for="inline2">Femmina</label>
+					  	<label class="form-check-label" for="inline2">Donna</label>
 						</div>
 						<springForm:errors path="sesso" cssClass="error"/>
 				 	</div>

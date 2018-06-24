@@ -145,6 +145,12 @@ public class UtenteManagementController {
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaEsistenzaUtente(idUtente, request)) {
 				Utente utente = utenteRepo.getOne(idUtente);
+				if(utente.getCredenziali().compareTo(CredenzialiUtente.GestoreRifugio)>=0) {
+					if(verificaService.verificaUtenteGestore(idUtente, request)) {
+						request.setAttribute("gestore", true);
+					}
+					else request.setAttribute("gestore", false);
+				}
 				request.setAttribute("utente", utente);
 				request.setAttribute("logged", loggedUser!= null);
 				request.setAttribute("loggedUser", loggedUser);
@@ -332,8 +338,18 @@ public class UtenteManagementController {
 							utente.setDescrizione(utenteForm.getDescrizione());
 							utente.setSesso(utenteForm.getSesso());
 							utente.setTel(utenteForm.getTel());
-							if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) 
+							if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
+								CredenzialiUtente vecchieCred = utente.getCredenziali();
+								CredenzialiUtente nuoveCred = utenteForm.getCredenziali();
+								if((vecchieCred.equals(CredenzialiUtente.GestoreRifugio) || vecchieCred.equals(CredenzialiUtente.Admin)) && nuoveCred.equals(CredenzialiUtente.Normale)) {
+									List<Possiede> rifGestiti = utente.getRifGestiti();
+									for(Possiede poss : rifGestiti) {
+										possRepo.delete(poss);
+									}
+								}
 								utente.setCredenziali(utenteForm.getCredenziali());
+								
+							}
 							utenteRepo.save(utente);
 							return "redirect:/profilo/" + idUtente + "/modifica";
 						}

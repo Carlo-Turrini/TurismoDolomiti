@@ -8,6 +8,7 @@ import javax.validation.constraints.Email;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Where;
 
+import com.student.project.TurismoDolomiti.constants.Constants;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -59,9 +60,9 @@ public class Utente implements Serializable {
 	private CredenzialiUtente credenziali = CredenzialiUtente.Normale;
 	
 	
-	@ColumnDefault("'SET_DEFAULT_ICON_PATH'")
+	@ColumnDefault("'/profiledefault.png'")
 	@Column(length = 128, name = "profile_photo_path")
-	private String profilePhotoPath = "SET_DEFAULT_ICON_PATH";
+	private String profilePhotoPath = Constants.profileDef;
 	
 	@Column(length = 2048)
 	private String descrizione;

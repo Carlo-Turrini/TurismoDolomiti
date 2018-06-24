@@ -1,34 +1,29 @@
 <div class="container">
-	<div class="row">
-		<div class="col-sm-1 log">
+	<div class="row justify-content-end">
+		<div class="log btn-group" role="group">
 			<% if(logged) { %>
+				
 				<a class="logLink" href="/logout">
 					<span class="fa-stack fa-lg">
 						<i class="fa fa-circle fa-stack-2x"></i>
 						<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>
 					</span>
 				</a>
-				
-			<% }
-			else { %>
-				<a class="logLink" href="/login"> 
-					<span class="fa-stack fa-lg">
-						<i class="fa fa-circle fa-stack-2x"></i>
-						<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>
-					</span>
-				</a>
-			<% } %>
-		</div>
-		
-		<% if(logged) { %>
-			<div class="col-sm-1 profile">
-				<a class=profileLink" href="/profilo/${loggedUser.getIdUtente()}">
+				<a class="profileLink" href="/profilo/${loggedUser.getIdUtente()}">
 					<span class="fa-stack fa-lg">
 						<i class="fa fa-circle fa-stack-2x"></i>
 						<i class="fa fa-user fa-stack-1x fa-inverse"></i>
 					</span>
 				</a>
-			</div>
-		<% }%>
+			<% }
+			else { %>
+				<a class="logLink" href="/login"> 
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-sign-in fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			<% } %>
+		</div>
 	</div>
 </div>

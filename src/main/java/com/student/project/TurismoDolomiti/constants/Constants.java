@@ -16,5 +16,6 @@ public class Constants {
 	public static final String DEF_ICONA_RIF = "";
 	public static final String DEF_ICONA_ESC = "";
 	public static final UUID nilUUID = new UUID(0L, 0L);
+	public static final String profileDef = "/profiledefault.png";
 	
 }

@@ -1,0 +1,67 @@
+<header>
+
+		<div class="row justify-content-between header-sfondo">
+			<div class="col-md-10">
+				<h1 class="title-header"> Turismo Dolomiti </h1>
+			</div>
+			<div class="log btn-group" role="group">
+				<% if(logged) { %>
+					
+					<a class="logLink" href="/logout">
+						<span class="fa-stack fa-lg">
+							<i class="fa fa-circle fa-stack-2x"></i>
+							<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>
+						</span>
+					</a>
+					<a class="profileLink" href="/profilo/${loggedUser.getIdUtente()}">
+						<span class="fa-stack fa-lg">
+							<i class="fa fa-circle fa-stack-2x"></i>
+							<i class="fa fa-user fa-stack-1x fa-inverse"></i>
+						</span>
+					</a>
+					
+				<% }
+				else { %>
+					<a class="logLink" href="/login"> 
+						<span class="fa-stack fa-lg">
+							<i class="fa fa-circle fa-stack-2x"></i>
+							<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>
+						</span>
+					</a>
+				<% } %>
+			</div>	
+		</div>
+		<div class="row justify-content-center">
+			<ul class="nav">
+				<li class="nav-item">
+			    	<a class="nav-link" href="/home">
+						<i class="fa fa-home fa-lg"></i>
+					</a>
+			  	</li>
+			  	<li class="nav-item">
+			    	<a class="nav-link" href="/elencoEscursioni">Escursioni</a>
+		  		</li>
+			  	<li class="nav-item">
+			    	<a class="nav-link" href="/elencoRifugi">Rifugi</a>
+		  		</li>
+		  		<% if(logged) { %>
+				  	<li class="nav-item">
+				    	<a class="nav-link" href="/leMiePrenotazioni">Le mie prenotazioni</a>
+			  		</li>
+			  		<% if(loggedUser.getCredenziali().compareTo(CredenzialiUtente.GestoreRifugio)>=0) { %>
+				  		<li class="nav-item">
+					    	<a class="nav-link" href="/profilo/${loggedUser.getIdUtente()}/elencoRifugiGestiti">I miei rifugi</a>
+				  		</li>
+			  		<% } %>
+			  		<% if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) { %>
+			  			<li class="nav-item">
+					    	<a class="nav-link" href="/elencoEscursioniDaCompletare">Escursioni incomplete</a>
+				  		</li>
+			  		<% } %>
+		  		<% } %>
+		  		
+			</ul>
+			
+		</div>
+		<hr class="divisoreNav"></hr>
+</header>
