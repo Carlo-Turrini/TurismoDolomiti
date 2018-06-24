@@ -3,13 +3,13 @@
 		<div class="log btn-group" role="group">
 			<% if(logged) { %>
 				
-				<a class="logLink" href="/logout">
+				<a class="logLink" href="/logout" title="logout">
 					<span class="fa-stack fa-lg">
 						<i class="fa fa-circle fa-stack-2x"></i>
 						<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>
 					</span>
 				</a>
-				<a class="profileLink" href="/profilo/${loggedUser.getIdUtente()}">
+				<a class="profileLink" href="/profilo/${loggedUser.getIdUtente()}" title="profilo">
 					<span class="fa-stack fa-lg">
 						<i class="fa fa-circle fa-stack-2x"></i>
 						<i class="fa fa-user fa-stack-1x fa-inverse"></i>
@@ -17,7 +17,7 @@
 				</a>
 			<% }
 			else { %>
-				<a class="logLink" href="/login"> 
+				<a class="logLink" href="/login" title="login"> 
 					<span class="fa-stack fa-lg">
 						<i class="fa fa-circle fa-stack-2x"></i>
 						<i class="fa fa-sign-in fa-stack-1x fa-inverse"></i>

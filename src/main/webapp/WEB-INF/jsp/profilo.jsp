@@ -100,6 +100,12 @@
 				
 				padding-right:10px;
 			}
+			.lead {
+				margin-bottom:1px;
+			}
+			.display-4 {
+				font-size:2.5rem;
+			}
 		</style>
 		<script type="text/javascript" src="/webjars/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -115,8 +121,12 @@
 				</div>
 				<div class="col-md-6">
 					<h1 class="display-4">${utente.getNome()} ${utente.getCognome()}</h1>
-					
-					<p class="lead text-muted"><%=credenziali%></p>
+					<p class="lead"><%=credenziali%></p>
+					<p class="lead">Data di nascita: ${utente.getDataNascita().toString()} </p>
+					<p class="lead">Sesso: <%=sesso%></p>
+					<p class="lead">Email: ${utente.getEmail()} </p>
+					<p class="lead">Telefono: ${utente.getTel()} </p>
+					<p class="lead">Descrizione: ${utente.getDescrizione()}</p>
 				</div>
 				<% if(logged && (loggedUser.getIdUtente() == utente.getId() || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))){ %>
 				<div class="col-md-1 btn-group" role="group">
@@ -134,25 +144,16 @@
 		  					</div>
 						</div>
 					</div>
-				</div>
-				<% } %>
-			</div>
-			<div class="row">
-				<div class="col">
-					<p class="lead">Data di nascita: ${utente.getDataNascita().toString()} </p>
-					<p class="lead">Sesso: <%=sesso%></p>
-					<p class="lead">Email: ${utente.getEmail()} </p>
-					<p class="lead">Telefono: ${utente.getTel()} </p>
-					<p class="lead">Descrizione: ${utente.getDescrizione()}</p>
 					<%if(gestore != null && utente.getCredenziali().compareTo(CredenzialiUtente.GestoreRifugio)>=0 ) {
-						if(gestore || (!gestore && (logged && (loggedUser.getIdUtente() == utente.getId()|| loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))))) {
+						if(gestore || (!gestore && loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))) {
 					%>
-						<a class="btn btn-secondary" href="/profilo/${utente.getId()}/elencoRifugiGestiti">I rifugi che gestisco</a>
+						<a class="btn btn-light" href="/profilo/${utente.getId()}/elencoRifugiGestiti">I miei rifugi</a>
 					<%
 						}
 					}
 					%>
 				</div>
+				<% } %>
 			</div>
 		</div>
 		<%@ include file="/include/footer.txt" %>

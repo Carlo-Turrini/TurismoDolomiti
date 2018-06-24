@@ -220,20 +220,26 @@ public class RifugioManagementController {
 			session.initSession(request, response);
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
-			if(verificaService.verificaEsistenzaUtente(idUtente, request) && verificaService.verificaUtenteGestore(idUtente, request)) {
-				List<RifugioCardDto> rifPosseduti = rifRepo.elencoRifugiPosseduti(idUtente);
-				if(rifPosseduti.isEmpty()) {
-					request.setAttribute("messaggio", "Non possiede rifugi!");
+			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
+				if(loggedUser.getIdUtente() == idUtente || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
+					List<RifugioCardDto> rifPosseduti = rifRepo.elencoRifugiPosseduti(idUtente);
+					if(rifPosseduti.isEmpty()) {
+						request.setAttribute("messaggio", "Non possiede rifugi!");
+					}
+					else request.setAttribute("rifPosseduti", rifPosseduti);
+					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
+						List<RifugioNomeIdDTO> nomiIdRifugi = rifRepo.findRifugioNomeAndId();
+						request.setAttribute("nomiRifugi", nomiIdRifugi);
+					}
+					request.setAttribute("logged", loggedUser != null);
+					request.setAttribute("loggedUser", loggedUser);
+					return "elencoRifugiGestiti";
+				
 				}
-				else request.setAttribute("rifPosseduti", rifPosseduti);
-				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
-					List<RifugioNomeIdDTO> nomiIdRifugi = rifRepo.findRifugioNomeAndId();
-					request.setAttribute("nomiRifugi", nomiIdRifugi);
+				else {
+					request.setAttribute("redirectUrl", "/home");
+					throw new ApplicationException("Credenziali insufficienti per accedere a questa pagina!");
 				}
-				request.setAttribute("logged", loggedUser != null);
-				request.setAttribute("loggedUser", loggedUser);
-				return "elencoRifugiGestiti";
-			
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
 		}
