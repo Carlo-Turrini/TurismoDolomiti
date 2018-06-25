@@ -51,8 +51,8 @@ public class Utente implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Sesso sesso;
 	
-	@Column
-	private Integer tel;
+	@Column(length = 10)
+	private String tel;
 	
 	@Enumerated(EnumType.STRING)
 	@ColumnDefault("'Normale'")
@@ -130,10 +130,10 @@ public class Utente implements Serializable {
 	public void setSesso(Sesso sesso) {
 		this.sesso=sesso;
 	}
-	public Integer getTel() {
+	public String getTel() {
 		return this.tel;
 	}
-	public void setTel(Integer tel) {
+	public void setTel(String tel) {
 		this.tel = tel;
 	}
 	public String getDescrizione() {

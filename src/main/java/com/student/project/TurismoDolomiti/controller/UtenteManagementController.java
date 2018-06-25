@@ -234,6 +234,7 @@ public class UtenteManagementController {
 						utente.setPassword(regForm.getPassword());
 						utente.setSesso(regForm.getSesso());
 						utenteRepo.save(utente);
+
 						return "redirect:/login";
 					}
 				}
@@ -280,6 +281,9 @@ public class UtenteManagementController {
 				request.setAttribute("idUtente", utente.getId());
 				request.setAttribute("logged", loggedUser != null);
 				request.setAttribute("loggedUser", loggedUser);
+				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
+					request.setAttribute("credUt", CredenzialiUtente.values());
+				}
 				return "modificaProfilo";
 				}
 				else throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -381,6 +385,7 @@ public class UtenteManagementController {
 							throw new ApplicationException((String) request.getAttribute("messaggio"));
 						}
 					}
+					request.setAttribute("idUtente", idUtente);
 					String fotoPath = utenteRepo.findProfilePhotoPath(idUtente);
 					request.setAttribute("fotoPath", fotoPath);
 					request.setAttribute("logged", loggedUser != null);
@@ -423,7 +428,7 @@ public class UtenteManagementController {
 					if(!fotoProfilo.isEmpty()) {
 						Utente utente = utenteRepo.getOne(idUtente);
 						String filename = null;
-						if(utente.getProfilePhotoPath().equals(Constants.DEF_ICONA_UTENTE)) {
+						if(utente.getProfilePhotoPath().equals(Constants.profileDef)) {
 							filename = uploadService.store(fotoProfilo, TipologiaFile.IconaUtente, null);
 						}
 						else {
@@ -453,7 +458,7 @@ public class UtenteManagementController {
 	
 	@RequestMapping("/profilo/{id}/modifica/foto/cancella")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String cancellaFotoProfilo(Long idUtente, HttpServletRequest request, HttpServletResponse response) {
+	public String cancellaFotoProfilo(@PathVariable("id") Long idUtente, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -464,7 +469,7 @@ public class UtenteManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Normale)) {
-				if(loggedUser.getIdUtente() == idUtente || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
+				if((loggedUser.getIdUtente() == idUtente) || (loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))) {
 					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) && loggedUser.getIdUtente() != idUtente) {
 						if(!verificaService.verificaEsistenzaUtente(idUtente, request)) {
 							throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -472,8 +477,8 @@ public class UtenteManagementController {
 					}
 					Utente utente = utenteRepo.getOne(idUtente);
 					String fotoProfilo = utente.getProfilePhotoPath();
-					if(!fotoProfilo.equals(Constants.DEF_ICONA_UTENTE)) {
-						utente.setProfilePhotoPath(Constants.DEF_ICONA_UTENTE);
+					if(!fotoProfilo.equals(Constants.profileDef)) {
+						utente.setProfilePhotoPath(Constants.profileDef);
 						utenteRepo.save(utente);
 						Path fotoProfiloPath = Paths.get(Constants.ICONA_UTENTE_DIR, fotoProfilo);
 						Files.delete(fotoProfiloPath);
@@ -482,7 +487,7 @@ public class UtenteManagementController {
 				}
 				else {
 					request.setAttribute("redirectUrl", "/home");
-					throw new ApplicationException("Accesso a cancella foto profilo negato");
+					throw new ApplicationException("Accesso a cancella foto profilo negato ");
 				}
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));

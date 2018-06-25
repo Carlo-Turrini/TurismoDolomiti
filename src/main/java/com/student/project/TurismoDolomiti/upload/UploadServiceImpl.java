@@ -1,6 +1,7 @@
 package com.student.project.TurismoDolomiti.upload;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -30,16 +31,18 @@ public class UploadServiceImpl implements UploadService {
 	               // This is a security check
 	               throw new StorageException(
 	                       "Non posso salvare un file con un path relativo al di fuori di questa cartella "
-	                               + filename);
+	                               + uploadedFilename);
 	           }
 	               String dir = null;
 	               String nomeFile = null;
-	               String fileExt = StringUtils.getFilenameExtension(filename);
+	               String oldFile = null;
+	               String oldExt = null;
+	               String fileExt = StringUtils.getFilenameExtension(uploadedFilename);
 	               if(tipologia.equals(TipologiaFile.Gpx)) {
 	            	   if(fileExt.equals("gpx")) {
 	            		   dir = Constants.GPX_DIR;
 	            	   }
-	            	   else throw new StorageException("Estensione del file non valida" + filename);
+	            	   else throw new StorageException("Estensione del file non valida" + uploadedFilename);
 	               }
 	               else {
 	            	   if(EnumUtils.isValidEnum(FotoFileExtensionSupported.class, fileExt)) {
@@ -56,7 +59,7 @@ public class UploadServiceImpl implements UploadService {
 	            			   dir = Constants.ICONA_ESC_RIF_DIR;
 	            		   }   
 	            	   }
-	            	   else throw new StorageException("Estensione del file non valida" + filename);
+	            	   else throw new StorageException("Estensione del file non valida" + uploadedFilename);
 	               }
 	               if(! new File(dir).exists())
 	               {
@@ -64,15 +67,20 @@ public class UploadServiceImpl implements UploadService {
 	               }
 	               if(filename == null ) {
 	            	   UUID IdFile = UUID.randomUUID();
-	            	   nomeFile = IdFile + "." +  fileExt;
+	            	   nomeFile = "/" + IdFile + "." +  fileExt;
 	               }
 	               else {
-	            	   filename = StringUtils.stripFilenameExtension(filename);
+	            	   oldExt = StringUtils.getFilenameExtension(filename);
+	            	   oldFile = StringUtils.stripFilenameExtension(filename);
 	            	   nomeFile = filename + "." + fileExt;
 	               }
 	               String filePath = dir + nomeFile;
 	               File dest = new File(filePath);
 	               file.transferTo(dest);
+	               if(filename != null && !oldExt.equals(fileExt)) {
+	            	   Path oldFilePath = Paths.get(dir + oldFile + "." + oldExt);
+	            	   Files.deleteIfExists(oldFilePath);
+	               }
 	               return nomeFile;
 			   }
 	   		else throw new StorageException("File vuoto " + filename);

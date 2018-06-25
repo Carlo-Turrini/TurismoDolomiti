@@ -1,5 +1,8 @@
 package com.student.project.TurismoDolomiti.formValidation;
 
+import java.util.List;
+import java.util.LinkedList;
+
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -41,14 +44,14 @@ public class EscursioneForm {
 	@NotNull
 	@Digits(integer = 4, fraction = 0)
 	private Integer dislivelloDiscesa;
-	private Long[] IdPuntiRistoro;
+	private List<Long> IdPuntiRistoro =  new LinkedList<Long>();
 	
 
-	public Long[] getIdPuntiRistoro() {
+	public List<Long> getIdPuntiRistoro() {
 		return IdPuntiRistoro;
 	}
 
-	public void setIdPuntiRistoro(Long[] idPuntiRistoro) {
+	public void setIdPuntiRistoro(List<Long> idPuntiRistoro) {
 		IdPuntiRistoro = idPuntiRistoro;
 	}
 

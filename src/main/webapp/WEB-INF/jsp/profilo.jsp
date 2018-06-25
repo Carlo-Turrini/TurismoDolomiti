@@ -106,6 +106,14 @@
 			.display-4 {
 				font-size:2.5rem;
 			}
+			.nav-link{
+				color:#5E5956;
+				font-size: 16px; 
+			}
+			.nav-link:hover {
+				transition: color 0.5s ease;
+				color:#d3d3d3;
+			}
 		</style>
 		<script type="text/javascript" src="/webjars/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>

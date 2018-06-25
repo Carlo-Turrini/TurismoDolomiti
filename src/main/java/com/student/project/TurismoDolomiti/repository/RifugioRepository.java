@@ -22,7 +22,7 @@ public interface RifugioRepository extends JpaRepository<Rifugio, Long>, JpaSpec
 	@Query("SELECT COUNT(r) FROM Rifugio r WHERE r.nome = :nome_rifugio")
 	Integer verificaEsistenzaRifugioByNome(@Param("nome_rifugio")String nomeRifugio);
 	@Query("SELECT COUNT(r) FROM Rifugio r WHERE r.tel = :tel_rifugio")
-	Integer verificaEsistenzaRifugioByTel(@Param("tel_rifugio")Integer telRifugio);
+	Integer verificaEsistenzaRifugioByTel(@Param("tel_rifugio")String telRifugio);
 	@Query("SELECT COUNT(r) FROM Rifugio r WHERE r.email = :email_rifugio")
 	Integer verificaEsistenzaRifugioByEmail(@Param("email_rifugio")String emailRifugio);
 	@Query("SELECT COUNT(r) FROM Rifugio r WHERE r.id = :id_rifugio")
@@ -30,7 +30,7 @@ public interface RifugioRepository extends JpaRepository<Rifugio, Long>, JpaSpec
 	@Query("SELECT r.nome FROM Rifugio r WHERE r.id = :id_rifugio")
 	String findNomeRifugio(@Param("id_rifugio")Long idRif);
 	Rifugio findByEmail(String email);
-	Rifugio findByTel(Integer tel);
+	Rifugio findByTel(String tel);
 	//List<RifugioCardDto> findAllDtoedBy();
 	Rifugio findByNome(String nome);
 	@Query("SELECT r.nome FROM Rifugio r")

@@ -120,13 +120,13 @@ public class VerificaServiceImpl implements VerificaService {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean verificaEsistenzaEsc(Long idEsc, String nomeEsc, HttpServletRequest request) {
+	public boolean verificaEsistenzaEsc(Long idEsc, HttpServletRequest request) {
 		try {
 			if(escRepo.verificaEsistenzaEsc(idEsc)>0) {
 				return true;
 			}
 			else {
-				request.setAttribute("messaggio", "Escursione: " + nomeEsc + " inesistente!");
+				request.setAttribute("messaggio", "Escursione inesistente!");
 				request.setAttribute("redirectUrl", "/elencoEscursioni");
 				return false;
 			}

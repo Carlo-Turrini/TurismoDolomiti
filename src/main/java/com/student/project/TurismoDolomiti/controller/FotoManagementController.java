@@ -24,7 +24,6 @@ import com.student.project.TurismoDolomiti.entity.Elemento;
 import com.student.project.TurismoDolomiti.entity.Foto;
 import com.student.project.TurismoDolomiti.entity.Utente;
 import com.student.project.TurismoDolomiti.repository.ElementoRepository;
-import com.student.project.TurismoDolomiti.repository.EscursioneRepository;
 import com.student.project.TurismoDolomiti.repository.FotoRepository;
 import com.student.project.TurismoDolomiti.repository.PossiedeRepository;
 import com.student.project.TurismoDolomiti.repository.RifugioRepository;
@@ -47,8 +46,6 @@ public class FotoManagementController {
 	@Autowired 
 	VerificaService verificaService;
 	@Autowired
-	private EscursioneRepository escRepo;
-	@Autowired
 	UtenteRepository utenteRepo;
 	@Autowired
 	UploadService uploadService;
@@ -59,14 +56,14 @@ public class FotoManagementController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(FotoManagementController.class);
 	
-	@RequestMapping("/escursione/{nome}/{id}/Foto")
+	@RequestMapping("/escursione/{id}/galleria")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String GalleriaFotoEsc(@PathVariable("nome")String nomeEsc, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String GalleriaFotoEsc(@PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		
 		try {
-			if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+			if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 				Galleria(idEsc, request, response);
-				request.setAttribute("tipologia", "Escursione");
+				request.setAttribute("tipologia", "escursione");
 				return "galleriaFoto";
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -78,13 +75,13 @@ public class FotoManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/Foto")
+	@RequestMapping("/rifugio/{id}/galleria")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String GalleriaFotoRif(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String GalleriaFotoRif(@PathVariable("nomeRif")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		try {
 			if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
 				Galleria(idRif, request, response);
-				request.setAttribute("tipologia", "Rifugio");
+				request.setAttribute("tipologia", "rifugio");
 				request.setAttribute("gestoriRifugio", possRepo.gestoriRifugio(idRif));
 				return "galleriaFoto";
 			}
@@ -122,13 +119,13 @@ public class FotoManagementController {
 	
 	@RequestMapping("/escursione/{nome}/{id}/Foto/aggiungi")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String AggiungiFotoEsc(@ModelAttribute FotoInsertDTO foto, @PathVariable("nome")String nomeEsc, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String AggiungiFotoEsc(@ModelAttribute FotoInsertDTO foto, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+			if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 				if(!foto.getFoto().isEmpty()) {
 					AggiungiFoto(foto, idEsc, request, response);
 				}
-				return "redirect:/escursione/" + escRepo.findNomeEscursione(idEsc) + "/" + idEsc + "/Foto";
+				return "redirect:/escursione/"+ idEsc + "/galleria";
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
 		}
@@ -146,7 +143,7 @@ public class FotoManagementController {
 				if(!foto.getFoto().isEmpty()) {
 					AggiungiFoto(foto, idRif, request, response);
 				}
-				return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/Foto";
+				return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/galleria";
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
 		}
@@ -185,13 +182,13 @@ public class FotoManagementController {
 		}
 	}
 	
-	@RequestMapping("escursione/{nome}/{id}/Foto/cacella") 
+	@RequestMapping("escursione/{id}/Foto/cacella") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String CancellaFotoEsc(@RequestParam("idFoto")Long idFoto, @PathVariable("nome")String nomeEsc, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String CancellaFotoEsc(@RequestParam("idFoto")Long idFoto, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+			if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 				CancellaFoto(idFoto, idEsc, request, response);
-				return "redirect:/escursione/" + escRepo.findNomeEscursione(idEsc) + "/" + idEsc + "/Foto";
+				return "redirect:/escursione/" + idEsc + "/galleria";
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
 		}
@@ -207,7 +204,7 @@ public class FotoManagementController {
 		try {
 			if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
 				CancellaFoto(idFoto, idRif, request, response);
-				return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/Foto";
+				return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/galleria";
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
 		}

@@ -26,7 +26,6 @@ import com.student.project.TurismoDolomiti.entity.Elemento;
 import com.student.project.TurismoDolomiti.entity.Utente;
 import com.student.project.TurismoDolomiti.repository.CommentoRepository;
 import com.student.project.TurismoDolomiti.repository.ElementoRepository;
-import com.student.project.TurismoDolomiti.repository.EscursioneRepository;
 import com.student.project.TurismoDolomiti.repository.PossiedeRepository;
 import com.student.project.TurismoDolomiti.repository.RifugioRepository;
 import com.student.project.TurismoDolomiti.repository.UtenteRepository;
@@ -46,8 +45,6 @@ public class CommentoManagementController {
 	@Autowired 
 	VerificaService verificaService;
 	@Autowired
-	private EscursioneRepository escRepo;
-	@Autowired
 	PossiedeRepository possRepo;
 	@Autowired
 	ElementoRepository elRepo;
@@ -56,12 +53,12 @@ public class CommentoManagementController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CommentoManagementController.class);
 	
-	@RequestMapping("/escursione/{nome}/{id}/commenti")
+	@RequestMapping("/escursione/{id}/commenti")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String ElencoCommentiEsc(@PathVariable("nome")String nomeEsc , @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String ElencoCommentiEsc(@PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		
 		try {
-			if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+			if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 				ElencoCommenti(idEsc, request, response);
 				request.setAttribute("tipologia", "Escursione");
 				return "elencoCommenti";
@@ -118,16 +115,16 @@ public class CommentoManagementController {
 		}
 	}
 	
-	@RequestMapping("/escursione/{nome}/{id}/aggiungiCommento") 
+	@RequestMapping("/escursione/{id}/aggiungiCommento") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String AggiungiCommentoEsc(@ModelAttribute("commento")String commento, @PathVariable("nome")String nomeEsc, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String AggiungiCommentoEsc(@ModelAttribute("commento")String commento, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		
 		try {
-			if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+			if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 				if(!commento.isEmpty()) {
 					AggiungiCommento(idEsc, commento, request, response);
 				}
-				return "redirect:/escursione/" + escRepo.findNomeEscursione(idEsc) + "/" + idEsc;
+				return "redirect:/escursione/" + idEsc;
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
 		}
@@ -184,14 +181,14 @@ public class CommentoManagementController {
 		}
 	}
 	
-	@RequestMapping("/escursione/{nome}/{id}/commenti/rimuoviCommento")
+	@RequestMapping("/escursione/{id}/commenti/rimuoviCommento")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String RimuoviCommentoEsc(@RequestParam("idCommento")Long idCommento, @PathVariable("nome")String nomeEsc, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String RimuoviCommentoEsc(@RequestParam("idCommento")Long idCommento, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		
 		try {
-			if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+			if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 				RimuoviCommento(idCommento, idEsc, request, response);
-				return "redirect:/escursione/" + escRepo.findNomeEscursione(idEsc) + "/" + idEsc + "/commenti";
+				return "redirect:/escursione/" + idEsc + "/commenti";
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
 		}

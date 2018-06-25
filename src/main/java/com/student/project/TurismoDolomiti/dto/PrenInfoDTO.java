@@ -5,13 +5,13 @@ public class PrenInfoDTO {
 	private String massiccioMontuoso;
 	private String nomeRif;
 	private String emailRif;
-	private Integer telRif;
+	private String telRif;
 	private Long idUtente;
 	private String nomeUtente;
 	private String cognomeUtente;
 	private String emailUtente;
 	
-	public PrenInfoDTO(Long idRif, String massiccioMontuoso, String nomeRif, String emailRif, Integer telRif, Long idUtente, String nomeUtente, String cognomeUtente, String emailUtente) {
+	public PrenInfoDTO(Long idRif, String massiccioMontuoso, String nomeRif, String emailRif, String telRif, Long idUtente, String nomeUtente, String cognomeUtente, String emailUtente) {
 		this.idRif = idRif;
 		this.massiccioMontuoso = massiccioMontuoso;
 		this.nomeRif = nomeRif;
@@ -55,11 +55,11 @@ public class PrenInfoDTO {
 		this.emailRif = emailRif;
 	}
 
-	public Integer getTelRif() {
+	public String getTelRif() {
 		return telRif;
 	}
 
-	public void setTelRif(Integer telRif) {
+	public void setTelRif(String telRif) {
 		this.telRif = telRif;
 	}
 

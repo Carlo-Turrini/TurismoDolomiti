@@ -39,8 +39,8 @@ public class Rifugio extends Elemento implements Serializable{
 	@Column(nullable = false, length = 256)
 	@Email
 	private String email;
-	@Column(nullable = false)
-	private Integer tel;
+	@Column(length = 10, nullable = false)
+	private String tel;
 	@Column(name = "prezzo_posto_letto", nullable = false)
 	private Integer prezzoPostoLetto;
 
@@ -94,10 +94,10 @@ public class Rifugio extends Elemento implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public Integer getTel() {
+	public String getTel() {
 		return tel;
 	}
-	public void setTel(Integer tel) {
+	public void setTel(String tel) {
 		this.tel = tel;
 	}
 	public Integer getPrezzoPostoLetto() {

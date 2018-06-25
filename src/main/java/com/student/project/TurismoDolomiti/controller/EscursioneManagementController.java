@@ -132,9 +132,9 @@ public class EscursioneManagementController {
 		}
 	}
 	
-	@RequestMapping("/escursione/{nome}/{id}") 
+	@RequestMapping("/escursione/{id}") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String escursione(@PathVariable("nome")String escNome, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String escursione(@PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -143,7 +143,7 @@ public class EscursioneManagementController {
 			session.initSession(request, response);
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
-				if(!verificaService.verificaEsistenzaEsc(idEsc, escNome, request)) {
+				if(!verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					 throw new ApplicationException((String) request.getAttribute("messaggio"));
 				}
 				else {
@@ -242,9 +242,9 @@ public class EscursioneManagementController {
 						esc.setNome(escForm.getNome());
 						esc.setTipologia(escForm.getTipologia());
 						Escursione savedEsc = escRepo.save(esc);
-						Long[] idPuntiRistoro = escForm.getIdPuntiRistoro();
-						for(int i = 0; i < idPuntiRistoro.length; i++) {
-							Rifugio rif = rifRepo.getOne(idPuntiRistoro[i]);
+						List<Long> idPuntiRistoro = escForm.getIdPuntiRistoro();
+						for(Long id : idPuntiRistoro) {
+							Rifugio rif = rifRepo.getOne(id);
 							if(rif != null) {
 								PassaPer pp = new PassaPer();
 								pp.setEscursione(savedEsc);
@@ -252,7 +252,7 @@ public class EscursioneManagementController {
 								passaPerRepo.save(pp);
 							}
 						}
-						return "redirect:/elencoEscursioni" ;
+						return "redirect:/escursione/" + savedEsc.getId() ;
 					}
 				}
 			}
@@ -264,9 +264,9 @@ public class EscursioneManagementController {
 	 }
 }
 	
-	@RequestMapping("/escursione/{nome}/{id}/modifica")
+	@RequestMapping("/escursione/{id}/modifica")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String modificaEsc(@PathVariable("nome") String escNome, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String modificaEsc(@PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 
@@ -276,7 +276,7 @@ public class EscursioneManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-					if(!verificaService.verificaEsistenzaEsc(idEsc, escNome, request)) {
+					if(!verificaService.verificaEsistenzaEsc(idEsc, request)) {
 						 throw new ApplicationException((String) request.getAttribute("messaggio"));
 					}
 					else {
@@ -286,10 +286,6 @@ public class EscursioneManagementController {
 						request.setAttribute("logged", loggedUser != null);
 						request.setAttribute("loggedUser", loggedUser);
 						request.setAttribute("idEsc", idEsc);
-						request.setAttribute("escIconPath",esc.getIconPath());
-						request.setAttribute("escGpxPath", esc.getGpxPath());
-						request.setAttribute("escAltimetriaPath", esc.getAltimetriaPath());
-						request.setAttribute("escNome", esc.getNome());
 						request.setAttribute("azione", "modifica");
 						EscursioneForm escForm = new EscursioneForm();
 						escForm.setNome(esc.getNome());
@@ -304,7 +300,7 @@ public class EscursioneManagementController {
 						escForm.setLunghezza(esc.getLunghezza());
 						escForm.setMassiccioMontuoso(esc.getMassiccioMontuoso());
 						escForm.setTipologia(esc.getTipologia());
-						escForm.setIdPuntiRistoro(passaPerRepo.findPuntiRistoroEsc(idEsc).toArray(new Long[0]));
+						escForm.setIdPuntiRistoro(passaPerRepo.findPuntiRistoroEsc(idEsc));
 						request.setAttribute("escForm", escForm);
 						return "insModEscursione";
 					}
@@ -320,9 +316,9 @@ public class EscursioneManagementController {
 		}
 	}
 	
-	@RequestMapping("/escursione/{nome}/{id}/modifica/submit")
+	@RequestMapping("/escursione/{id}/modifica/submit")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String modificaEscSub(@PathVariable("nome") String nomeEsc, @PathVariable("id")Long idEsc, @Valid @ModelAttribute("escForm") EscursioneForm escForm, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
+	public String modificaEscSub(@PathVariable("id")Long idEsc, @Valid @ModelAttribute("escForm") EscursioneForm escForm, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		try {
@@ -331,14 +327,13 @@ public class EscursioneManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				if(!verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+				if(!verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					 throw new ApplicationException((String) request.getAttribute("messaggio"));
 				}
 				else {
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
 					request.setAttribute("idEsc", idEsc);
-					request.setAttribute("nomeEsc", nomeEsc);
 					if(bindingResult.hasErrors()) {
 						request.setAttribute("azione", "modifca");
 						return "insModEscursione";
@@ -367,7 +362,7 @@ public class EscursioneManagementController {
 							esc.setTipologia(escForm.getTipologia());
 							escRepo.save(esc);
 							List<Long> idPuntiRistoroEsc = passaPerRepo.findPuntiRistoroEsc(idEsc);
-							List<Long> nuoviIdPuntiRistoroEsc = Arrays.asList(escForm.getIdPuntiRistoro());
+							List<Long> nuoviIdPuntiRistoroEsc = escForm.getIdPuntiRistoro();
 							if(!idPuntiRistoroEsc.equals(nuoviIdPuntiRistoroEsc)) {
 								for(Long idPuntoRistoro : idPuntiRistoroEsc) {
 									if(nuoviIdPuntiRistoroEsc.contains(idPuntoRistoro)) {
@@ -392,7 +387,7 @@ public class EscursioneManagementController {
 									}
 								}
 							}
-							return "redirect:/escursione/" + escForm.getNome() + "/" + idEsc + "/modifica";
+							return "redirect:/escursione/" + idEsc + "/modifica";
 						}
 					}
 				}
@@ -405,9 +400,9 @@ public class EscursioneManagementController {
 		}
 	}
 	
-	@RequestMapping("/escursione/{nome}/{id}/modifica/foto") 
+	@RequestMapping("/escursione/{id}/modifica/foto") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String modificaIconaEsc(@PathVariable("nome") String nomeEsc, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String modificaIconaEsc(@PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		try {
@@ -416,8 +411,9 @@ public class EscursioneManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					String iconaEsc = escRepo.findEscIconPath(idEsc);
+					request.setAttribute("idEsc", idEsc);
 					request.setAttribute("iconaEsc", iconaEsc);
 					request.setAttribute("tipologia", "escursione");
 					request.setAttribute("logged", loggedUser != null);
@@ -434,9 +430,9 @@ public class EscursioneManagementController {
 		}
 	}
 	
-	@RequestMapping("/escursione/{nome}/{id}/modifica/foto/submit")
+	@RequestMapping("/escursione/{id}/modifica/foto/submit")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String modificaIconaEscSubmit(@PathVariable("nome") String nomeEsc, @PathVariable("id")Long idEsc, @RequestParam("foto")MultipartFile iconaEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String modificaIconaEscSubmit(@PathVariable("id")Long idEsc, @RequestParam("foto")MultipartFile iconaEsc, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		try {
@@ -445,7 +441,7 @@ public class EscursioneManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					if(!iconaEsc.isEmpty()) {
 						Escursione esc = escRepo.getOne(idEsc);
 						String filename = null;
@@ -457,10 +453,10 @@ public class EscursioneManagementController {
 						}
 						esc.setIconPath(filename);
 						escRepo.save(esc);
-						return "redirect:/escursione/" + escRepo.findNomeEscursione(idEsc) + "/" + idEsc + "/modifica/foto";
+						return "redirect:/escursione/" + idEsc + "/modifica/foto";
 					}
 					else {
-						request.setAttribute("redirectUrl", "/escursione/" + escRepo.findNomeEscursione(idEsc) + "/" + idEsc + "/modifica/foto");
+						request.setAttribute("redirectUrl", "/escursione/" + idEsc + "/modifica/foto");
 						throw new ApplicationException("File vuoto");
 					}
 					
@@ -475,9 +471,9 @@ public class EscursioneManagementController {
 		}
 	}
 	
-	@RequestMapping("/escursione/{nome}/{id}/modifica/foto/cancella")
+	@RequestMapping("/escursione/{id}/modifica/foto/cancella")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String cancellaIconaEsc(@PathVariable("nome") String nomeEsc, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String cancellaIconaEsc(@PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		try {
@@ -486,7 +482,7 @@ public class EscursioneManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					Escursione esc = escRepo.getOne(idEsc);
 					String iconaEsc = esc.getIconPath();
 					if(!iconaEsc.equals(Constants.DEF_ICONA_ESC)) {
@@ -495,7 +491,7 @@ public class EscursioneManagementController {
 						Path iconPath = Paths.get(Constants.ICONA_ESC_RIF_DIR, iconaEsc);
 						Files.delete(iconPath);
 					}
-					return "redirect:/escursione/" + escRepo.findNomeEscursione(idEsc) + "/" + idEsc + "/modifica/foto";
+					return "redirect:/escursione/" + idEsc + "/modifica/foto";
 				}
 				else throw new ApplicationException((String) request.getAttribute("messaggio"));
 			}
@@ -506,9 +502,9 @@ public class EscursioneManagementController {
 			throw new RuntimeException(e);
 		}
 	}
-	@RequestMapping("/escursione/{nome}/{id}/modifica/altimetria")
+	@RequestMapping("/escursione/{id}/modifica/altimetria")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String modificaAltimetria(@PathVariable("nome") String nomeEsc, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String modificaAltimetria(@PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		try {
@@ -517,8 +513,9 @@ public class EscursioneManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					String altimetriaPath = escRepo.findEscAltimetriaPath(idEsc);
+					request.setAttribute("idEsc", idEsc);
 					request.setAttribute("altimetriaPath", altimetriaPath);
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
@@ -535,9 +532,9 @@ public class EscursioneManagementController {
 		}
 	}
 	
-	@RequestMapping("/escursione/{nome}/{id}/modifica/altimetria/submit")
+	@RequestMapping("/escursione/{id}/modifica/altimetria/submit")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String modificaAltimetriaSubmit(@PathVariable("nome") String nomeEsc, @PathVariable("id")Long idEsc, @RequestParam("altimetria")MultipartFile altimetria, HttpServletRequest request, HttpServletResponse response) {
+	public String modificaAltimetriaSubmit(@PathVariable("id")Long idEsc, @RequestParam("altimetria")MultipartFile altimetria, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		try {
@@ -546,7 +543,7 @@ public class EscursioneManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					if(!altimetria.isEmpty()) {
 						Escursione esc = escRepo.getOne(idEsc);
 						String altimetriaFile = null;
@@ -562,11 +559,11 @@ public class EscursioneManagementController {
 								esc.setCompleto(true);
 							}
 						}
-						return "redirect:/escursione/" + escRepo.findNomeEscursione(idEsc) + "/" + idEsc + "/modifica/altimetria";
+						return "redirect:/escursione/" + idEsc + "/modifica/altimetria";
 						
 					}
 					else {
-						request.setAttribute("redirectUrl", "/escursione/" + escRepo.findNomeEscursione(idEsc) + "/" + idEsc + "/modifica/altimetria");
+						request.setAttribute("redirectUrl", "/escursione/" + idEsc + "/modifica/altimetria");
 						throw new ApplicationException("File altimetria vuoto");
 					}
 				}
@@ -580,9 +577,9 @@ public class EscursioneManagementController {
 		}
 	}
 	
-	@RequestMapping("/escursione/{nome}/{id}/modifica/gpx")
+	@RequestMapping("/escursione/{id}/modifica/gpx")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String modificaGpx(@PathVariable("nome") String nomeEsc, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String modificaGpx(@PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		try {
@@ -591,9 +588,10 @@ public class EscursioneManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					String gpxPath = escRepo.findEscGpxPath(idEsc);
 					request.setAttribute("gpxPath", gpxPath);
+					request.setAttribute("idEsc", idEsc);
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
 					return "modificaGpx";
@@ -609,9 +607,9 @@ public class EscursioneManagementController {
 		}
 	}
 	
-	@RequestMapping("/escursione/{nome}/{id}/modifica/gpx/submit")
+	@RequestMapping("/escursione/{id}/modifica/gpx/submit")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String modificaGpxSubmit(@PathVariable("nome") String nomeEsc, @PathVariable("id")Long idEsc, @RequestParam("gpx")MultipartFile gpx, HttpServletRequest request, HttpServletResponse response) {
+	public String modificaGpxSubmit( @PathVariable("id")Long idEsc, @RequestParam("gpx")MultipartFile gpx, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		try {
@@ -620,7 +618,7 @@ public class EscursioneManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					if(!gpx.isEmpty()) {
 						Escursione esc = escRepo.getOne(idEsc);
 						String gpxFile = null;
@@ -637,11 +635,11 @@ public class EscursioneManagementController {
 								esc.setCompleto(true);
 							}
 						}
-						return "redirect:/escursione/" + escRepo.findNomeEscursione(idEsc) + "/" + idEsc + "/modifica/gpx";
+						return "redirect:/escursione/" + idEsc + "/modifica/gpx";
 						
 					}
 					else {
-						request.setAttribute("redirectUrl", "/escursione/" + escRepo.findNomeEscursione(idEsc) + "/" + idEsc + "/modifica/gpx");
+						request.setAttribute("redirectUrl", "/escursione/" + idEsc + "/modifica/gpx");
 						throw new ApplicationException("File gpx vuoto");
 					}
 				}
@@ -655,9 +653,9 @@ public class EscursioneManagementController {
 		}
 	}
 	
-	@RequestMapping("/escursione/{nome}/{id}/cancella") 
+	@RequestMapping("/escursione/{id}/cancella") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String cancellaEscursione(@PathVariable("nome")String nomeEsc, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
+	public String cancellaEscursione(@PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -667,7 +665,7 @@ public class EscursioneManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				if(verificaService.verificaEsistenzaEsc(idEsc, nomeEsc, request)) {
+				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					Escursione esc = escRepo.getOne(idEsc);
 					List<PassaPer> passaPer = esc.getPassaPer();
 					List<Foto> fotoEsc = esc.getFoto();

@@ -1,11 +1,10 @@
 package com.student.project.TurismoDolomiti.formValidation;
 
 
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,13 +29,12 @@ public class UtenteForm {
 	private String password;
 	@NotNull
 	@NotEmpty
-	@Past
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private String dataNascita;
 	@NotNull
 	private Sesso sesso;
-	@Digits(integer = 10, fraction = 0)
-	private Integer tel;
+	@Pattern(regexp = "^$|^[0-9]{10}$")
+	private String tel;
 	@Size(min = 0, max = 2048)
 	private String descrizione;
 	@NotNull
@@ -77,10 +75,10 @@ public class UtenteForm {
 	public void setSesso(Sesso sesso) {
 		this.sesso = sesso;
 	}
-	public Integer getTel() {
+	public String getTel() {
 		return tel;
 	}
-	public void setTel(Integer tel) {
+	public void setTel(String tel) {
 		this.tel = tel;
 	}
 	public String getDescrizione() {

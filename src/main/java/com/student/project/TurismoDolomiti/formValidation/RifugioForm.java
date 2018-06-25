@@ -4,6 +4,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,8 +25,9 @@ public class RifugioForm {
 	@Digits(integer = 3, fraction = 0)
 	private Integer prezzoPostoLetto;
 	@NotNull
-	@Digits(integer = 10, fraction = 0)
-	private Integer tel;
+	@NotEmpty
+	@Pattern(regexp = "^[0-9]{10}$")	
+	private String tel;
 	@NotNull
 	@Email
 	@Size(min = 7, max = 128)
@@ -75,10 +77,10 @@ public class RifugioForm {
 	public void setPrezzoPostoLetto(Integer prezzoPostoLetto) {
 		this.prezzoPostoLetto = prezzoPostoLetto;
 	}
-	public Integer getTel() {
+	public String getTel() {
 		return tel;
 	}
-	public void setTel(Integer tel) {
+	public void setTel(String tel) {
 		this.tel = tel;
 	}
 	public String getEmail() {

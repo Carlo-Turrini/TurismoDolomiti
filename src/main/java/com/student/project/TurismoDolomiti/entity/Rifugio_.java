@@ -14,7 +14,7 @@ public class Rifugio_ extends Elemento_ {
 	public static volatile SingularAttribute<Rifugio, Date> dataApertura;
 	public static volatile SingularAttribute<Rifugio, Date> dataChiusura;
 	public static volatile SingularAttribute<Rifugio, String> email;
-	public static volatile SingularAttribute<Rifugio, Integer> tel;
+	public static volatile SingularAttribute<Rifugio, String> tel;
 	public static volatile SingularAttribute<Rifugio, Integer> prezzoPostoLetto;
 	public static volatile ListAttribute<Rifugio, Possiede> possessori;
 	public static volatile ListAttribute<Rifugio, PassaPer> passaPer;
