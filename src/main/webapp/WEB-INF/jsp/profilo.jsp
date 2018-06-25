@@ -137,29 +137,31 @@
 					<p class="lead">Descrizione: ${utente.getDescrizione()}</p>
 				</div>
 				<% if(logged && (loggedUser.getIdUtente() == utente.getId() || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))){ %>
-				<div class="col-md-1 btn-group" role="group">
-				  	<a class="btn btn-link" href="/profilo/${utente.getId()}/cancella">
-						<i class="fa fa-trash-o fa-lg"></i>
-					</a>
-				  	<div class="btn-group" role="group">
-						<div class="dropdown">
-		  					<button class="btn btn-light dropdown-toggle" type="button" id="modifyButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		    					<i class="fa fa-pencil"></i>
-		  					</button>
-		  					<div class="dropdown-menu" aria-labelledby="modifyButton">
-			    				<a class="dropdown-item" href="/profilo/${utente.getId()}/modifica">Modifica profilo</a>
-			    				<a class="dropdown-item" href="/profilo/${utente.getId()}/modifica/foto">Modifica foto profilo</a>
-		  					</div>
+				<div class="col-md-1">
+					<div class="btn-group" role="group">
+					  	<a class="btn btn-link" href="/profilo/${utente.getId()}/cancella">
+							<i class="fa fa-trash-o fa-lg"></i>
+						</a>
+					  	<div class="btn-group" role="group">
+							<div class="dropdown">
+			  					<button class="btn btn-light dropdown-toggle" type="button" id="modifyButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			    					<i class="fa fa-pencil"></i>
+			  					</button>
+			  					<div class="dropdown-menu" aria-labelledby="modifyButton">
+				    				<a class="dropdown-item" href="/profilo/${utente.getId()}/modifica">Modifica profilo</a>
+				    				<a class="dropdown-item" href="/profilo/${utente.getId()}/modifica/foto">Modifica foto profilo</a>
+			  					</div>
+							</div>
 						</div>
-					</div>
-					<%if(gestore != null && utente.getCredenziali().compareTo(CredenzialiUtente.GestoreRifugio)>=0 ) {
-						if(gestore || (!gestore && loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))) {
-					%>
-						<a class="btn btn-light" href="/profilo/${utente.getId()}/elencoRifugiGestiti">I miei rifugi</a>
-					<%
+						<%if(gestore != null && utente.getCredenziali().compareTo(CredenzialiUtente.GestoreRifugio)>=0 ) {
+							if(gestore || (!gestore && loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))) {
+						%>
+							<a class="btn btn-light" href="/profilo/${utente.getId()}/elencoRifugiGestiti">I miei rifugi</a>
+						<%
+							}
 						}
-					}
-					%>
+						%>
+					</div>
 				</div>
 				<% } %>
 			</div>

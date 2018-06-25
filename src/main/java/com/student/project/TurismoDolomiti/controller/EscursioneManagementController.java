@@ -198,7 +198,7 @@ public class EscursioneManagementController {
 		
 	}
 	
-	@RequestMapping("/elencoEscursioni/inserisciEscursione/Submit") 
+	@RequestMapping("/elencoEscursioni/inserisciEscursione/submit") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String insEscSub(@Valid @ModelAttribute("escForm") EscursioneForm escForm, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;

@@ -20,10 +20,10 @@ public class EscursioneForm {
 	@Size(min = 0, max = 2048)
 	private String descrizione;
 	@NotNull
-	@Digits(integer = 2, fraction = 6)
+	@Digits(integer = 2, fraction = 15)
 	private Double latitude;
 	@NotNull
-	@Digits(integer = 3, fraction = 6)
+	@Digits(integer = 3, fraction = 15)
 	private Double longitude;
 	@NotNull
 	@Size(min = 2, max = 64)

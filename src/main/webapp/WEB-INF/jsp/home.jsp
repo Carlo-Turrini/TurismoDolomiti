@@ -59,8 +59,8 @@
 			.home {
 				position: relative;
 				margin-top: 0;
-				max-width: 1219px;
-				height: 400px;
+				max-width: 1239px;
+				height: 350px;
 				margin-left: auto;
 				margin-right: auto;
 				text-align: center;
@@ -104,7 +104,7 @@
 				
 			}
 			.card {
-				max-height: 230px;
+				max-height: 250px;
 			}
 			.card-img-top {
 				object-fit: cover;
@@ -120,6 +120,10 @@
 				font-size: 130%;
 				font-style: italic;
 				font-family: "Bahnschrift Light Condensed", Bahnschrift, serif;	
+			}
+			.card.myCard {
+				margin-left:5px;
+				margin-right:5px;
 			}
 			
 
@@ -144,7 +148,7 @@ le volte di porpora scintillanti ti stelle."
 		</div>
 		
 		<div class="card-deck">
-			<div class="card">
+			<div class="card myCard">
 				<img class="card-img-top" src="escCard.jpg" alt="Card image">
 				<div class="card-img-overlay">
 					<h1 class="card-title"> Escursioni </h1>
@@ -152,7 +156,7 @@ le volte di porpora scintillanti ti stelle."
 					<a href="/elencoEscursioni" class="btn btn-primary"> Vedi elenco</a>
 				</div>	
 			</div>
-			<div class="card">
+			<div class="card myCard">
 				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
 				<div class="card-img-overlay">
 					<h1 class="card-title"> Rifugi </h1>
@@ -163,16 +167,16 @@ le volte di porpora scintillanti ti stelle."
 			</div>
 			
 			<% if(logged) { %>
-			<div class="card">
+			<div class="card myCard">
 				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
 				<div class="card-img-overlay">
-					<h1 class="card-title"> Le mie prenotazioni </h1>
+					<h1 class="card-title"> Prenotazioni </h1>
 					<p class="card-text"> Controlla i tuoi viaggi </p>
 					<a href="/leMiePrenotazioni" class="btn btn-primary"> Vedi elenco </a>
 				</div>
 			</div>
 			<% if(loggedUser.getCredenziali().compareTo(CredenzialiUtente.GestoreRifugio)>=0) { %>
-			<div class="card">
+			<div class="card myCard">
 				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
 				<div class="card-img-overlay">
 					<h1 class="card-title"> I miei rifugi </h1>
@@ -185,11 +189,11 @@ le volte di porpora scintillanti ti stelle."
 			<% } 
 				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
 			%>
-			<div class="card">
+			<div class="card myCard">
 				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
 				<div class="card-img-overlay">
 					<h1 class="card-title"> Escursioni incomplete </h1>
-					<p class="card-text"> Completa le escursioni </p>
+					<p class="card-text"> Completale </p>
 					<a href="/elencoEscursioniDaCompletare" class="btn btn-primary"> Vedi elenco </a>
 				</div>
 				
