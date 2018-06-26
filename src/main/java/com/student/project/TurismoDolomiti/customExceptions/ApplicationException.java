@@ -1,7 +1,9 @@
 package com.student.project.TurismoDolomiti.customExceptions;
 
 public class ApplicationException extends RuntimeException{
-    public ApplicationException(String message) {
+	private static final long serialVersionUID = 643330230602231759L;
+
+	public ApplicationException(String message) {
         super(message);
     }
 

@@ -77,9 +77,9 @@ public class FotoManagementController {
 	
 	@RequestMapping("/rifugio/{id}/galleria")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String GalleriaFotoRif(@PathVariable("nomeRif")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String GalleriaFotoRif(@PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+			if(verificaService.verificaEsistenzaRif(idRif, request)) {
 				Galleria(idRif, request, response);
 				request.setAttribute("tipologia", "rifugio");
 				request.setAttribute("gestoriRifugio", possRepo.gestoriRifugio(idRif));
@@ -117,7 +117,7 @@ public class FotoManagementController {
 		}
 	}
 	
-	@RequestMapping("/escursione/{nome}/{id}/Foto/aggiungi")
+	@RequestMapping("/escursione/{id}/Foto/aggiungi")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String AggiungiFotoEsc(@ModelAttribute FotoInsertDTO foto, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -135,15 +135,15 @@ public class FotoManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/Foto/aggiungi")
+	@RequestMapping("/rifugio/{id}/Foto/aggiungi")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String AggiungiFotoRif(@ModelAttribute FotoInsertDTO foto, @PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String AggiungiFotoRif(@ModelAttribute FotoInsertDTO foto, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+			if(verificaService.verificaEsistenzaRif(idRif, request)) {
 				if(!foto.getFoto().isEmpty()) {
 					AggiungiFoto(foto, idRif, request, response);
 				}
-				return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/galleria";
+				return "redirect:/rifugio/" + idRif + "/galleria";
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
 		}
@@ -198,13 +198,13 @@ public class FotoManagementController {
 		}
 	}
 	
-	@RequestMapping("rifugio/{nome}/{id}/Foto/cancella")
+	@RequestMapping("rifugio/{id}/Foto/cancella")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String CancellaFotoRif(@RequestParam("idFoto")Long idFoto, @PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String CancellaFotoRif(@RequestParam("idFoto")Long idFoto, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+			if(verificaService.verificaEsistenzaRif(idRif, request)) {
 				CancellaFoto(idFoto, idRif, request, response);
-				return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/galleria";
+				return "redirect:/rifugio/" + idRif + "/galleria";
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
 		}

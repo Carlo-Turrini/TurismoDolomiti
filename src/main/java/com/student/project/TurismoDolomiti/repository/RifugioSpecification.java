@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RifugioSpecification implements Specification<Rifugio> {
+	private static final long serialVersionUID = -734755415809790927L;
 	private RifugioSearch criteria;
 	
 	public RifugioSpecification(RifugioSearch rifugioSearch) {

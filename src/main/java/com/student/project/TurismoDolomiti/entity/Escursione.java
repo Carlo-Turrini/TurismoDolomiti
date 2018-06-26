@@ -39,7 +39,7 @@ public class Escursione extends Elemento implements Serializable {
 	private Integer dislivelloDiscesa;
 	@Column(name = "completo", nullable = false)
 	@ColumnDefault("false")
-	private Boolean completo;
+	private Boolean completo = false;
 	@Column(name = "gpx_path",length = 256) 
 	private String gpxPath;
 	@Column(name = "altimetria_path", length = 256)

@@ -97,9 +97,9 @@ public class PrenotazioniManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/prenotazioni/{idPren}")
+	@RequestMapping("/rifugio/{id}/prenotazioni/{idPren}")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String prenotazioneRifugio(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, @PathVariable("idPren")Long idPren, HttpServletRequest request, HttpServletResponse response) {
+	public String prenotazioneRifugio(@PathVariable("id")Long idRif, @PathVariable("idPren")Long idPren, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -110,9 +110,9 @@ public class PrenotazioniManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(possRepo.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
-						if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request)) {
+						if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
 							if(prenRepo.verificaPenotazioneRifugio(idPren, idRif)>0) {
 								prenotazioneInfo(idPren, request);
 								request.setAttribute("idRif", idRif);
@@ -125,14 +125,14 @@ public class PrenotazioniManagementController {
 								
 							}
 							else {
-								request.setAttribute("redirectUrl", "/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/prenotazioni");
+								request.setAttribute("redirectUrl", "/rifugio/" + idRif + "/prenotazioni");
 								throw new ApplicationException("Prenotazione inesistente!");
 							}
 						}
 						else throw new ApplicationException((String) request.getAttribute("messaggio"));
 					}
 					else {
-						request.setAttribute("redirectUrl", "/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif);
+						request.setAttribute("redirectUrl", "/rifugio/" + idRif);
 						throw new ApplicationException(rifRepo.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
 					}
 				}
@@ -191,9 +191,9 @@ public class PrenotazioniManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/prenotazioni") 
+	@RequestMapping("/rifugio/{id}/prenotazioni") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String elencoPrenotazioniRifugio(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String elencoPrenotazioniRifugio(@PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -204,9 +204,9 @@ public class PrenotazioniManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(possRepo.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
-						if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request)) {
+						if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
 							List<PrenotazioneRifugioCardDto> prenotazioniRifugio = prenRepo.findAllPrenotazioniRifugio(idRif);
 							List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
 							request.setAttribute("gestoriRifugio", gestoriRifugio);
@@ -219,7 +219,7 @@ public class PrenotazioniManagementController {
 						else throw new ApplicationException((String) request.getAttribute("messaggio"));
 					}
 					else {
-						request.setAttribute("redirectUrl", "/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif);
+						request.setAttribute("redirectUrl", "/rifugio/" + idRif);
 						throw new ApplicationException(rifRepo.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
 					}
 				}
@@ -233,9 +233,9 @@ public class PrenotazioniManagementController {
 		}
 	}
 	
-	@RequestMapping("rifugio/{nome}/{id}/prenotazione")
+	@RequestMapping("rifugio/{id}/prenotazione")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String effettuarePrenotazione(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, @RequestParam("numPersone")Integer numPersone, @RequestParam("checkIn")Date checkIn, @RequestParam("checkOut")Date checkOut, HttpServletRequest request, HttpServletResponse response) {
+	public String effettuarePrenotazione(@PathVariable("id")Long idRif, @RequestParam("numPersone")Integer numPersone, @RequestParam("checkIn")Date checkIn, @RequestParam("checkOut")Date checkOut, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -247,7 +247,7 @@ public class PrenotazioniManagementController {
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Normale)) {
 				
-				if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(possRepo.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
 						if(checkIn.compareTo(checkOut)>=0 || rifRepo.verificaRifugioApertoInPeriodo(idRif, checkIn, checkOut)>0) {
 							if(plRepo.findNumPostiLettoRifugioDisponibiliInPeriodo(idRif, checkIn, checkOut) >= numPersone) {
@@ -273,12 +273,12 @@ public class PrenotazioniManagementController {
 							}
 						}
 						else {
-							request.setAttribute("redirectUrl", "/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif);
+							request.setAttribute("redirectUrl", "/rifugio/" + idRif);
 							throw new ApplicationException("Hai inserito delle date non valide");
 						}
 					}
 					else {
-						request.setAttribute("redirectUrl", "/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif);
+						request.setAttribute("redirectUrl", "/rifugio/" + idRif);
 						throw new ApplicationException(rifRepo.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
 					}
 				}
@@ -292,9 +292,9 @@ public class PrenotazioniManagementController {
 		}
 	}
 	
-	@RequestMapping("rifugio/{nome}/{id}/prenotazione/submit")
+	@RequestMapping("rifugio/{id}/prenotazione/submit")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String prenotazioneSubmit(@ModelAttribute("plByCamera") List<PostiDisponibiliCameraRifugioDto> plByCamera, @RequestParam("descGruppo")String descGruppo, @RequestParam("checkIn")Date checkIn, @RequestParam("checkOut")Date checkOut, @RequestParam("numPersone")Integer numPersone, @PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String prenotazioneSubmit(@ModelAttribute("plByCamera") List<PostiDisponibiliCameraRifugioDto> plByCamera, @RequestParam("descGruppo")String descGruppo, @RequestParam("checkIn")Date checkIn, @RequestParam("checkOut")Date checkOut, @RequestParam("numPersone")Integer numPersone, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -305,7 +305,7 @@ public class PrenotazioniManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Normale)) {
-				if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(possRepo.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
 						if(checkIn.compareTo(checkOut)>=0 || rifRepo.verificaRifugioApertoInPeriodo(idRif, checkIn, checkOut)>0) {
 							if(plRepo.findNumPostiLettoRifugioDisponibiliInPeriodo(idRif, checkIn, checkOut) >= numPersone) {
@@ -379,12 +379,12 @@ public class PrenotazioniManagementController {
 							}
 						}
 						else {
-							request.setAttribute("redirectUrl", "/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif);
+							request.setAttribute("redirectUrl", "/rifugio/" + idRif);
 							throw new ApplicationException("Hai inserito delle date non valide");
 						}
 					}	
 					else {
-						request.setAttribute("redirectUrl", "/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif);
+						request.setAttribute("redirectUrl", "/rifugio/" + idRif);
 						throw new ApplicationException(rifRepo.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
 					}
 				}
@@ -428,9 +428,9 @@ public class PrenotazioniManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/prenotazioni/{idPren}/cancella")
+	@RequestMapping("/rifugio/{id}/prenotazioni/{idPren}/cancella")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String cancellaPrenotazioneRifugio(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, @PathVariable("idPren")Long idPren, HttpServletRequest request, HttpServletResponse response) {
+	public String cancellaPrenotazioneRifugio(@PathVariable("id")Long idRif, @PathVariable("idPren")Long idPren, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -441,22 +441,22 @@ public class PrenotazioniManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(possRepo.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
-						if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request)) {
+						if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
 							if(prenRepo.verificaPenotazioneRifugio(idPren, idRif)>0) {
 								prenRepo.deleteById(idPren);
 								return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/prenotazioni";
 							}
 							else {
-								request.setAttribute("redirectUrl", "/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/prenotazioni");
+								request.setAttribute("redirectUrl", "/rifugio/" + idRif + "/prenotazioni");
 								throw new ApplicationException("Prenotazione inesistente!");
 							}
 						}
 						else throw new ApplicationException((String) request.getAttribute("messaggio"));
 					}
 					else {
-						request.setAttribute("redirectUrl", "/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif);
+						request.setAttribute("redirectUrl", "/rifugio/"  + idRif);
 						throw new ApplicationException(rifRepo.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
 					}
 				}

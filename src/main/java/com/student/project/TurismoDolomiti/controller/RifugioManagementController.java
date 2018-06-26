@@ -124,9 +124,9 @@ public class RifugioManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}")
+	@RequestMapping("/rifugio/{id}")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String rifugio(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String rifugio(@PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -135,7 +135,7 @@ public class RifugioManagementController {
 			session.initSession(request, response);
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
-			if(!verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+			if(!verificaService.verificaEsistenzaRif(idRif, request)) {
 				 throw new ApplicationException((String) request.getAttribute("messaggio"));
 			}
 			else {
@@ -166,9 +166,9 @@ public class RifugioManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/escursioni") 
+	@RequestMapping("/rifugio/{id}/escursioni") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String elencoEscursioniPerRifugio(@PathVariable("nome") String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String elencoEscursioniPerRifugio( @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		String messaggio = null;
@@ -178,7 +178,7 @@ public class RifugioManagementController {
 			session.initSession(request, response);
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
-			if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+			if(verificaService.verificaEsistenzaRif(idRif, request)) {
 				List<EscursioneCardDto> escursioniPerRifugio =  escRepo.findElencoEscursioniPerRifugio(idRif);
 				Pageable topPhotoes = PageRequest.of(0, 5);
 				List<FotoSequenceDTO> fotoRifugioSequence = fotoRepo.findPhotoesForSequence(idRif, topPhotoes);
@@ -194,7 +194,7 @@ public class RifugioManagementController {
 				}
 				else request.setAttribute("escursioniPerRifugio", escursioniPerRifugio);
 				request.setAttribute("idRif", idRif);
-				request.setAttribute("nomeRif", nomeRif);
+				request.setAttribute("nomeRif", rifRepo.findNomeRifugio(idRif));
 				request.setAttribute("logged", loggedUser != null);
 				request.setAttribute("loggedUser", loggedUser);
 				return "elencoEscursioniPerRifugio";
@@ -263,9 +263,8 @@ public class RifugioManagementController {
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
 				if(verificaService.verificaEsistenzaUtente(idUtente, request) && verificaService.verificaUtenteGestore(idUtente, request)) { 
-					String nomeRif = rifRepo.findNomeRifugio(idRif);
-					if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
-						if(verificaService.verificaNonGestore(idRif, idUtente, nomeRif, request)) {
+					if(verificaService.verificaEsistenzaRif(idRif, request)) {
+						if(verificaService.verificaNonGestore(idRif, idUtente, request)) {
 							Utente utente = utenteRepo.getOne(idUtente);
 							Rifugio rif = rifRepo.getOne(idRif);
 							Possiede poss = new Possiede();
@@ -306,12 +305,12 @@ public class RifugioManagementController {
 							throw new ApplicationException((String) request.getAttribute("messaggio"));
 						}
 					}
-					String nomeRif = rifRepo.findNomeRifugio(idRif);
-					if(!verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+
+					if(!verificaService.verificaEsistenzaRif(idRif, request)) {
 						throw new ApplicationException((String) request.getAttribute("messaggio"));
 					}
 					else {
-						if(verificaService.verificaGestore(idRif, idUtente, nomeRif, request)) {
+						if(verificaService.verificaGestore(idRif, idUtente, request)) {
 							Utente utente = utenteRepo.getOne(idUtente);
 							Rifugio rif = rifRepo.getOne(idRif);
 							possRepo.deleteByProprietarioAndRifugio(utente, rif);
@@ -411,8 +410,9 @@ public class RifugioManagementController {
 						rif.setMassiccioMontuoso(rifForm.getMassiccioMontuoso());
 						rif.setPrezzoPostoLetto(rifForm.getPrezzoPostoLetto());
 						rif.setTel(rifForm.getTel());
-						rifRepo.save(rif);
-						return "redirect:/elencoRifugi";
+						rif.setIconPath(Constants.DEF_ICONA_RIF);
+						Rifugio savedRif = rifRepo.save(rif);
+						return "redirect:/rifugio/" + savedRif.getId();
 					}
 				}
 			}
@@ -424,9 +424,9 @@ public class RifugioManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/modifica")
+	@RequestMapping("/rifugio/{id}/modifica")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String modificaRifugio(@PathVariable("nome") String nomeRif, @PathVariable("idRif")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String modificaRifugio(@PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -436,10 +436,10 @@ public class RifugioManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(!verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+				if(!verificaService.verificaEsistenzaRif(idRif, request)) {
 					throw new ApplicationException((String) request.getAttribute("messaggio"));
 				}
-				else if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)|| verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request)) {
+				else if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)|| verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
 					Rifugio rif = rifRepo.getOne(idRif);
 					RifugioForm rifForm = new RifugioForm();
 					rifForm.setAltitudine(rif.getAltitudine());
@@ -457,7 +457,6 @@ public class RifugioManagementController {
 					request.setAttribute("loggedUser", loggedUser);
 					request.setAttribute("azione", "modifica");
 					request.setAttribute("rifForm", rifForm);
-					request.setAttribute("nomeRif", nomeRif);
 					request.setAttribute("idRif", idRif);
 					return "insModRifugio";
 				}
@@ -474,9 +473,9 @@ public class RifugioManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/modifica/submit") 
+	@RequestMapping("/rifugio/{id}/modifica/submit") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String modRifugioSub(@PathVariable("nome")String nomeRif, @PathVariable("idRif")Long idRif, @Valid @ModelAttribute("rifForm")RifugioForm rifForm, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
+	public String modRifugioSub(@PathVariable("id")Long idRif, @Valid @ModelAttribute("rifForm")RifugioForm rifForm, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -487,13 +486,12 @@ public class RifugioManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(!verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+				if(!verificaService.verificaEsistenzaRif(idRif, request)) {
 					throw new ApplicationException((String) request.getAttribute("messaggio"));
 				}
-				else if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)|| verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request)) {
+				else if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)|| verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
-					request.setAttribute("nomeRif", nomeRif);
 					request.setAttribute("idRif", idRif);	
 
 					if(bindingResult.hasErrors()) {
@@ -535,7 +533,7 @@ public class RifugioManagementController {
 							rif.setPrezzoPostoLetto(rifForm.getPrezzoPostoLetto());
 							rif.setTel(rifForm.getTel());
 							rifRepo.save(rif);
-							return "redirect:/rifugio/" + rifForm.getNome() + "/" + idRif + "/modifica";
+							return "redirect:/rifugio/"+ idRif + "/modifica";
 						}
 					
 					}
@@ -553,9 +551,9 @@ public class RifugioManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/modifica/foto")
+	@RequestMapping("/rifugio/{id}/modifica/foto")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String modificaIconaRifugio(@PathVariable("nome")String nomeRif, @PathVariable("idRif")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String modificaIconaRifugio(@PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -566,11 +564,12 @@ public class RifugioManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
-					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request)) {
+				if(verificaService.verificaEsistenzaRif(idRif, request)) {
+					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
 						String iconaRifugio = rifRepo.findRifugioIconPath(idRif);
-						request.setAttribute("iconaRifugio", iconaRifugio);
+						request.setAttribute("fotoPath", iconaRifugio);
 						request.setAttribute("tipologia", "rifugio");
+						request.setAttribute("idRif", idRif);
 						request.setAttribute("logged", loggedUser != null);
 						request.setAttribute("loggedUser", loggedUser);
 						return "modificaFoto";
@@ -587,9 +586,9 @@ public class RifugioManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/modifica/foto/submit")
+	@RequestMapping("/rifugio/{id}/modifica/foto/submit")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String modificaIconaRifugioSubmit(@PathVariable("nome")String nomeRif, @PathVariable("idRif")Long idRif, @RequestParam("foto")MultipartFile iconaRifugio, HttpServletRequest request, HttpServletResponse response) {
+	public String modificaIconaRifugioSubmit(@PathVariable("id")Long idRif, @RequestParam("foto")MultipartFile iconaRifugio, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -600,8 +599,8 @@ public class RifugioManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
-					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request)) {
+				if(verificaService.verificaEsistenzaRif(idRif, request)) {
+					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
 						if(!iconaRifugio.isEmpty()) {
 							Rifugio rif = rifRepo.getOne(idRif);
 							String filename = null;
@@ -613,10 +612,10 @@ public class RifugioManagementController {
 							}
 							rif.setIconPath(filename);
 							rifRepo.save(rif);
-							return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/modifica/foto";
+							return "redirect:/rifugio/" + idRif + "/modifica/foto";
 						}
 						else {
-							request.setAttribute("redirectUrl", "/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/modifica/foto");
+							request.setAttribute("redirectUrl", "/rifugio/" + idRif + "/modifica/foto");
 							throw new ApplicationException("File vuoto");
 						}
 					}
@@ -633,9 +632,9 @@ public class RifugioManagementController {
 		
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/modifica/foto/cancella")
+	@RequestMapping("/rifugio/{id}/modifica/foto/cancella")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String cancellaIconaRifugio(@PathVariable("nome")String nomeRif, @PathVariable("idRif")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String cancellaIconaRifugio(@PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -646,8 +645,8 @@ public class RifugioManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
-					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request)) {
+				if(verificaService.verificaEsistenzaRif(idRif, request)) {
+					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
 						Rifugio rif = rifRepo.getOne(idRif);
 						String iconaRif = rif.getIconPath();
 						if(!iconaRif.equals(Constants.DEF_ICONA_RIF)) {
@@ -656,7 +655,7 @@ public class RifugioManagementController {
 							Path iconPath = Paths.get(Constants.ICONA_ESC_RIF_DIR, iconaRif);
 							Files.delete(iconPath);
 						}
-						return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/modifica/foto";
+						return "redirect:/rifugio/" + idRif + "/modifica/foto";
 						
 					}
 					else throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -671,9 +670,9 @@ public class RifugioManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/cancella") 
+	@RequestMapping("/rifugio/{id}/cancella") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String cancellaRifugio(@PathVariable("nome")String nomeRif, @PathVariable(name = "idRif") Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String cancellaRifugio(@PathVariable("id") Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -683,7 +682,7 @@ public class RifugioManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					Rifugio rif = rifRepo.getOne(idRif);
 					List<Foto> fotoRif = rif.getFoto();
 					List<Commento> comRif = rif.getCommenti();

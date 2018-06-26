@@ -56,9 +56,9 @@ public class MenuManagementController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(MenuManagementController.class);
 	
-	@RequestMapping("/rifugio/{nome}/{id}/menu/{categoria}")
+	@RequestMapping("/rifugio/{id}/menu/{categoria}")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String elencoPiattiPerCategoria(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, @PathVariable("categoria")CategoriaMenu categoria, HttpServletRequest request, HttpServletResponse response) {
+	public String elencoPiattiPerCategoria(@PathVariable("id")Long idRif, @PathVariable("categoria")CategoriaMenu categoria, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -67,7 +67,7 @@ public class MenuManagementController {
 			session.initSession(request, response);
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
-			if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+			if(verificaService.verificaEsistenzaRif(idRif, request)) {
 				throw new ApplicationException((String) request.getAttribute("messaggio"));
 			}
 			else {
@@ -87,9 +87,9 @@ public class MenuManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/menu/aggiungiPiatto")
+	@RequestMapping("/rifugio/{id}/menu/aggiungiPiatto")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String aggiungiPiatto(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String aggiungiPiatto(@PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -99,8 +99,8 @@ public class MenuManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request)) {
-					if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
+					if(verificaService.verificaEsistenzaRif(idRif, request)) {
 						setInfo(loggedUser, idRif, request);
 						request.setAttribute("piattoForm", new PiattoForm());
 						request.setAttribute("azione", "inserimento");
@@ -118,9 +118,9 @@ public class MenuManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/menu/aggiungiPiatto/submit")
+	@RequestMapping("/rifugio/{id}/menu/aggiungiPiatto/submit")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String aggiungiPiattoSubmit(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif,  @Valid @ModelAttribute("piattoForm")PiattoForm piattoForm, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
+	public String aggiungiPiattoSubmit(@PathVariable("id")Long idRif,  @Valid @ModelAttribute("piattoForm")PiattoForm piattoForm, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -131,8 +131,8 @@ public class MenuManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request)) {
-					if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
+					if(verificaService.verificaEsistenzaRif(idRif, request)) {
 						if(bindingResult.hasErrors()) {
 							setInfo(loggedUser, idRif, request);
 							request.setAttribute("azione", "inserimento");
@@ -154,7 +154,7 @@ public class MenuManagementController {
 								piatto.setPrezzo(piattoForm.getPrezzo());
 								piatto.setRifugio(rifRepo.getOne(idRif));
 								piattoRepo.save(piatto);
-								return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/menu/" + piattoForm.getCategoria();
+								return "redirect:/rifugio/" + idRif + "/menu/" + piattoForm.getCategoria();
 							}
 						}
 					}
@@ -170,9 +170,9 @@ public class MenuManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/menu/modificaPiatto")
+	@RequestMapping("/rifugio/{id}/menu/modificaPiatto")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String modificaPiatto(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, @RequestParam("idPiatto")Long idPiatto, HttpServletRequest request, HttpServletResponse response) {
+	public String modificaPiatto( @PathVariable("id")Long idRif, @RequestParam("idPiatto")Long idPiatto, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -183,11 +183,11 @@ public class MenuManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request)) {
-					if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
+					if(verificaService.verificaEsistenzaRif(idRif, request)) {
 						Piatto piatto = piattoRepo.getOne(idPiatto);
 						if(piatto == null) {
-							request.setAttribute("redirectUrl", "/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/menu/" + CategoriaMenu.Primi.toString());
+							request.setAttribute("redirectUrl", "/rifugio/" + idRif + "/menu/" + CategoriaMenu.Primi.toString());
 							throw new ApplicationException("Piatto inesistente");
 						}
 						else {
@@ -216,9 +216,9 @@ public class MenuManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/menu/modificaPiatto/submit")
+	@RequestMapping("/rifugio/{id}/menu/modificaPiatto/submit")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String modPiattoSubmit(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, @RequestParam("idPiatto")Long idPiatto,  @Valid @ModelAttribute("piattoForm")PiattoForm piattoForm, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
+	public String modPiattoSubmit(@PathVariable("id")Long idRif, @RequestParam("idPiatto")Long idPiatto,  @Valid @ModelAttribute("piattoForm")PiattoForm piattoForm, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -229,11 +229,11 @@ public class MenuManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request)) {
-						if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
+						if(verificaService.verificaEsistenzaRif(idRif, request)) {
 							Piatto piatto = piattoRepo.getOne(idPiatto);
 							if(piatto == null) {
-								request.setAttribute("redirectUrl", "/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/menu/" + CategoriaMenu.Primi.toString());
+								request.setAttribute("redirectUrl", "/rifugio/" + idRif + "/menu/" + CategoriaMenu.Primi.toString());
 								throw new ApplicationException("Piatto inesistente");
 							}
 							else {
@@ -259,7 +259,7 @@ public class MenuManagementController {
 										piatto.setNome(piattoForm.getNome());
 										piatto.setPrezzo(piattoForm.getPrezzo());
 										piattoRepo.save(piatto);
-										return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/menu/" + piattoForm.getCategoria().toString();
+										return "redirect:/rifugio/" + idRif + "/menu/" + piattoForm.getCategoria().toString();
 									}
 								}
 							}
@@ -276,9 +276,9 @@ public class MenuManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/menu/{categoria}/cancellaPiatto") 
+	@RequestMapping("/rifugio/{id}/menu/{categoria}/cancellaPiatto") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String cancellaPiatto(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, @PathVariable("categoria")CategoriaMenu categoria, @RequestParam("idPiatto")Long idPiatto, HttpServletRequest request, HttpServletResponse response) {
+	public String cancellaPiatto(@PathVariable("id")Long idRif, @PathVariable("categoria")CategoriaMenu categoria, @RequestParam("idPiatto")Long idPiatto, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -288,10 +288,10 @@ public class MenuManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request)) {
-						if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
+						if(verificaService.verificaEsistenzaRif(idRif, request)) {
 							piattoRepo.deleteById(idPiatto);
-							return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/menu/" + categoria.toString();
+							return "redirect:/rifugio/" + idRif + "/menu/" + categoria.toString();
 						}
 						else throw new ApplicationException((String) request.getAttribute("messaggio"));
 				}

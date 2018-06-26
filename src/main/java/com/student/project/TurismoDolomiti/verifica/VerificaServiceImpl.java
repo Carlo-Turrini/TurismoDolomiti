@@ -84,13 +84,13 @@ public class VerificaServiceImpl implements VerificaService {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean verificaGestore(Long idRif, Long idUtente, String nomeRif, HttpServletRequest request) {
+	public boolean verificaGestore(Long idRif, Long idUtente, HttpServletRequest request) {
 		try {
 			if(possRepo.verificaProprieta(idRif, idUtente)>0) {
 				return true;
 			}
 			else {
-				request.setAttribute("messaggio", "Non sei uno dei gestori di " + nomeRif);
+				request.setAttribute("messaggio", "Non sei uno dei gestori di " + rifRepo.findNomeRifugio(idRif));
 				request.setAttribute("redirectUrl", "/elencoRifugiPosseduti");
 				return false;
 			}
@@ -102,10 +102,10 @@ public class VerificaServiceImpl implements VerificaService {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean verificaNonGestore(Long idRif, Long idUtente, String nomeRif, HttpServletRequest request) {
+	public boolean verificaNonGestore(Long idRif, Long idUtente, HttpServletRequest request) {
 		try {
 			if(possRepo.verificaProprieta(idRif, idUtente)>0) {
-				request.setAttribute("messaggio", "Utente già gestore di " + nomeRif);
+				request.setAttribute("messaggio", "Utente già gestore di " + rifRepo.findNomeRifugio(idRif));
 				request.setAttribute("redirectUrl", "/elencoRifugiPosseduti");
 				return false;
 			}
@@ -138,13 +138,13 @@ public class VerificaServiceImpl implements VerificaService {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public boolean verificaEsistenzaRif(Long idRif, String nomeRif, HttpServletRequest request)  {
+	public boolean verificaEsistenzaRif(Long idRif, HttpServletRequest request)  {
 		try {
 			if(rifRepo.verificaEsistenzaRifugio(idRif)>0) {
 				return true;
 			}
 			else {
-				request.setAttribute("messaggio", "Rifugio: " + nomeRif + " inesistente!");
+				request.setAttribute("messaggio", "Rifugio inesistente!");
 				request.setAttribute("redirectUrl", "/elencoRifugi");
 				return false;
 			}

@@ -3,7 +3,6 @@ package com.student.project.TurismoDolomiti.controller;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -185,6 +184,9 @@ public class EscursioneManagementController {
 					request.setAttribute("loggedUser", loggedUser);
 					request.setAttribute("escForm", new EscursioneForm());
 					request.setAttribute("azione", "inserimento");
+					nomiIdRif.add(new RifugioNomeIdDTO(1L, "Rifugio Lavaredo"));
+					nomiIdRif.add(new RifugioNomeIdDTO(2L, "Rifugio Auronzo"));
+					nomiIdRif.add(new RifugioNomeIdDTO(3L, "Rifugio Comici"));
 					request.setAttribute("nomiIdRif", nomiIdRif);
 					
 					return "insModEscursione";
@@ -222,7 +224,7 @@ public class EscursioneManagementController {
 					if(esc != null) {
 						List<RifugioNomeIdDTO> nomiIdRif = rifRepo.findRifugioNomeAndId();
 						request.setAttribute("nomiIdRif", nomiIdRif);
-						request.setAttribute("messaggio", "Esiste già un escursione con questo nome");
+						request.setAttribute("messaggio", "Esiste già un'escursione con questo nome");
 						request.setAttribute("escForm", escForm);
 						request.setAttribute("azione", "inserimento");
 						return "insModEscursione";
@@ -241,6 +243,7 @@ public class EscursioneManagementController {
 						esc.setMassiccioMontuoso(escForm.getMassiccioMontuoso());
 						esc.setNome(escForm.getNome());
 						esc.setTipologia(escForm.getTipologia());
+						esc.setIconPath(Constants.DEF_ICONA_ESC);
 						Escursione savedEsc = escRepo.save(esc);
 						List<Long> idPuntiRistoro = escForm.getIdPuntiRistoro();
 						for(Long id : idPuntiRistoro) {
@@ -302,6 +305,9 @@ public class EscursioneManagementController {
 						escForm.setTipologia(esc.getTipologia());
 						escForm.setIdPuntiRistoro(passaPerRepo.findPuntiRistoroEsc(idEsc));
 						request.setAttribute("escForm", escForm);
+						request.setAttribute("latitude",esc.getLatitude());
+						request.setAttribute("longitude", esc.getLongitude());
+						request.setAttribute("gpxPath", esc.getGpxPath());
 						return "insModEscursione";
 					}
 			}
@@ -334,6 +340,9 @@ public class EscursioneManagementController {
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
 					request.setAttribute("idEsc", idEsc);
+					request.setAttribute("latitude",escForm.getLatitude());
+					request.setAttribute("longitude", escForm.getLongitude());
+					request.setAttribute("gpxPath", escRepo.findGpxPath(idEsc));
 					if(bindingResult.hasErrors()) {
 						request.setAttribute("azione", "modifca");
 						return "insModEscursione";
@@ -414,7 +423,7 @@ public class EscursioneManagementController {
 				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					String iconaEsc = escRepo.findEscIconPath(idEsc);
 					request.setAttribute("idEsc", idEsc);
-					request.setAttribute("iconaEsc", iconaEsc);
+					request.setAttribute("fotoPath", iconaEsc);
 					request.setAttribute("tipologia", "escursione");
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);

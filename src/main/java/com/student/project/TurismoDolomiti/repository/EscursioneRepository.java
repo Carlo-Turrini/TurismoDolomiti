@@ -37,5 +37,6 @@ public interface EscursioneRepository extends JpaRepository<Escursione, Long>, J
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.EscursioneCardDto(esc.id, esc.nome, esc.iconPath, esc.durata, esc.dislivelloSalita, esc.dislivelloDiscesa, esc.lunghezza, esc.difficolta, esc.tipologia, esc.massiccioMontuoso, esc.label) FROM Escursione esc WHERE esc.completo = FALSE ")
 	List<EscursioneCardDto> findElencoEscursioniDaCompletare();
 	
-	
+	@Query("SELECT e.gpxPath FROM Escursione e WHERE e.id = :id_esc")
+	String findGpxPath(@Param("id_esc")Long idEsc);
 }

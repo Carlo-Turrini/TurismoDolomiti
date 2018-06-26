@@ -52,9 +52,9 @@ public class CameraManagementController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CameraManagementController.class);
 	
-	@RequestMapping("/rifugio/{nome}/{id}/elencoCamere") 
+	@RequestMapping("/rifugio/{id}/elencoCamere") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String elencoCamere(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String elencoCamere(@PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -64,8 +64,8 @@ public class CameraManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
-					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request) ) {
+				if(verificaService.verificaEsistenzaRif(idRif, request)) {
+					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request) ) {
 						List<Camera> camereRifugio = camRepo.findCamereByRifugioId(idRif);
 						List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
 						request.setAttribute("gestoriRifugio", gestoriRifugio);
@@ -90,9 +90,9 @@ public class CameraManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/elencoCamere/aggiungi")
+	@RequestMapping("/rifugio/{id}/elencoCamere/aggiungi")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String aggiungiCamera(@ModelAttribute("camForm") @Valid CameraForm camForm, BindingResult bindingResult, @PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String aggiungiCamera(@ModelAttribute("camForm") @Valid CameraForm camForm, BindingResult bindingResult, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -102,8 +102,8 @@ public class CameraManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
-					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request) ) {
+				if(verificaService.verificaEsistenzaRif(idRif, request)) {
+					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request) ) {
 						if(bindingResult.hasErrors()) {
 							List<Camera> camereRifugio = camRepo.findCamereByRifugioId(idRif);
 							List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
@@ -141,7 +141,7 @@ public class CameraManagementController {
 									pl.setCamera(savedCam);
 									plRepo.save(pl);
 								}
-								return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/elencoCamere";
+								return "redirect:/rifugio/" + idRif + "/elencoCamere";
 							}
 						}
 					}
@@ -157,9 +157,9 @@ public class CameraManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{nome}/{id}/elencoCamere/rimuovi") 
+	@RequestMapping("/rifugio/{id}/elencoCamere/rimuovi") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String rimuoviCamera(@RequestParam("idCamera")Long idCam, @PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String rimuoviCamera(@RequestParam("idCamera")Long idCam, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
 		
@@ -169,14 +169,14 @@ public class CameraManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
-					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), nomeRif, request) ) {
+				if(verificaService.verificaEsistenzaRif(idRif, request)) {
+					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request) ) {
 						if(camRepo.verificaCameraRifugio(idRif, idCam)>0) {
 							camRepo.deleteById(idCam);
-							return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/elencoCamere";
+							return "redirect:/rifugio/" + idRif + "/elencoCamere";
 						}
 						else {
-							request.setAttribute("redirectUrl", "/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/elencoCamere");
+							request.setAttribute("redirectUrl", "/rifugio/" + idRif + "/elencoCamere");
 							throw new ApplicationException(rifRepo.findNomeRifugio(idRif) + ": camera inesistente!");
 						}
 						

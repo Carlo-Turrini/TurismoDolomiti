@@ -44,15 +44,15 @@ public class EscursioneForm {
 	@NotNull
 	@Digits(integer = 4, fraction = 0)
 	private Integer dislivelloDiscesa;
-	private List<Long> IdPuntiRistoro =  new LinkedList<Long>();
+	private List<Long> idPuntiRistoro =  new LinkedList<Long>();
 	
 
 	public List<Long> getIdPuntiRistoro() {
-		return IdPuntiRistoro;
+		return idPuntiRistoro;
 	}
 
 	public void setIdPuntiRistoro(List<Long> idPuntiRistoro) {
-		IdPuntiRistoro = idPuntiRistoro;
+		this.idPuntiRistoro = idPuntiRistoro;
 	}
 
 	public String getNome() {

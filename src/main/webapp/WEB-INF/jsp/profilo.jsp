@@ -139,7 +139,7 @@
 				<% if(logged && (loggedUser.getIdUtente() == utente.getId() || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))){ %>
 				<div class="col-md-1">
 					<div class="btn-group" role="group">
-					  	<a class="btn btn-link" href="/profilo/${utente.getId()}/cancella">
+					  	<a class="btn btn-light" href="/profilo/${utente.getId()}/cancella">
 							<i class="fa fa-trash-o fa-lg"></i>
 						</a>
 					  	<div class="btn-group" role="group">

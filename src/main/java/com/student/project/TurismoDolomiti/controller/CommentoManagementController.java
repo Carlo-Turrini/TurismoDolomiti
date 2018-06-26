@@ -71,12 +71,12 @@ public class CommentoManagementController {
 		}
 	}
 	
-	@RequestMapping("rifugio/{nome}/{id}/commenti")
+	@RequestMapping("rifugio/{id}/commenti")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String ElencoCommentiRif(@PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String ElencoCommentiRif( @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		
 		try {
-			if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+			if(verificaService.verificaEsistenzaRif(idRif, request)) {
 				ElencoCommenti(idRif, request, response);
 				request.setAttribute("gestoriRifugio", possRepo.gestoriRifugio(idRif));
 				request.setAttribute("tipologia", "Rifugio");
@@ -134,15 +134,15 @@ public class CommentoManagementController {
 		}
 	}
 	
-	@RequestMapping("rifugio/{nome}/{id}/aggiungiCommento") 
+	@RequestMapping("rifugio/{id}/aggiungiCommento") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String AggiungiCommentoRif(@ModelAttribute("commento") String commento, @PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String AggiungiCommentoRif(@ModelAttribute("commento") String commento, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+			if(verificaService.verificaEsistenzaRif(idRif, request)) {
 				if(!commento.isEmpty()) {
 					AggiungiCommento(idRif, commento, request, response);
 				}
-				return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif;
+				return "redirect:/rifugio/" + idRif;
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
 		}
@@ -199,14 +199,14 @@ public class CommentoManagementController {
 		
 	}
 	
-	@RequestMapping("rifugio/{nome}/{id}/commenti/rimuoviCommento")
+	@RequestMapping("rifugio/{id}/commenti/rimuoviCommento")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String RimuoviCommentoRif(@RequestParam("idCommento")Long idCommento, @PathVariable("nome")String nomeRif, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
+	public String RimuoviCommentoRif(@RequestParam("idCommento")Long idCommento, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 
 		try {
-			if(verificaService.verificaEsistenzaRif(idRif, nomeRif, request)) {
+			if(verificaService.verificaEsistenzaRif(idRif, request)) {
 				RimuoviCommento(idCommento, idRif, request, response);
-				return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/commenti";
+				return "redirect:/rifugio/" + idRif + "/commenti";
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
 		}
