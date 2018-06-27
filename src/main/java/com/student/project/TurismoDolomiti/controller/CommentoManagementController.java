@@ -60,6 +60,7 @@ public class CommentoManagementController {
 		try {
 			if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 				ElencoCommenti(idEsc, request, response);
+				request.setAttribute("idEsc", idEsc);
 				request.setAttribute("tipologia", "Escursione");
 				return "elencoCommenti";
 			}
@@ -79,6 +80,7 @@ public class CommentoManagementController {
 			if(verificaService.verificaEsistenzaRif(idRif, request)) {
 				ElencoCommenti(idRif, request, response);
 				request.setAttribute("gestoriRifugio", possRepo.gestoriRifugio(idRif));
+				request.setAttribute("idRif", idRif);
 				request.setAttribute("tipologia", "Rifugio");
 				return "elencoCommenti";
 			}
@@ -102,7 +104,6 @@ public class CommentoManagementController {
 			loggedUser = loggedUserDAO.find();
 			request.setAttribute("logged", loggedUser != null);
 			request.setAttribute("loggedUser", loggedUser);
-			request.setAttribute("idEl", idEl);
 			request.setAttribute("nomeEl", elRepo.findNomeEl(idEl));
 			Pageable allComments = PageRequest.of(0, Integer.MAX_VALUE);
 			List<CommentoCardDto> commenti = comRepo.findCommentiByElemento(idEl, allComments);
