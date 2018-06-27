@@ -22,7 +22,7 @@ public class Piatto implements Serializable {
 	@Column(nullable = false)
 	private Integer prezzo; //In euro
 	@Column(length = 516, nullable = false)
-	private String descrizone;
+	private String descrizione;
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private CategoriaMenu categoria;
@@ -50,11 +50,11 @@ public class Piatto implements Serializable {
 	public void setPrezzo(Integer prezzo) {
 		this.prezzo = prezzo;
 	}
-	public String getDescrizone() {
-		return descrizone;
+	public String getDescrizione() {
+		return descrizione;
 	}
-	public void setDescrizone(String descrizone) {
-		this.descrizone = descrizone;
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
 	}
 	public CategoriaMenu getCategoria() {
 		return categoria;

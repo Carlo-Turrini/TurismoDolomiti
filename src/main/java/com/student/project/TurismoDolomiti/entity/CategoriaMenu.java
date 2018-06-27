@@ -5,6 +5,4 @@ public enum CategoriaMenu {
 	Secondi,
 	Contorni,
 	Dessert,
-	Bevande,
-	Pizze
 }

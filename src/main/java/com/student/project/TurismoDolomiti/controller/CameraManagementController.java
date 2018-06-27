@@ -67,8 +67,7 @@ public class CameraManagementController {
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request) ) {
 						List<Camera> camereRifugio = camRepo.findCamereByRifugioId(idRif);
-						List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
-						request.setAttribute("gestoriRifugio", gestoriRifugio);
+						request.setAttribute("gestoriRifugio", possRepo.gestoriRifugio(idRif));
 						if(!camereRifugio.isEmpty()) request.setAttribute("camere", camereRifugio);
 						else request.setAttribute("messaggio", "Non ci sono camere");
 						request.setAttribute("logged", loggedUser != null);
@@ -106,8 +105,7 @@ public class CameraManagementController {
 					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request) ) {
 						if(bindingResult.hasErrors()) {
 							List<Camera> camereRifugio = camRepo.findCamereByRifugioId(idRif);
-							List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
-							request.setAttribute("gestoriRifugio", gestoriRifugio);
+							request.setAttribute("gestoriRifugio", possRepo.gestoriRifugio(idRif));
 							if(!camereRifugio.isEmpty()) request.setAttribute("camere", camereRifugio);
 							else request.setAttribute("messaggio", "Non ci sono camere");
 							request.setAttribute("logged", loggedUser != null);
@@ -119,8 +117,7 @@ public class CameraManagementController {
 						else {
 							if(camRepo.verificaNumeroCamera(idRif, camForm.getNumCamera())>0) {
 								List<Camera> camereRifugio = camRepo.findCamereByRifugioId(idRif);
-								List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
-								request.setAttribute("gestoriRifugio", gestoriRifugio);
+								request.setAttribute("gestoriRifugio", possRepo.gestoriRifugio(idRif));
 								if(!camereRifugio.isEmpty()) request.setAttribute("camere", camereRifugio);
 								else request.setAttribute("messaggio", "Non ci sono camere");
 								request.setAttribute("logged", loggedUser != null);

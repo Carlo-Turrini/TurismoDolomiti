@@ -139,12 +139,12 @@
 				<% if(logged && (loggedUser.getIdUtente() == utente.getId() || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))){ %>
 				<div class="col-md-1">
 					<div class="btn-group" role="group">
-					  	<a class="btn btn-light" href="/profilo/${utente.getId()}/cancella">
+					  	<a class="btn btn-light" href="/profilo/${utente.getId()}/cancella" title="elimina">
 							<i class="fa fa-trash-o fa-lg"></i>
 						</a>
 					  	<div class="btn-group" role="group">
 							<div class="dropdown">
-			  					<button class="btn btn-light dropdown-toggle" type="button" id="modifyButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  					<button class="btn btn-light dropdown-toggle" type="button" id="modifyButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="modifica">
 			    					<i class="fa fa-pencil"></i>
 			  					</button>
 			  					<div class="dropdown-menu" aria-labelledby="modifyButton">

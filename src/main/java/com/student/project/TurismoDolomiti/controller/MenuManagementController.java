@@ -67,7 +67,7 @@ public class MenuManagementController {
 			session.initSession(request, response);
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
-			if(verificaService.verificaEsistenzaRif(idRif, request)) {
+			if(!verificaService.verificaEsistenzaRif(idRif, request)) {
 				throw new ApplicationException((String) request.getAttribute("messaggio"));
 			}
 			else {
@@ -149,7 +149,7 @@ public class MenuManagementController {
 							else {
 								Piatto piatto = new Piatto();
 								piatto.setCategoria(piattoForm.getCategoria());
-								piatto.setDescrizone(piattoForm.getDescrizione());
+								piatto.setDescrizione(piattoForm.getDescrizione());
 								piatto.setNome(piattoForm.getNome());
 								piatto.setPrezzo(piattoForm.getPrezzo());
 								piatto.setRifugio(rifRepo.getOne(idRif));
@@ -193,7 +193,7 @@ public class MenuManagementController {
 						else {
 							PiattoForm piattoForm = new PiattoForm();
 							piattoForm.setCategoria(piatto.getCategoria());
-							piattoForm.setDescrizione(piatto.getDescrizone());
+							piattoForm.setDescrizione(piatto.getDescrizione());
 							piattoForm.setNome(piatto.getNome());
 							piattoForm.setPrezzo(piatto.getPrezzo());
 							
@@ -255,7 +255,7 @@ public class MenuManagementController {
 									}
 									else {
 										piatto.setCategoria(piattoForm.getCategoria());
-										piatto.setDescrizone(piattoForm.getDescrizione());
+										piatto.setDescrizione(piattoForm.getDescrizione());
 										piatto.setNome(piattoForm.getNome());
 										piatto.setPrezzo(piattoForm.getPrezzo());
 										piattoRepo.save(piatto);

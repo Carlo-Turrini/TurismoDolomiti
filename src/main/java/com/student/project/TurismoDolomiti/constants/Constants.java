@@ -6,7 +6,7 @@ import com.student.project.TurismoDolomiti.sessionDao.SessionDAOFactory;
 
 public class Constants {
 	public static final String SESSION_IMPL=SessionDAOFactory.COOKIEIMPL;
-	public static final String FOTO_DIR = "C:\\Users\\Tarlo\\TurismoDolomiti\\foto\\";
+	public static final String FOTO_DIR = "C:\\Users\\Tarlo\\TurismoDolomitiMedia\\galleria\\";
 	public static final String GPX_DIR = "C:\\Users\\Tarlo\\TurismoDolomitiMedia\\gpx\\";
 	public static final String ALTIMETRIA_DIR = "C:\\Users\\Tarlo\\TurismoDolomitiMedia\\altimetria\\";
 	public static final String ICONA_UTENTE_DIR = "C:\\Users\\Tarlo\\TurismoDolomitiMedia\\iconeUtenti\\";
