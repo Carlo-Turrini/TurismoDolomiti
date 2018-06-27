@@ -1,0 +1,15 @@
+<p class="lead">Commenti:</p>
+<% for(CommentoCardDto comm : commentiCard){ %>
+	<article>
+		<div class="row">
+			<div class="col-md-1 comPhotoCol">
+				<img src="<%=comm.getProfilePhotoPathUtente()%>" class="rounded-circle fotoCommento">
+			</div>
+			<div class="col-md-11">
+				<a class="btn btn-link myComBtnLink" href="/profilo/<%=comm.getIdUtente()%>"><%=comm.getNomeUtente()%> <%=comm.getCognomeUtente()%></a>
+				<span class="timestamp"><%=comm.getTimestamp().toString()%></span>
+				<p class="commento"><%=comm.getTesto()%></p>
+			</div>
+		</div>
+	</article>
+<% } %>

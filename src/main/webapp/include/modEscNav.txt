@@ -1,0 +1,9 @@
+<div class="col-md-3"> 
+	<nav class="nav flex-column ">
+		<a class="nav-link  myLink" href="/escursione/${idEsc}/modifica">Modifica escursione</a>
+		<a class="nav-link myLink" href="/escursione/${idEsc}/modifica/foto">Foto</a>
+		<a class="nav-link myLink" href="/escursione/${idEsc}/modifica/gpx">Gpx</a>
+		<a class="nav-link myLink" href="/escursione/${idEsc}/modifica/altimetria">Altimetria</a>
+		<a class="btn btn-outline-secondary nav-btn" href="/escursione/${idEsc}">Escursione</a>
+	</nav>
+</div>

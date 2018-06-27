@@ -1,0 +1,7 @@
+<div class="col-md-3"> 
+	<nav class="nav flex-column ">
+		<a class="nav-link  myLink" href="/profilo/${idUtente}/modifica">Modifica profilo</a>
+		<a class="nav-link myLink" href="/profilo/${idUtente}/modifica/foto">Foto</a>
+		<a class="btn btn-outline-secondary nav-btn" href="/profilo/${idUtente}">Profilo</a>
+	</nav>
+</div>
