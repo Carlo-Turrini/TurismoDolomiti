@@ -1,7 +1,7 @@
 package com.student.project.TurismoDolomiti.repository;
 
 public class RifugioSearch {
-	private Boolean aperto;
+	private Boolean aperto = false;
 	private String nome;
 	private String massiccioMontuoso;
 	

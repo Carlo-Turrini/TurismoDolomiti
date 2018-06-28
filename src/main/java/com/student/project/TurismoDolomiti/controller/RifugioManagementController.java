@@ -112,7 +112,7 @@ public class RifugioManagementController {
 				String messaggio = "Non sono state trovati rifugi";
 				request.setAttribute("messaggio", messaggio);
 			}
-			else request.setAttribute("elRif", elencoRifugi);
+			else request.setAttribute("rifugi", elencoRifugi);
 			request.setAttribute("rifSearch", rSearch);
 			request.setAttribute("logged", loggedUser != null);
 			request.setAttribute("loggedUser", loggedUser);

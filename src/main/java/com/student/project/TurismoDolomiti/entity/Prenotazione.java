@@ -35,7 +35,7 @@ public class Prenotazione implements Serializable{
 	private String descrizioneGruppo;
 	@Column(name = "deleted", nullable = false)
 	@ColumnDefault("false")
-	private Boolean deleted;
+	private Boolean deleted = false;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_cliente")
 	private Utente cliente;

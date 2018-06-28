@@ -63,6 +63,7 @@ public class FotoManagementController {
 		try {
 			if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 				Galleria(idEsc, request, response);
+				request.setAttribute("idEsc", idEsc);
 				request.setAttribute("tipologia", "escursione");
 				return "galleriaFoto";
 			}
@@ -82,6 +83,7 @@ public class FotoManagementController {
 			if(verificaService.verificaEsistenzaRif(idRif, request)) {
 				Galleria(idRif, request, response);
 				request.setAttribute("tipologia", "rifugio");
+				request.setAttribute("idRif", idRif);
 				request.setAttribute("gestoriRifugio", possRepo.gestoriRifugio(idRif));
 				return "galleriaFoto";
 			}
@@ -106,7 +108,6 @@ public class FotoManagementController {
 			List<FotoCardDto> foto = fotoRepo.findPhotoesByElemento(idEl);
 			if(foto.isEmpty()) request.setAttribute("messaggio", "Non ci sono foto");
 			else request.setAttribute("foto", foto);
-			request.setAttribute("idEl", idEl);
 			request.setAttribute("nomeEl", elRepo.findNomeEl(idEl));
 			request.setAttribute("logged", loggedUser != null);
 			request.setAttribute("loggedUser", loggedUser);
@@ -117,7 +118,7 @@ public class FotoManagementController {
 		}
 	}
 	
-	@RequestMapping("/escursione/{id}/Foto/aggiungi")
+	@RequestMapping("/escursione/{id}/galleria/aggiungi")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String AggiungiFotoEsc(@ModelAttribute FotoInsertDTO foto, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -135,7 +136,7 @@ public class FotoManagementController {
 		}
 	}
 	
-	@RequestMapping("/rifugio/{id}/Foto/aggiungi")
+	@RequestMapping("/rifugio/{id}/galleria/aggiungi")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String AggiungiFotoRif(@ModelAttribute FotoInsertDTO foto, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -182,7 +183,7 @@ public class FotoManagementController {
 		}
 	}
 	
-	@RequestMapping("escursione/{id}/Foto/cacella") 
+	@RequestMapping("escursione/{id}/galleria/cacella") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String CancellaFotoEsc(@RequestParam("idFoto")Long idFoto, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -198,7 +199,7 @@ public class FotoManagementController {
 		}
 	}
 	
-	@RequestMapping("rifugio/{id}/Foto/cancella")
+	@RequestMapping("rifugio/{id}/galleria/cancella")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String CancellaFotoRif(@RequestParam("idFoto")Long idFoto, @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		try {

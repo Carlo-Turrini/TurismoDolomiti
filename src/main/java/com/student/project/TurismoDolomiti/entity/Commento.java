@@ -30,7 +30,7 @@ public class Commento implements Serializable {
 	private Timestamp timestamp;
 	@Column(name = "deleted", nullable = false)
 	@ColumnDefault("false")
-	private Boolean deleted;
+	private Boolean deleted = false;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_utente")
 	private Utente utente;

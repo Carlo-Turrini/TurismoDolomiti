@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page session="false" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="springForm"%>
 <%@ page import="com.student.project.TurismoDolomiti.dto.LoggedUserDTO" %>
 <%@ page import="com.student.project.TurismoDolomiti.entity.CredenzialiUtente" %>
@@ -35,11 +36,17 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 		<script type="text/javascript" src="/webjars/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 		<script language="javascript">
-			function deleteCommento(id) {
-				document.deleteForm.idCom.value = id;
+			function deleteCommento() {
 				document.deleteForm.submit();
-				
 			}
+			$(document).ready(function () {
+    			$('#deleteComModal').on('show.bs.modal', function (event) {
+					var button = $(event.relatedTarget) // Button that triggered the modal
+					var idCom = button.data('id') // Extract info from data-* attributes
+  					var modal = $(this)
+  					modal.find('.modal-body #idCommento').val(idCom)
+				})
+   			})
 		</script>
 		
 		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
@@ -104,12 +111,16 @@
 				color:#5E5956;
 				font-size: 16px; 
 			}
-			.nav-link:hover, .myBtnLink:hover {
+			.nav-link:hover, .myBtnLink:hover, .myDelLink:hover {
 				transition: color 0.5s ease;
 				color:#d3d3d3;
 			}
 			.myBtnLink {
 				padding: 0rem .75rem;
+				color:#5E5956;
+			}
+			.myDelLink {
+				padding:0px;
 				color:#5E5956;
 			}
 			.fotoCommento {
@@ -132,11 +143,42 @@
 			.col-md-2 {
 				padding-left:0px;
 			}
+			.commUtenteRefCol {
+				padding-left:0px;
+			}
+			.subtitle {
+				font-size:1.50rem;
+			}
+			.comCol {
+				padding-left:0px;
+			}
 		</style>
 	</head>
 	<body>
 		<%@include file="/include/header.txt" %>
 		<main>
+			<div class="modal fade" id="deleteComModal" tabindex="-1" role="dialog" aria-labelledby="deleteComModalLabel" aria-hidden="true">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="deleteComModalLabel">Eliminazione</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				      	<p class="lead">Confermi di voler eliminare il commento?</p>
+						<form name="deleteForm" method="POST" action="<%=deleteUrl%>">     
+					        <input type="hidden" name="idCommento" id="idCommento"/>      
+					    </form>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+				        <a class="btn btn-danger" href="javascript:deleteCommento()">Conferma</a>
+				      </div>
+				    </div>
+				  </div>
+			</div>
 			<div class="container">
 			
 				<div class="row">
@@ -147,7 +189,8 @@
 					<% } %>
 					<div class="col-md-10">
 						<h1>${nomeEl}</h1>
-						<p class="lead">Commenti:</p>
+						<p class="lead subtitle">Commenti:</p>
+						<hr>
 						<% if(messaggio != null){ %>
 							<div class="alert alert-primary" role="alert">
 							  <span><i class="fa fa-info-circle fa-lg" style="color: #21618C;"></i> ${messaggio}</span>
@@ -157,9 +200,6 @@
 						<% } %>
 					</div>
 				</div>
-				<form name="deleteForm" method="POST" action="<%=deleteUrl%>">     
-			        <input type="hidden" name="idCom"/>      
-			    </form>
 			</div>
 		</main>
 		<%@ include file="/include/footer.txt" %>

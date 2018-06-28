@@ -28,4 +28,6 @@ public interface PostoLettoRepository extends JpaRepository<PostoLetto, Long> {
 	
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.PostiLettoPrenotatiCameraDTO(c.id, c.numCamera, COUNT(pl), c.capienza, c.tipologia) FROM PeriodoPrenotato pp JOIN PostoLetto pl ON pp.postoLetto.id = pl.id JOIN Camera c ON pl.camera.id = c.id WHERE pp.prenotazione.id = :id_pren GROUP BY c.id")
 	List<PostiLettoPrenotatiCameraDTO> findPrenotatiByCamera(@Param("id_pren")Long idPren);
+	
+
 }

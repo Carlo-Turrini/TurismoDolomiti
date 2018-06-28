@@ -30,4 +30,5 @@ public interface PrenotazioneRepository extends JpaRepository<Prenotazione, Long
 	PrenInfoDTO findPrenInfo(@Param("id_pren")Long idPren);
 	
 
+
 }

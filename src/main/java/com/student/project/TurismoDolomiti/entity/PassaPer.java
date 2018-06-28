@@ -19,7 +19,7 @@ public class PassaPer implements Serializable {
 	private Long id;
 	@Column(name = "deleted", nullable = false)
 	@ColumnDefault("false")
-	private Boolean deleted;
+	private Boolean deleted = false;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_escursione")
 	private Escursione escursione;

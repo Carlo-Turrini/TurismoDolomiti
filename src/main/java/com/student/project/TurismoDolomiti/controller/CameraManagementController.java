@@ -22,8 +22,10 @@ import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
 import com.student.project.TurismoDolomiti.entity.Camera;
 import com.student.project.TurismoDolomiti.entity.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.entity.PostoLetto;
+import com.student.project.TurismoDolomiti.entity.Rifugio;
 import com.student.project.TurismoDolomiti.formValidation.CameraForm;
 import com.student.project.TurismoDolomiti.repository.CameraRepository;
+import com.student.project.TurismoDolomiti.repository.PeriodoPrenotatoRepository;
 import com.student.project.TurismoDolomiti.repository.PossiedeRepository;
 import com.student.project.TurismoDolomiti.repository.PostoLettoRepository;
 import com.student.project.TurismoDolomiti.repository.PrenotazioneRepository;
@@ -49,6 +51,8 @@ public class CameraManagementController {
 	CameraRepository camRepo;
 	@Autowired
 	PossiedeRepository possRepo;
+	@Autowired
+	PeriodoPrenotatoRepository ppRepo;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CameraManagementController.class);
 	
@@ -128,7 +132,9 @@ public class CameraManagementController {
 								return "elencoCamere";
 							}
 							else {
+								Rifugio rif = rifRepo.getOne(idRif);
 								Camera cam = new Camera();
+								cam.setRifugio(rif);
 								cam.setCapienza(camForm.getCapienza());
 								cam.setNumCamera(camForm.getNumCamera());
 								cam.setTipologia(camForm.getTipologia());
@@ -169,7 +175,12 @@ public class CameraManagementController {
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request) ) {
 						if(camRepo.verificaCameraRifugio(idRif, idCam)>0) {
+							List<Long> prenotazioniCamera = ppRepo.findPrenotazioniByCamera(idCam);
+							for(Long prenId : prenotazioniCamera) {
+								prenRepo.deleteById(prenId);
+							}
 							camRepo.deleteById(idCam);
+							
 							return "redirect:/rifugio/" + idRif + "/elencoCamere";
 						}
 						else {

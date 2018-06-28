@@ -4,16 +4,23 @@
 			<div class="col-md-1 comPhotoCol">
 				<img src="<%=comm.getProfilePhotoPathUtente()%>" class="rounded-circle fotoCommento">
 			</div>
-			<div class="col-md-11">
-				<a class="btn btn-link myComBtnLink" href="/profilo/<%=comm.getIdUtente()%>"><%=comm.getNomeUtente()%> <%=comm.getCognomeUtente()%></a>
-				<span class="timestamp"><%=comm.getTimestamp().toString()%></span>
+			<div class="col-md-10 comCol">
+				<div class="row ">
+					<div class="col-md-11  commUtenteRefCol">
+						<a class="btn btn-link myComBtnLink" href="/profilo/<%=comm.getIdUtente()%>"><%=comm.getNomeUtente()%> <%=comm.getCognomeUtente()%></a>
+						<span class="timestamp"><%=comm.getTimestamp().toString()%></span>
+					</div>
+					<div class="col-md-1">
+						<% if(logged && (loggedUser.getIdUtente() == comm.getIdUtente() || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))) { %>
+						<button type="button" class="btn btn-link myDelLink" data-toggle="modal" data-target="#deleteComModal" data-id="<%=comm.getIdCommento()%>">
+							<i class="fa fa-trash-o fa-lg"></i>
+						</button>
+						<% } %>
+					</div>
+				</div>
 				<p class="commento"><%=comm.getTesto()%></p>
 			</div>
-			<% if(loggedUser.getIdUtente() == comm.getIdUtente() || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) { %>
-				<a class="btn btn-link " href="javascript:deleteCommento(<%=comm.getIdCommento()%>)">
-					<i class="fa fa-trash-o fa-lg"></i>
-				</a>
-			<% } %>
+			
 		</div>
 	</article>
 <% } %>

@@ -166,6 +166,9 @@
 			.col-md-2 {
 				padding-left:0px;
 			}
+			.subtitle {
+				font-size:1.50rem;
+			}
 		</style>
 	</head>
 	<body>
@@ -201,9 +204,10 @@
 				<% } %>
 				<div class="row">
 					<%@include file="/include/rifNav.txt" %>
-					<div class="col-md-8">
+					<div class="col-md-10">
 						<h1>${nomeRif}</h1>
-						<p class="lead">Menu: <%=categoriaMenu.toString()%></p>
+						<p class="lead subtitle">Menu: <%=categoriaMenu.toString()%></p>
+						<hr>
 						<% if(messaggio != null) { %>
 							<div class="alert alert-primary" role="alert">
 							  <span><i class="fa fa-info-circle fa-lg" style="color: #21618C;"></i> ${messaggio}</span>

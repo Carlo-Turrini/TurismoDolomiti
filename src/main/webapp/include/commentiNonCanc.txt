@@ -1,4 +1,5 @@
-<p class="lead">Commenti:</p>
+<p class="lead subtitle">Commenti:</p>
+<hr>
 <% for(CommentoCardDto comm : commentiCard){ %>
 	<article>
 		<div class="row">
