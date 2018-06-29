@@ -91,7 +91,7 @@ public class VerificaServiceImpl implements VerificaService {
 			}
 			else {
 				request.setAttribute("messaggio", "Non sei uno dei gestori di " + rifRepo.findNomeRifugio(idRif));
-				request.setAttribute("redirectUrl", "/elencoRifugiPosseduti");
+				request.setAttribute("redirectUrl", "/profilo/" + idUtente + "/elencoRifugiGestiti");
 				return false;
 			}
 		}
@@ -106,7 +106,7 @@ public class VerificaServiceImpl implements VerificaService {
 		try {
 			if(possRepo.verificaProprieta(idRif, idUtente)>0) {
 				request.setAttribute("messaggio", "Utente già gestore di " + rifRepo.findNomeRifugio(idRif));
-				request.setAttribute("redirectUrl", "/elencoRifugiPosseduti");
+				request.setAttribute("redirectUrl", "/profilo/" + idUtente + "/elencoRifugiGestiti");
 				return false;
 			}
 			else {
@@ -210,6 +210,28 @@ public class VerificaServiceImpl implements VerificaService {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	public boolean verificaCredUtenteGestore(Long idUtente, HttpServletRequest request) {
+		try {
+			Utente utente = utenteRepo.getOne(idUtente);
+			if(utente.getCredenziali().compareTo(CredenzialiUtente.GestoreRifugio)>=0) {
+				return true;
+			}
+			else {
+				
+				request.setAttribute("messaggio", "Utente privo delle credenziali necessarie");
+				request.setAttribute("redirectUrl", "/profilo/" + idUtente);
+				return false;
+			}
+			
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public boolean verificaUtenteGestore(Long idUtente, HttpServletRequest request) {
 		try  {
 			if(possRepo.verificaUtenteGestore(idUtente)>0) {
@@ -217,7 +239,7 @@ public class VerificaServiceImpl implements VerificaService {
 			}
 			else {
 				request.setAttribute("messaggio", "Utente non gestore");
-				request.setAttribute("redirectUrl", "/profilo" + idUtente);
+				request.setAttribute("redirectUrl", "/profilo/" + idUtente);
 				return false;
 			}
 		}

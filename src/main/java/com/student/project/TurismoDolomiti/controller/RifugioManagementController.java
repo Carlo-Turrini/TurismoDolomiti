@@ -222,15 +222,16 @@ public class RifugioManagementController {
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
 				if(loggedUser.getIdUtente() == idUtente || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
-					List<RifugioCardDto> rifPosseduti = rifRepo.elencoRifugiPosseduti(idUtente);
-					if(rifPosseduti.isEmpty()) {
+					List<RifugioCardDto> rifugiGestiti = rifRepo.elencoRifugiPosseduti(idUtente);
+					if(rifugiGestiti.isEmpty()) {
 						request.setAttribute("messaggio", "Non possiede rifugi!");
 					}
-					else request.setAttribute("rifPosseduti", rifPosseduti);
+					else request.setAttribute("rifugiGestiti", rifugiGestiti);
 					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
 						List<RifugioNomeIdDTO> nomiIdRifugi = rifRepo.findRifugioNomeAndId();
 						request.setAttribute("nomiRifugi", nomiIdRifugi);
 					}
+					request.setAttribute("idUtente", idUtente);
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
 					return "elencoRifugiGestiti";
@@ -262,7 +263,7 @@ public class RifugioManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				if(verificaService.verificaEsistenzaUtente(idUtente, request) && verificaService.verificaUtenteGestore(idUtente, request)) { 
+				if(verificaService.verificaEsistenzaUtente(idUtente, request) && verificaService.verificaCredUtenteGestore(idUtente, request)) { 
 					if(verificaService.verificaEsistenzaRif(idRif, request)) {
 						if(verificaService.verificaNonGestore(idRif, idUtente, request)) {
 							Utente utente = utenteRepo.getOne(idUtente);

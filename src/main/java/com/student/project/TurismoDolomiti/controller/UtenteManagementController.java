@@ -145,12 +145,6 @@ public class UtenteManagementController {
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaEsistenzaUtente(idUtente, request)) {
 				Utente utente = utenteRepo.getOne(idUtente);
-				if(utente.getCredenziali().compareTo(CredenzialiUtente.GestoreRifugio)>=0) {
-					if(verificaService.verificaUtenteGestore(idUtente, request)) {
-						request.setAttribute("gestore", true);
-					}
-					else request.setAttribute("gestore", false);
-				}
 				request.setAttribute("utente", utente);
 				request.setAttribute("logged", loggedUser!= null);
 				request.setAttribute("loggedUser", loggedUser);

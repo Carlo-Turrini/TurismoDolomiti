@@ -184,9 +184,6 @@ public class EscursioneManagementController {
 					request.setAttribute("loggedUser", loggedUser);
 					request.setAttribute("escForm", new EscursioneForm());
 					request.setAttribute("azione", "inserimento");
-					nomiIdRif.add(new RifugioNomeIdDTO(1L, "Rifugio Lavaredo"));
-					nomiIdRif.add(new RifugioNomeIdDTO(2L, "Rifugio Auronzo"));
-					nomiIdRif.add(new RifugioNomeIdDTO(3L, "Rifugio Comici"));
 					request.setAttribute("nomiIdRif", nomiIdRif);
 					
 					return "insModEscursione";

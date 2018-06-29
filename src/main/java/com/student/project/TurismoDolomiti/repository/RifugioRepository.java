@@ -15,7 +15,7 @@ import java.util.List;
 
 @Repository
 public interface RifugioRepository extends JpaRepository<Rifugio, Long>, JpaSpecificationExecutor<Rifugio>{
-	@Query("SELECT new com.student.project.TurismoDolomiti.dto.RifugioCardDto(r.id, r.nome, r.massiccioMontuoso, r.altitudine, r.dataApertura, r.dataChiusura, r.iconPath) FROM Rifugio r JOIN Possiede p ON r.id = p.rifugio.id WHERE p.proprietario.id = :id_utente")
+	@Query("SELECT new com.student.project.TurismoDolomiti.dto.RifugioCardDto(r.id, r.nome, r.massiccioMontuoso, r.altitudine, r.dataApertura, r.dataChiusura, r.iconPath) FROM Possiede p JOIN p.rifugio r WHERE p.proprietario.id = :id_utente")
 	List<RifugioCardDto> elencoRifugiPosseduti(@Param("id_utente") Long idUtente);
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.RifugioCartinaEscursioneCardDto(r.id, r.nome, r.latitude, r.longitude, r.iconPath) FROM Rifugio r JOIN Elemento e ON r.id = e.id JOIN PassaPer pp ON r.id = pp.rifugio.id WHERE pp.escursione.id = :id_escursione")
 	List<RifugioCartinaEscursioneCardDto> findRifugiEscursione(@Param("id_escursione") Long idEscursione);

@@ -132,6 +132,29 @@
 				height:150px;
 				object-fit:cover;
 			}
+			.rifCard {
+				height:350px;
+			}
+			.card-img-top.myCardImg {
+				width:100%;
+				height:200px;
+				object-fit:cover;
+			}
+			.rifCardText {
+			 margin-bottom:0px;
+			}
+			.rifCardSub {
+				color:#5E5956;
+				font-size: 1.05rem;
+				margin-bottom:5px;
+			}
+			.pageTitle {
+				font-variant: small-caps;
+			}
+			a.cardHref {
+				text-decoration:none;
+				color:black;
+			}
 		</style>
 	</head>
 	<body>
@@ -144,56 +167,58 @@
 						<springForm:form method="POST" cssClass="login" action="/elencoRifugi" modelAttribute="rifSearch">
 							<div class="form-group">
 								<label for="inputNome">Nome del rifugio</label>
-								<springForm:input type="text" cssClass="form-control" path="nome"/>
+								<springForm:input type="text" cssClass="form-control" path="nome" placeholder="Rifugio Comici"/>
 							</div>
 							<div class="form-group">
 								<label for="inputMassMont">Massiccio montuoso</label>
-								<springForm:input type="text" cssClass="form-control" path="massiccioMontuoso"/>
+								<springForm:input type="text" cssClass="form-control" path="massiccioMontuoso" placeholder="Tre Cime di Lavaredo"/>
 							</div>
 							<div class="form-group">
 								<label for="inputStato">Stato dei rifugi</label>
 								<springForm:checkbox label="Aperto" path="aperto"/>
 							</div>
-							<input type="submit" class="btn btn-primary btn-sm" value="Filtra">
+							<input type="submit" class="btn btn-outline-secondary btn-sm" value="Filtra">
 						</springForm:form>
 					</div>
 					<div class="col-md-9">
 						<div class="row">
 								<div class="col-md-9">
-									<h1>Elenco dei rifugi</h1>
+									<h1 class="pageTitle">Elenco dei rifugi</h1>
 								</div>
 								<div class="col-md-3">
 								<% if(logged && loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) { %>
 									<a class="btn btn-primary" href="/elencoRifugi/inserisciRifugio" ><i class="fa fa-plus fa-lg"></i> Nuovo rifugio</a>
 									<% } %>
 								</div>
-							</div>
+						</div>
 						<hr>
 						<% if(messaggio != null) { %>
 							<div class="alert alert-primary" role="alert">
 							  <span><i class="fa fa-info-circle fa-lg" style="color: #21618C;"></i> ${messaggio}</span>
 							</div>
-						<% } else for(Rifugio rif : rifugi){%>
-							<div class="col-md-8">
-								<article>
-									<a href="/rifugio/<%=rif.getId()%>"></a>
-									<div class="row">
-										<div class="col-md-4">
-											<img src="<%=rif.getIconPath()%>" class="fotoArticle">
-										</div>
-										<div class="col-md-8">
-											<p class="subArticle"><%=rif.getMassiccioMontuoso()%>
-											<p><%=rif.getNome()%>, <%=rif.getAltitudine()%>m</p>
-											<p class="subArticle"><%=rif.getDataApertura().toString()%> - <%=rif.getDataChiusura().toString()%></p>
-											<% if(rif.getDataApertura().compareTo(oggi)<=0 && rif.getDataChiusura().compareTo(oggi)>=0) { %>
+							
+						<% } else { %>
+							<div class="row">
+							<% for(Rifugio rif : rifugi){%>
+							<div class="col-md-6">
+								<a href="/rifugio/<%=rif.getId()%>" class="cardHref">
+								<div class="card rifCard">
+									<img class="card-img-top myCardImg" src="<%=rif.getIconPath()%>">
+									<div class="card-body">
+										<h5 class="card-title rifCardText"><%=rif.getNome()%>, <%=rif.getAltitudine()%>m</h5>
+										<p class="card-text rifCardSub"><%=rif.getMassiccioMontuoso()%></p>
+										<p class="card-text rifCardText"> <%=rif.getDataApertura().toString()%> - <%=rif.getDataChiusura().toString()%></p>
+										<% if(rif.getDataApertura().compareTo(oggi)<=0 && rif.getDataChiusura().compareTo(oggi)>=0) { %>
 											<span class="aperto"><i class="fa fa-circle fa-md" style="color:green;"></i>  Aperto</span>
 											<%} else { %>
 											<span class="chiuso"><i class="fa fa-circle fa-md" style="color:red;"></i>  Chiuso</span>
-											<% } %>
-										</div>
+										<% } %>
 									</div>
-								</article>
+								</div>
+								</a>
 							</div>
+						<% } %>
+						</div>
 						<% } %>
 					</div>
 				</div>

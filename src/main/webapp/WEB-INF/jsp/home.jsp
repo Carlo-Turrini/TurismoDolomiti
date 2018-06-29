@@ -60,7 +60,7 @@
 				position: relative;
 				margin-top: 0;
 				max-width: 1239px;
-				height: 350px;
+				height: 400px;
 				margin-left: auto;
 				margin-right: auto;
 				text-align: center;
@@ -89,7 +89,7 @@
 				
 			}
 			.title > pre {
-				font-size: 120%;
+				font-size: 130%;
 				font-style: italic;
 				font-family: "Bahnschrift Light Condensed", Bahnschrift, serif;			
 				}
@@ -104,7 +104,7 @@
 				
 			}
 			.card {
-				max-height: 250px;
+				max-height: 220px;
 			}
 			.card-img-top {
 				object-fit: cover;
@@ -117,7 +117,7 @@
 				font-family: "Bahnschrift Light Condensed", Bahnschrift, serif;
 			}
 			.card-text {
-				font-size: 130%;
+				font-size: 120%;
 				font-style: italic;
 				font-family: "Bahnschrift Light Condensed", Bahnschrift, serif;	
 			}
@@ -151,16 +151,16 @@ le volte di porpora scintillanti ti stelle."
 			<div class="card myCard">
 				<img class="card-img-top" src="escCard.jpg" alt="Card image">
 				<div class="card-img-overlay">
-					<h1 class="card-title"> Escursioni </h1>
-					<p class="card-text"> Un elenco delle più belle escursioni delle dolomiti </p>
+					<h2 class="card-title"> Escursioni </h2>
+					<p class="card-text"> Le più belle escursioni delle dolomiti </p>
 					<a href="/elencoEscursioni" class="btn btn-primary"> Vedi elenco</a>
 				</div>	
 			</div>
 			<div class="card myCard">
 				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
 				<div class="card-img-overlay">
-					<h1 class="card-title"> Rifugi </h1>
-					<p class="card-text"> Un elenco dei più bei rifugi delle dolomiti </p>
+					<h2 class="card-title"> Rifugi </h2>
+					<p class="card-text"> I più bei rifugi delle dolomiti </p>
 					<a href="/elencoRifugi" class="btn btn-primary"> Vedi elenco </a>
 				</div>
 				
@@ -170,7 +170,7 @@ le volte di porpora scintillanti ti stelle."
 			<div class="card myCard">
 				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
 				<div class="card-img-overlay">
-					<h1 class="card-title"> Prenotazioni </h1>
+					<h2 class="card-title"> Prenotazioni </h2>
 					<p class="card-text"> Controlla i tuoi viaggi </p>
 					<a href="/leMiePrenotazioni" class="btn btn-primary"> Vedi elenco </a>
 				</div>
@@ -179,7 +179,7 @@ le volte di porpora scintillanti ti stelle."
 			<div class="card myCard">
 				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
 				<div class="card-img-overlay">
-					<h1 class="card-title"> I miei rifugi </h1>
+					<h2 class="card-title"> I miei rifugi </h2>
 					<p class="card-text"> Controlla i rifugi che gestisci </p>
 					<a href="/elencoRifugi" class="btn btn-primary"> Vedi elenco </a>
 				</div>
@@ -192,11 +192,18 @@ le volte di porpora scintillanti ti stelle."
 			<div class="card myCard">
 				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
 				<div class="card-img-overlay">
-					<h1 class="card-title"> Escursioni incomplete </h1>
+					<h2 class="card-title"> Escursioni incomplete </h2>
 					<p class="card-text"> Completale </p>
 					<a href="/elencoEscursioniDaCompletare" class="btn btn-primary"> Vedi elenco </a>
 				</div>
-				
+			</div>
+			<div class="card myCard">
+				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
+				<div class="card-img-overlay">
+					<h2 class="card-title"> Utenti </h2>
+					<p class="card-text"> Monitora gli utenti nel sistema </p>
+					<a href="/elencoUtenti" class="btn btn-primary"> Vedi elenco </a>
+				</div>
 			</div>
 			<% } %>
 			<%  } %>

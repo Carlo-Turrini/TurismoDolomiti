@@ -15,6 +15,7 @@ public interface VerificaService {
 	boolean verificaEsistenzaUtente(Long idUtente, HttpServletRequest request);
 	boolean verificaUtenteModificaProfilo(Long idLog, Long idUtente, HttpServletRequest request);
 	boolean verificaUtenteNonLoggato(LoggedUserDTO loggedUser, HttpServletRequest request);
+	boolean verificaCredUtenteGestore(Long idUtente, HttpServletRequest request);
 	boolean verificaUtenteGestore(Long idUtente, HttpServletRequest request);
 }
 

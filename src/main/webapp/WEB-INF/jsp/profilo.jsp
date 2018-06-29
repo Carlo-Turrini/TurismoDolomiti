@@ -13,7 +13,6 @@
 	LoggedUserDTO loggedUser = (LoggedUserDTO) request.getAttribute("loggedUser");
 	Boolean logged = (Boolean) request.getAttribute("logged");
 	Utente utente = (Utente) request.getAttribute("utente");
-	Boolean gestore = (Boolean) request.getAttribute("gestore");
 	String credenziali = null;
 	String sesso = null;
 	if(utente.getCredenziali().equals(CredenzialiUtente.Normale)) {
@@ -118,54 +117,69 @@
 		<script type="text/javascript" src="/webjars/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 		<script type="text/javascript" src="/webjars/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-		
 	</head>
 	<body>
 		<%@ include file="/include/header.txt" %>
-		<div class="container my-container">
-			<div class="row">
-				<div class="col-md-4">
-					<img src="${utente.getProfilePhotoPath()}" class="rounded-circle profilePhoto" alt="Foto profilo"> 
+		<main>
+			<div class="modal fade" id="deleteUtenteModal" tabindex="-1" role="dialog" aria-labelledby="deleteUtenteModalLabel" aria-hidden="true">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <h5 class="modal-title" id="deleteUtenteModalLabel">Eliminazione</h5>
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					          <span aria-hidden="true">&times;</span>
+					        </button>
+					      </div>
+					      <div class="modal-body">
+					      	<p class="lead">Confermi di voler eliminare il profilo?</p>
+					      </div>
+					      <div class="modal-footer">
+					        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+					        <a class="btn btn-danger" href="/profilo/${idUtente}/cancella">Conferma</a>
+					      </div>
+					    </div>
+					  </div>
 				</div>
-				<div class="col-md-6">
-					<h1 class="display-4">${utente.getNome()} ${utente.getCognome()}</h1>
-					<p class="lead"><%=credenziali%></p>
-					<p class="lead">Data di nascita: ${utente.getDataNascita().toString()} </p>
-					<p class="lead">Sesso: <%=sesso%></p>
-					<p class="lead">Email: ${utente.getEmail()} </p>
-					<p class="lead">Telefono: ${utente.getTel()} </p>
-					<p class="lead">Descrizione: ${utente.getDescrizione()}</p>
-				</div>
-				<% if(logged && (loggedUser.getIdUtente() == utente.getId() || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))){ %>
-				<div class="col-md-1">
-					<div class="btn-group" role="group">
-					  	<a class="btn btn-light" href="/profilo/${utente.getId()}/cancella" title="elimina">
-							<i class="fa fa-trash-o fa-lg"></i>
-						</a>
-					  	<div class="btn-group" role="group">
-							<div class="dropdown">
-			  					<button class="btn btn-light dropdown-toggle" type="button" id="modifyButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="modifica">
-			    					<i class="fa fa-pencil"></i>
-			  					</button>
-			  					<div class="dropdown-menu" aria-labelledby="modifyButton">
-				    				<a class="dropdown-item" href="/profilo/${utente.getId()}/modifica">Modifica profilo</a>
-				    				<a class="dropdown-item" href="/profilo/${utente.getId()}/modifica/foto">Modifica foto profilo</a>
-			  					</div>
-							</div>
-						</div>
-						<%if(gestore != null && utente.getCredenziali().compareTo(CredenzialiUtente.GestoreRifugio)>=0 ) {
-							if(gestore || (!gestore && loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))) {
-						%>
-							<a class="btn btn-light" href="/profilo/${utente.getId()}/elencoRifugiGestiti">I miei rifugi</a>
-						<%
-							}
-						}
-						%>
+			<div class="container my-container">
+				<div class="row">
+					<div class="col-md-4">
+						<img src="${utente.getProfilePhotoPath()}" class="rounded-circle profilePhoto" alt="Foto profilo"> 
 					</div>
+					<div class="col-md-6">
+						<h1 class="display-4">${utente.getNome()} ${utente.getCognome()}</h1>
+						<p class="lead"><%=credenziali%></p>
+						<p class="lead">Data di nascita: ${utente.getDataNascita().toString()} </p>
+						<p class="lead">Sesso: <%=sesso%></p>
+						<p class="lead">Email: ${utente.getEmail()} </p>
+						<p class="lead">Telefono: ${utente.getTel()} </p>
+						<p class="lead">Descrizione: ${utente.getDescrizione()}</p>
+					</div>
+					<% if(logged && (loggedUser.getIdUtente() == utente.getId() || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))){ %>
+					<div class="col-md-1">
+						<div class="btn-group" role="group">
+						  	<button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteUtenteModal" title="elimina">
+								<i class="fa fa-trash-o fa-lg"></i>
+							</button>
+						  	<div class="btn-group" role="group">
+								<div class="dropdown">
+				  					<button class="btn btn-light dropdown-toggle" type="button" id="modifyButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="modifica">
+				    					<i class="fa fa-pencil"></i>
+				  					</button>
+				  					<div class="dropdown-menu" aria-labelledby="modifyButton">
+					    				<a class="dropdown-item" href="/profilo/${utente.getId()}/modifica">Modifica profilo</a>
+					    				<a class="dropdown-item" href="/profilo/${utente.getId()}/modifica/foto">Modifica foto profilo</a>
+				  					</div>
+								</div>
+							</div>
+							<%if(utente.getCredenziali().compareTo(CredenzialiUtente.GestoreRifugio)>=0 ) { %>
+								<a class="btn btn-light" href="/profilo/${utente.getId()}/elencoRifugiGestiti">I miei rifugi</a>
+							<% } %>
+						</div>
+					</div>
+					<% } %>
 				</div>
-				<% } %>
 			</div>
-		</div>
+		</main>
 		<%@ include file="/include/footer.txt" %>
 	</body>
 </html>
