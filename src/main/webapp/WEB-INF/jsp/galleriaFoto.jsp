@@ -16,15 +16,17 @@
 	String deleteUrl = null;
 	String addUrl = null;
 	List<Long> gestoriRifugio = new LinkedList<Long>(); 
+	Long idRif = null;
+	Long idEsc = null;
 	if(tipologia.equals("rifugio")) {
 		gestoriRifugio = (List<Long>) request.getAttribute("gestoriRifugio");
-		Long idRif = (Long) request.getAttribute("idRif");
+		idRif = (Long) request.getAttribute("idRif");
 		deleteUrl = "/rifugio/" + idRif + "/galleria/cancella";
 		addUrl= "/rifugio/" + idRif + "/galleria/aggiungi";
 		
 	}
 	else if(tipologia.equals("escursione")) {
-		Long idEsc = (Long) request.getAttribute("idEsc");
+		idEsc = (Long) request.getAttribute("idEsc");
 		deleteUrl = "/escursione/" + idEsc + "/galleria/cancella";
 		addUrl= "/escursione/" + idEsc + "/galleria/aggiungi";
 	}

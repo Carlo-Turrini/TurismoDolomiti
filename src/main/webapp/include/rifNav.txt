@@ -1,4 +1,4 @@
-<div class="col-md-2"> 
+<div class="col-md-2 myCol"> 
 	<nav class="nav flex-column ">
 		<a class="nav-link  myLink" href="/rifugio/${idRif}">Descrizione</a>
 		<div class="dropdown">
@@ -7,21 +7,22 @@
   			</a>
 
   			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-				<a class="dropdown-item" href="/rifugio/${idRif}/menu/Primi">Primi</a>
-    			<a class="dropdown-item" href="/rifugio/${idRif}/menu/Secondi">Secondi</a>
-    			<a class="dropdown-item" href="/rifugio/${idRif}/menu/Contorni">Contorni</a>
-    			<a class="dropdown-item" href="/rifugio/${idRif}/menu/Dessert">Dessert</a>
+				<a class="dropdown-item" href="/rifugio/<%=idRif%>/menu/Primi">Primi</a>
+    			<a class="dropdown-item" href="/rifugio/<%=idRif%>/menu/Secondi">Secondi</a>
+    			<a class="dropdown-item" href="/rifugio/<%=idRif%>/menu/Contorni">Contorni</a>
+    			<a class="dropdown-item" href="/rifugio/<%=idRif%>/menu/Dessert">Dessert</a>
     			<%if(logged && (loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || gestoriRifugio.contains(loggedUser.getIdUtente()))){%>
     				 <div class="dropdown-divider"></div>
-    				 <a class="dropdown-item" href="/rifugio/${idRif}/menu/aggiungiPiatto">Aggiungi piatto</a>
+    				 <a class="dropdown-item" href="/rifugio/<%=idRif%>/menu/aggiungiPiatto">Aggiungi piatto</a>
     			<% } %>
   			</div>
 		</div>
-		<a class="nav-link myLink" href="/rifugio/${idRif}/galleria">Galleria</a>
-		<a class="nav-link myLink" href="/rifugio/${idRif}/commenti">Commenti</a>
+		<a class="nav-link myLink" href="/rifugio/<%=idRif%>/galleria">Galleria</a>
+		<a class="nav-link myLink" href="/rifugio/<%=idRif%>/commenti">Commenti</a>
+		<a class="nav-link  myLink" href="/rifugio/${idRif}/escursioni">Escursioni</a>
 		<% if(logged && (loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || gestoriRifugio.contains(loggedUser.getIdUtente()))) { %>
-			<a class="nav-link myLink" href="/rifugio/${idRif}/elencoCamere">Camere</a>
-			<a class="nav-link myLink" href="/rifugio/${idRif}/prenotazioni">Prenotazioni</a>
+			<a class="nav-link myLink" href="/rifugio/<%=idRif%>/elencoCamere">Camere</a>
+			<a class="nav-link myLink" href="/rifugio/<%=idRif%>/prenotazioni">Prenotazioni</a>
 		<% }%>
 	</nav>
 </div>

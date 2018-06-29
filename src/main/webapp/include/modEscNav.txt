@@ -1,4 +1,4 @@
-<div class="col-md-3"> 
+<div class="col-md-2"> 
 	<nav class="nav flex-column ">
 		<a class="nav-link  myLink" href="/escursione/${idEsc}/modifica">Modifica escursione</a>
 		<a class="nav-link myLink" href="/escursione/${idEsc}/modifica/foto">Foto</a>

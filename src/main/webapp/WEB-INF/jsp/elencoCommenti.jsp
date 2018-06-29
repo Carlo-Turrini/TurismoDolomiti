@@ -16,14 +16,16 @@
 	String messaggio = (String) request.getAttribute("messaggio");
 	String deleteUrl = null;
 	List<Long> gestoriRifugio = new LinkedList<Long>(); 
+	Long idRif = null;
+	Long idEsc = null;
 	if(tipologia.equals("Rifugio")) {
 		gestoriRifugio = (List<Long>) request.getAttribute("gestoriRifugio");
-		Long idRif = (Long) request.getAttribute("idRif");
+		idRif = (Long) request.getAttribute("idRif");
 		deleteUrl = "/rifugio/" + idRif + "/commenti/cancella";
 		
 	}
 	else if(tipologia.equals("Escursione")) {
-		Long idEsc = (Long) request.getAttribute("idEsc");
+		idEsc = (Long) request.getAttribute("idEsc");
 		deleteUrl = "/escursione/" + idEsc + "/commenti/cancella";
 	}
 %>

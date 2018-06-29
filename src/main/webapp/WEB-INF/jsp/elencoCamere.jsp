@@ -163,7 +163,7 @@
 				color:#5E5956;
 				font-size: 16px; 
 			}
-			.nav-link:hover, .myBtnLink:hover {
+			.nav-link:hover, .myBtnLink:hover, .myDelLink:hover {
 				transition: color 0.5s ease;
 				color:#d3d3d3;
 			}
@@ -186,13 +186,18 @@
 			}
 			.firstRow {
 				margin-bottom:0px;
+				font-size:1.10rem;
 			}
 			.camArtCol {
-				border: 1px solid #BDC3C7;
 				border-radius: 5px;
 				margin-bottom:7px;
 				padding-bottom:0px;
+				background-color: #F7F9F9;
 			}
+			.subtitle {
+				font-size:1.50rem;
+			}
+			
 		</style>
 	</head>
 	<body>
@@ -223,19 +228,20 @@
 			<div class="container">
 				<div class="row">
 					<%@include file="/include/rifNav.txt" %>
-					<div class="col-md-7">
+					<div class="col-md-10">
 						<h1>${nomeRif}</h1>
-						<p class="lead">Camere:</p>
+						<p class="lead subtitle">Camere:</p>
+						<hr>
 						<% if(messaggio != null) { %>
 							<div class="alert alert-primary" role="alert">
 							  <span><i class="fa fa-info-circle fa-lg" style="color: #21618C;"></i> ${messaggio}</span>
 							</div>
 						<% } else for(Camera cam : camere) {%>
 							<article>
-								<div class="col-md-8 camArtCol">
+								<div class="col-md-6 camArtCol">
 								<div class="row">
 									<div class="col-md-11 artCol">
-										<p class="firstRow"> N°<%=cam.getNumCamera()%>   <%=cam.getTipologia()%> </p>
+										<p class="lead firstRow"> N°<%=cam.getNumCamera()%>   <%=cam.getTipologia()%> </p>
 									</div>
 									<div class="col-md-1">
 										<% if( logged && (gestoriRifugio.contains(loggedUser.getIdUtente()) || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))) { %>
@@ -245,13 +251,14 @@
 										<% } %>
 									</div>
 								</div>
-								<p>Capienza: <%=cam.getCapienza()%></p>
+								<p class="pb-2">Capienza: <%=cam.getCapienza()%></p>
 								</div>
 								
 							</article>
 						<% } %>
 						<springForm:form action="/rifugio/${idRif}/elencoCamere/aggiungi" method="POST" modelAttribute="camForm" cssClass="login">
-							<p class="lead">Nuova camera</p>
+							<p class="lead subtitle">Nuova camera</p>
+							<hr>
 							<% if(insertMessage != null) { %>
 								<div class="alert alert-warning" role="alert">
 								  <span><i class="fa fa-exclamation-triangle fa-lg" style="color: #FFC300;"></i> ${insertMessage}</span>

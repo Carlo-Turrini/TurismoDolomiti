@@ -163,11 +163,11 @@
 			.comPhotoCol {
 				padding-top:5px;
 			}
-			.col-md-2 {
-				padding-left:0px;
-			}
 			.subtitle {
 				font-size:1.50rem;
+			}
+			.myCol {
+				padding-left:0px;
 			}
 		</style>
 	</head>

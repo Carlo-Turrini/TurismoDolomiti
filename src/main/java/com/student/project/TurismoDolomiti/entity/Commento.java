@@ -22,7 +22,7 @@ public class Commento implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
-	@Column(length = 2048, nullable = false)
+	@Column(length = 516, nullable = false)
 	private String testo;
 	@Column(nullable = false, updatable = false)
 	@CreatedDate
@@ -72,19 +72,6 @@ public class Commento implements Serializable {
 	public void setElemento(Elemento elemento) {
 		this.elemento = elemento;
 	}
-	//Alternativa: usare un UUID per fare equals e hashcode.. -> aumento overhead sul DB
-	//Che schifo.. ma � davvero necessario?
-	@Override
-	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(!(obj instanceof Commento)) return false;
-		Commento commento = (Commento) obj;
-		return id != null && this.id.equals(commento.id);
-	}
-	//Se non gli faccio ritornare un valore costante mi da problemi di consistenza essendo il valore di id generato dopo l'allocazione..
-	@Override
-	public int hashCode() {
-		return 5;
-	}
+
 	
 }

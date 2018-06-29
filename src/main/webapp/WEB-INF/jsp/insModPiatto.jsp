@@ -193,7 +193,9 @@
 			form.login input.my-input-group {
 				width:80%
 			}
-		
+			.subtitle {
+				font-size:1.50rem;
+			}
 		</style>
 	</head>
 	<body>
@@ -204,7 +206,8 @@
 						<%@include file="/include/rifNav.txt" %>
 					<div class="col-md-10">
 						<h1>${nomeRif}</h1>
-						<p class="lead">Menu: <%if(azione.equals("modifica")) { %>modifica piatto <%} else { %>nuovo piatto<% } %></p>
+						<p class="lead subtitle">Menu: <%if(azione.equals("modifica")) { %>modifica piatto <%} else { %>nuovo piatto<% } %></p>
+						<hr>
 						<% if(messaggio != null) { %>
 							<div class="alert alert-warning" role="alert">
 							  <span><i class="fa fa-exclamation-triangle fa-lg" style="color: #FFC300;"></i> ${messaggio}</span>

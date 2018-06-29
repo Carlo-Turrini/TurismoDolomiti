@@ -258,6 +258,9 @@
 			form.login input.my-input-group {
 				width:80%
 			}
+			.myCol {
+				padding-left:0px;
+			}
 		</style>
 	</head>
 	<body>
@@ -268,7 +271,7 @@
 					<% if(azione.equals("modifica")) { %>
 						<%@include file="/include/modEscNav.txt"%>
 					<% } %>
-					<div class="col-md-5">
+					<div class="col-md-6">
 						<% if(messaggio != null) { %>
 						<div class="alert alert-warning">
 							<p class="lead myLead"><span style="font-size: 1em; color: #FFC300;"><i class="fa fa-exclamation-triangle fa-lg"></i></span>  ${messaggio}</p>
@@ -278,7 +281,8 @@
 						
 						<% } %>
 						<springForm:form action="<%=actionUrl%>" method="POST" modelAttribute="escForm" cssClass="login">
-							<p class="form-title"><%=titoloForm%></p>
+							<h1><%=titoloForm%></h1>
+							<hr>
 							<div class="form-group col-md-8 ">
 								<label for="inputNome">Nome</label>
 								<springForm:input type="text" cssClass="form-control" id="inputNome" path="nome" required="true" placeholder="Giro del camoscio" minLength="2" maxLength="128"/>
@@ -294,7 +298,7 @@
 								<springForm:input type="text" cssClass="form-control" id="inputMonti" path="massiccioMontuoso" required="true" placeholder="Gruppo dei Cadini" minLength="2" maxLength="64"/>
 								<springForm:errors cssClass="error" path="massiccioMontuoso"/>
 							</div>
-							<div class="form-group col-md-8 ">
+							<div class="form-group col-md-6 myCol ">
 								<label for="inputTipo">Tipologia di escursione</label>
 								<springForm:select required="true" cssClass="form-control" id="inputTipo" path="tipologia">
 									<springForm:option value="" label="Seleziona tipologia"/>
@@ -316,7 +320,7 @@
 									<springForm:errors path="longitude" cssClass="error"/>
 								</div>
 							</div>
-							<div class="form-group col-md-8">
+							<div class="form-group col-md-6 myCol">
 								<label for="inputDiff">Difficolt&aacute;</label>
 								<springForm:select required="true" cssClass="form-control" id="inputDiff" path="difficolta">
 									<springForm:option value="" label="Seleziona difficoltà"/>
@@ -326,7 +330,7 @@
 								</springForm:select>
 								<springForm:errors cssClass="error" path="difficolta"/>
 							</div>
-							<div class="form-group col-md-8">
+							<div class="form-group col-md-6 myCol">
 								<label for="inputLun">Lunghezza</label>
 								<div id="inputLun" class="input-group mb-3">
 									<springForm:input type="number" cssClass="form-control my-input-group" path="lunghezza" required="true" step="1" maxLength="3"/>
@@ -336,7 +340,7 @@
 									<springForm:errors cssClass="error" path="lunghezza"/>
 								</div>
 							</div>
-							<div class="form-group col-md-8 ">
+							<div class="form-group col-md-6 myCol ">
 								<label for="inputDur">Durata</label>
 								<div id="inputDur" class="input-group">
 									<springForm:input type="number" cssClass="form-control my-input-group" path="durata" required="true" step="0.25" maxLength="5"/>
@@ -371,7 +375,7 @@
 							</div>
 							<div class="form-group">
 								<label for="inputDesc">Descrizione</label>
-								<springForm:textarea cssClass="form-control" path="descrizione" id="inputDesc" maxLength="2048" rows="10"/>
+								<springForm:textarea cssClass="form-control" path="descrizione" id="inputDesc" maxLength="2048" rows="10" cols="100" wrap="hard"/>
 								<springForm:errors cssClass="error" path="descrizione"/>
 							</div>
 							<div class="form-group col-md-8 ">

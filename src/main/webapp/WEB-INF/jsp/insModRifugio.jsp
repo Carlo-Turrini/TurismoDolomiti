@@ -256,7 +256,7 @@
 					<% if(azione.equals("modifica")) { %>
 						<%@include file="/include/modRifNav.txt"%>
 					<% } %>
-					<div class="col-md-5">
+					<div class="col-md-6">
 						<% if(messaggi != null && !messaggi.isEmpty()) { %>
 						<div class="alert alert-warning">
 							<div class="row">
@@ -274,7 +274,8 @@
 						
 						<% } %>
 						<springForm:form action="<%=actionUrl%>" method="POST" modelAttribute="rifForm" cssClass="login">
-							<p class="form-title"><%=titoloForm%></p>
+							<h1><%=titoloForm%></h1>
+							<hr>
 							<div class="form-group col-md-8 myCol">
 								<label for="inputNome">Nome</label>
 								<springForm:input type="text" cssClass="form-control" id="inputNome" path="nome" required="true" placeholder="Rifugio Lavaredo" minLength="2" maxLength="128"/>
@@ -346,7 +347,7 @@
 							</div>
 							<div class="form-group">
 								<label for="inputDesc">Descrizione</label>
-								<springForm:textarea cssClass="form-control" path="descrizione" id="inputDesc" maxLength="2048" rows="10"/>
+								<springForm:textarea cssClass="form-control" path="descrizione" id="inputDesc" maxLength="2048" rows="10" cols="100" wrap="hard"/>
 								<springForm:errors cssClass="error" path="descrizione"/>
 							</div>
 

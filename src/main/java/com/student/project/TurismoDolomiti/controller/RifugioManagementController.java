@@ -141,7 +141,7 @@ public class RifugioManagementController {
 			else {
 				Rifugio rif = rifRepo.getOne(idRif);
 				Boolean aperto;
-				if(rif.getDataApertura().compareTo(Date.valueOf(LocalDate.now()))>=0 && rif.getDataChiusura().compareTo(Date.valueOf(LocalDate.now()))<=0) {
+				if(rif.getDataApertura().compareTo(Date.valueOf(LocalDate.now()))<=0 && rif.getDataChiusura().compareTo(Date.valueOf(LocalDate.now()))>=0) {
 					aperto = true;
 				}
 				else aperto = false;
