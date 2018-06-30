@@ -8,7 +8,12 @@ public class PostiDisponibiliCameraRifugioDto {
 	private Long postiLettoCameraDisponibili;
 	private Integer postiLettoCameraSel;
 	
+	public PostiDisponibiliCameraRifugioDto() {
+		
+	}
+	
 	public PostiDisponibiliCameraRifugioDto(Long idCamera, Integer capienza, Integer numCamera, String tipologiaCamera, Long postiLettoCameraDisponibili) {
+		this();
 		this.idCamera = idCamera;
 		this.capienza = capienza;
 		this.numCamera = numCamera;

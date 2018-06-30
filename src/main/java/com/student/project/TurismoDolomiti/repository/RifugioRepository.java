@@ -43,5 +43,8 @@ public interface RifugioRepository extends JpaRepository<Rifugio, Long>, JpaSpec
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.RifugioNomeIdDTO(r.id, r.nome) FROM Rifugio r")
 	List<RifugioNomeIdDTO> findRifugioNomeAndId();
 	
+	@Query("SELECT r.prezzoPostoLetto FROM Rifugio r WHERE r.id = :id_rif")
+	Integer findPrezzoPostoLetto(@Param("id_rif")Long idRif);
+	
 	
 }

@@ -229,7 +229,13 @@
 				  	map.fitBounds(markerBounds);
 					
 				}
-				
+				<% if(!gestoriRifugio.isEmpty()) { %>
+	    		document.getElementById("inputCheckIn").onchange = function() {
+	    			var checkOut = document.getElementById("inputCheckOut");
+	    			checkOut.setAttribute("min", this.value);
+	    			
+	    		}
+	    		<% } %>
     		}
     		window.addEventListener("load", onLoadHandler);
     	</script>
@@ -315,14 +321,15 @@
 									<div class="card-body">
 									    <h5 class="card-title">Pernottamento:</h5>
 									    <h6 class="card-subtitle mb-2 text-muted">Prezzo a notte: ${rif.getPrezzoPostoLetto()}€</h6>
-									    <form class="login" method="POST" action="rifugio/<%=idRif%>/prenotazione">
+									    <%if(!gestoriRifugio.isEmpty()) { %>
+									    <form class="login" method="POST" action="/rifugio/<%=idRif%>/prenotazione">
 											<div class="form-group col-md-9 myCol">
 										 		<label for="inputCheckIn">Check in</label>
-										 		<input id="inputCheckIn" type="date" Class="form-control" name="checkIn" required/>
+										 		<input id="inputCheckIn" type="date" Class="form-control" name="checkIn" required min="<%=rif.getDataApertura().toString()%>" max="<%=rif.getDataChiusura().toString()%>"/>
 										 	</div>
 										 	<div class="form-group col-md-9 myCol">
 									      		<label for="inputCheckOut">Check out</label>
-									      		<input type="date" class="form-control" id="inputCheckOUT"  name="checkOut" required/>
+									      		<input type="date" class="form-control" id="inputCheckOUT"  name="checkOut" required min="<%=rif.getDataApertura().toString()%>" max="<%=rif.getDataChiusura().toString()%>"/>
 											</div>
 											<div class="form-group col-md-6 myCol">
 												<label for="inputOspiti">Ospiti</label>
@@ -330,6 +337,9 @@
 											</div>
 											<input type="submit" class="btn btn-primary" value="Cerca"/>
 									    </form>
+									    <% } else { %>
+									    <p>Non si accettano prenotazioni online, si prega di contattare il rifugio direttamente.</p>
+									    <% } %>
 									</div>
 								</div>
 							</div>

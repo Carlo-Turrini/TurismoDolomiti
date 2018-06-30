@@ -3,9 +3,13 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "PERIODO_PRENOTATO")
+@SQLDelete(sql = "UPDATE PERIODO_PRENOTATO SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class PeriodoPrenotato implements Serializable {
 	private static final long serialVersionUID = 1591992348664653817L;
 	

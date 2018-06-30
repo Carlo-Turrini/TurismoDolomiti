@@ -21,10 +21,10 @@ public interface PostoLettoRepository extends JpaRepository<PostoLetto, Long> {
 	List<PostiDisponibiliCameraRifugioDto> findPostiLettoRifugioDisponibiliGroupByCamera(@Param("id_rifugio")Long idRifugio, @Param("check_in") Date checkIn, @Param("check_out") Date checkOut);
 	
 	@Query("SELECT COUNT(pl) FROM PostoLetto pl WHERE pl.camera.id = :id_camera AND pl.id NOT IN (SELECT DISTINCT pp.postoLetto.id FROM PeriodoPrenotato pp JOIN Prenotazione p ON pp.prenotazione.id = p.id WHERE p.rifugio.id = :id_rifugio AND (p.arrivo <= :check_out OR p.partenza > :check_in))")
-	Integer findNumPostiLettoRifugioDisponibiliInPeriodoByCamera(@Param("check_in") Date checkIn, @Param("check_out")Date checkOut, @Param("id_camera") Long idCamera);
+	Integer findNumPostiLettoRifugioDisponibiliInPeriodoByCamera(@Param("check_in") Date checkIn, @Param("check_out")Date checkOut, @Param("id_rifugio")Long idRifugio, @Param("id_camera") Long idCamera);
 	
 	@Query("SELECT pl FROM PostoLetto pl WHERE pl.camera.id = :id_camera AND pl.id NOT IN (SELECT DISTINCT pp.postoLetto.id FROM PeriodoPrenotato pp JOIN Prenotazione p ON pp.prenotazione.id = p.id WHERE p.rifugio.id = :id_rifugio AND (p.arrivo <= :check_out OR p.partenza > :check_in))")
-	List<PostoLetto> findByCameraIdFreeInPeriodo(@Param("id_camera")Long idCamera, @Param("check_in") Date checkIn, @Param("check_out") Date checkOut, Pageable pageable);
+	List<PostoLetto> findByCameraIdFreeInPeriodo(@Param("id_camera")Long idCamera, @Param("check_in") Date checkIn, @Param("check_out") Date checkOut, @Param("id_rifugio")Long idRifugio, Pageable pageable);
 	
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.PostiLettoPrenotatiCameraDTO(c.id, c.numCamera, COUNT(pl), c.capienza, c.tipologia) FROM PeriodoPrenotato pp JOIN PostoLetto pl ON pp.postoLetto.id = pl.id JOIN Camera c ON pl.camera.id = c.id WHERE pp.prenotazione.id = :id_pren GROUP BY c.id")
 	List<PostiLettoPrenotatiCameraDTO> findPrenotatiByCamera(@Param("id_pren")Long idPren);

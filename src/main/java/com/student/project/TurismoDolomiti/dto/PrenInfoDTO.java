@@ -2,18 +2,18 @@ package com.student.project.TurismoDolomiti.dto;
 
 public class PrenInfoDTO {
 	private Long idRif;
-	private String massiccioMontuoso;
 	private String nomeRif;
 	private String emailRif;
 	private String telRif;
+	private String iconPathRif;
 	private Long idUtente;
 	private String nomeUtente;
 	private String cognomeUtente;
+	private String profilePhotoPathUtente;
 	private String emailUtente;
 	
-	public PrenInfoDTO(Long idRif, String massiccioMontuoso, String nomeRif, String emailRif, String telRif, Long idUtente, String nomeUtente, String cognomeUtente, String emailUtente) {
+	public PrenInfoDTO(Long idRif, String nomeRif, String emailRif, String telRif, Long idUtente, String nomeUtente, String cognomeUtente, String emailUtente, String iconPathRif, String profilePhotoPathUtente) {
 		this.idRif = idRif;
-		this.massiccioMontuoso = massiccioMontuoso;
 		this.nomeRif = nomeRif;
 		this.emailRif = emailRif;
 		this.telRif = telRif;
@@ -21,6 +21,8 @@ public class PrenInfoDTO {
 		this.nomeUtente = nomeUtente;
 		this.cognomeUtente = cognomeUtente;
 		this.emailUtente = emailUtente;
+		this.iconPathRif = iconPathRif;
+		this.profilePhotoPathUtente = profilePhotoPathUtente;
 	}
 
 	public Long getIdRif() {
@@ -29,14 +31,6 @@ public class PrenInfoDTO {
 
 	public void setIdRif(Long idRif) {
 		this.idRif = idRif;
-	}
-
-	public String getMassiccioMontuoso() {
-		return massiccioMontuoso;
-	}
-
-	public void setMassiccioMontuoso(String massiccioMontuoso) {
-		this.massiccioMontuoso = massiccioMontuoso;
 	}
 
 	public String getNomeRif() {
@@ -93,6 +87,22 @@ public class PrenInfoDTO {
 
 	public void setEmailUtente(String emailUtente) {
 		this.emailUtente = emailUtente;
+	}
+
+	public String getIconPathRif() {
+		return iconPathRif;
+	}
+
+	public void setIconPathRif(String iconPathRif) {
+		this.iconPathRif = iconPathRif;
+	}
+
+	public String getProfilePhotoPathUtente() {
+		return profilePhotoPathUtente;
+	}
+
+	public void setProfilePhotoPathUtente(String profilePhotoPathUtente) {
+		this.profilePhotoPathUtente = profilePhotoPathUtente;
 	}
 
 	
