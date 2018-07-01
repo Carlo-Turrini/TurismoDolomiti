@@ -189,7 +189,7 @@
 					 %>	
 					 	<%@include file="/include/modRifNav.txt" %>
 					 <% } %>
-					 <div class="col-md-7">
+					 <div class="col-md-8">
 					 	<img src="${fotoPath}" class="rounded-circle Photo"> 
 					 	<springForm:form method="POST" action="<%=actionUrl%>" enctype="multipart/form-data">
 					 		<div class="input-group mb-3">

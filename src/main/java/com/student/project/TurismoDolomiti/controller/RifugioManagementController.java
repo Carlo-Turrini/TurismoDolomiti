@@ -180,19 +180,19 @@ public class RifugioManagementController {
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaEsistenzaRif(idRif, request)) {
 				List<EscursioneCardDto> escursioniPerRifugio =  escRepo.findElencoEscursioniPerRifugio(idRif);
-				Pageable topPhotoes = PageRequest.of(0, 5);
-				List<FotoSequenceDTO> fotoRifugioSequence = fotoRepo.findPhotoesForSequence(idRif, topPhotoes);
-				Pageable topComments = PageRequest.of(0, 3);
-				List<CommentoCardDto> commentiCard = comRepo.findCommentiByElemento(idRif, topComments);
-				List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
-				request.setAttribute("gestoriRifugio", gestoriRifugio);
-				request.setAttribute("fotoSequence", fotoRifugioSequence);
-				request.setAttribute("commentiCard", commentiCard);
-				if(escursioniPerRifugio == null) {
-					messaggio = "Escursioni non trovate";
-					request.setAttribute("messaggio", messaggio);
+				if(escursioniPerRifugio.isEmpty()) {
+					request.setAttribute("messaggio", "Non sono ancora registrate escursioni che passino per questo rifugio");
+					
 				}
 				else request.setAttribute("escursioniPerRifugio", escursioniPerRifugio);
+				//Pageable topPhotoes = PageRequest.of(0, 5);
+				//List<FotoSequenceDTO> fotoRifugioSequence = fotoRepo.findPhotoesForSequence(idRif, topPhotoes);
+				//Pageable topComments = PageRequest.of(0, 3);
+				//List<CommentoCardDto> commentiCard = comRepo.findCommentiByElemento(idRif, topComments);
+				List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
+				request.setAttribute("gestoriRifugio", gestoriRifugio);
+				//request.setAttribute("fotoSequence", fotoRifugioSequence);
+				//request.setAttribute("commentiCard", commentiCard);
 				request.setAttribute("idRif", idRif);
 				request.setAttribute("nomeRif", rifRepo.findNomeRifugio(idRif));
 				request.setAttribute("logged", loggedUser != null);

@@ -167,6 +167,9 @@
 				margin-left:auto;
 				margin-right:auto;
 			}
+			.col-md-2 {
+				padding:0px;
+			}
 		</style>
 	</head>
 	<body>
@@ -175,7 +178,7 @@
 			<div class="container">
 				<div class="row">
 					 <%@include file="/include/modEscNav.txt" %>
-					 <div class="col-md-6">
+					 <div class="col-md-8">
 						<div id="map" class="mapCss"></div> 
 					 	<springForm:form method="POST" action="/escursione/${idEsc}/modifica/gpx/submit"  enctype="multipart/form-data">
 					 		<div class="input-group mb-3">

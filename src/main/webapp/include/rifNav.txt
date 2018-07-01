@@ -19,7 +19,7 @@
 		</div>
 		<a class="nav-link myLink" href="/rifugio/<%=idRif%>/galleria">Galleria</a>
 		<a class="nav-link myLink" href="/rifugio/<%=idRif%>/commenti">Commenti</a>
-		<a class="nav-link  myLink" href="/rifugio/${idRif}/escursioni">Escursioni</a>
+		<a class="nav-link  myLink" href="/rifugio/<%=idRif%>/escursioni">Escursioni</a>
 		<% if(logged && (loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || gestoriRifugio.contains(loggedUser.getIdUtente()))) { %>
 			<a class="nav-link myLink" href="/rifugio/<%=idRif%>/elencoCamere">Camere</a>
 			<a class="nav-link myLink" href="/rifugio/<%=idRif%>/prenotazioni">Prenotazioni</a>
