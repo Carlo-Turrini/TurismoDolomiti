@@ -134,7 +134,7 @@
 				color:#5E5956;
 				font-size: 16px; 
 			}
-			.nav-link:hover {
+			.nav-link:hover, .btn-link:hover, .deleteBtn:hover {
 				transition: color 0.5s ease;
 				color:#d3d3d3;
 			}
@@ -167,15 +167,34 @@
 			.btn-link {
 				color:#5E5956;
 			}
-			.btn-link:hover {
-				transition: color 0.5s ease;
-				color: #d3d3d3;
+			.deleteBtn {
+				color:#5E5956;
+				padding-top:0px;
 			}
 		</style>
 	</head>
 	<body>
 		<%@ include file="/include/header.txt" %>
 		<main>
+			<div class="modal fade" id="deleteFotoModal" tabindex="-1" role="dialog" aria-labelledby="deleteFotoModalLabel" aria-hidden="true">
+		  		<div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="deleteFotoModalLabel">Cancellazione</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				      	<p class="lead">Confermi di voler cancellare la foto?</p>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+				        <a class="btn btn-danger" href="<%=deleteUrl%>">Conferma</a>
+				      </div>
+				    </div>
+		  		</div>
+			</div>
 			<div class="container">
 				<div class="row">
 					 <% if(tipologia.equals("profilo")) { %>
@@ -189,7 +208,11 @@
 					 %>	
 					 	<%@include file="/include/modRifNav.txt" %>
 					 <% } %>
-					 <div class="col-md-8">
+					 <div class="col-md-9">
+					 	<h1>Modifica foto</h1>
+					 	<hr>
+					 	<div class="row">
+					 	<div class="col-md-11">
 					 	<img src="${fotoPath}" class="rounded-circle Photo"> 
 					 	<springForm:form method="POST" action="<%=actionUrl%>" enctype="multipart/form-data">
 					 		<div class="input-group mb-3">
@@ -202,9 +225,10 @@
 						</springForm:form>
 					 </div>
 					 <div class="col-md-1">
-					 	<a class="btn btn-link" href="<%=deleteUrl%>">
+					 	<button type="button" class="btn btn-link deleteBtn" data-toggle="modal" data-target="#deleteFotoModal">
 							<i class="fa fa-trash-o fa-lg"></i>
-						</a>
+						</button>
+					 </div>
 					 </div>
 				</div>
 			</div>

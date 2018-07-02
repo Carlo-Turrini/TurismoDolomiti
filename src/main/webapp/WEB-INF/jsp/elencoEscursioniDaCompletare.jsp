@@ -107,7 +107,7 @@
 			.myCol {
 				padding-left:0px;
 			}
-						.fotoArticle {
+			.fotoArticle {
 				width:150px;
 				height:150px;
 				object-fit:cover;
@@ -165,7 +165,7 @@
 							<div class="row">
 							<% for(EscursioneCardDto esc : elencoEscDaCompletare){%>
 							<div class="col-md-6">
-								<a href="/escursione/<%=esc.getId()%>" class="cardHref">
+								<a href="/escursione/<%=esc.getId()%>/modifica" class="cardHref">
 									<div class="card rifCard mb-2">
 										<img class="card-img-top myCardImg" src="<%=esc.getIconPath()%>">
 										<div class="card-body">

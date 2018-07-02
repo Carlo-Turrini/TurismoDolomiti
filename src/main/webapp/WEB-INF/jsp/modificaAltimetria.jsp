@@ -160,8 +160,9 @@
 			<div class="container">
 				<div class="row">
 				 	<%@include file="/include/modEscNav.txt" %>
-					 <div class="col-md-8">
-					 	
+					 <div class="col-md-9">
+					 	<h1>Modifica altimetria</h1>
+					 	<hr>
 					 	<img src="<%=altimetriaPath%>" class="altimetria"> 
 					 	<springForm:form method="POST" action="/escursione/${idEsc}/modifica/altimetria/submit" enctype="multipart/form-data">
 					 		<div class="input-group mb-3">

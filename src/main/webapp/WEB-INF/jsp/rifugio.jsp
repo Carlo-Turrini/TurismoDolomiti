@@ -7,6 +7,9 @@
 <%@ page import="com.student.project.TurismoDolomiti.dto.CommentoCardDto" %>
 <%@ page import="com.student.project.TurismoDolomiti.entity.Rifugio" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.sql.Date"%>
 <%
 	LoggedUserDTO loggedUser = (LoggedUserDTO) request.getAttribute("loggedUser");
 	Boolean logged = (Boolean) request.getAttribute("logged");
@@ -16,6 +19,15 @@
 	Rifugio rif = (Rifugio) request.getAttribute("rif");
 	Boolean aperto = (Boolean) request.getAttribute("aperto");
 	Long idRif = rif.getId();
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	String apertura = rif.getDataApertura().toLocalDate().format(formatter);
+	String chiusura = rif.getDataChiusura().toLocalDate().format(formatter);
+	Date oggi = Date.valueOf(LocalDate.now());
+	String min = null;
+	if(oggi.compareTo(rif.getDataApertura())>=0) {
+		min = oggi.toString();
+	}
+	else min = rif.getDataApertura().toString();
 %>
 <!DOCTYPE html>
 <html>
@@ -218,9 +230,9 @@
 
 				    iconSize:     [70, 70], // size of the icon
 				    shadowSize:   [70, 70], // size of the shadow
-				    iconAnchor:   [23, 69], // point of the icon which will correspond to marker's location
-				    shadowAnchor: [10, 65],  // the same for the shadow
-				    popupAnchor:  [-3, -70] // point from which the popup should open relative to the iconAnchor
+				    iconAnchor:   [33, 69], // point of the icon which will correspond to marker's location
+				    shadowAnchor: [23, 65],  // the same for the shadow
+				    popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
 				});
 				if(latitude != null && longitude != null) {
 					marker = new L.marker([latitude, longitude], {icon: rifIcon}).bindPopup("<%=rif.getNome()%>").addTo(map);
@@ -275,7 +287,7 @@
 							<div class="col-md-10 myCol">
 								<h1>${rif.getNome()}, ${rif.getAltitudine()}m</h1>
 								<p class="lead subtitle">${rif.getMassiccioMontuoso()}</p>
-								<p class="lead rifInfo">${rif.getDataApertura().toString()} - ${rif.getDataChiusura().toString()}</p>
+								<p class="lead rifInfo"><%=apertura%> - <%=chiusura%></p>
 								<% if(aperto) { %>
 								<span class="lead rifInfo"><i class="fa fa-circle fa-md" style="color:green;"></i>  Aperto</span>
 								<%} else { %>
@@ -283,7 +295,7 @@
 								<% } %>
 							</div>
 							<div class="col-md-2">
-							<% if(logged) { %>
+							<% if(logged && (gestoriRifugio.contains(loggedUser.getIdUtente()) || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin))) { %>
 							<div class="btn-group" role="group">
 							  	<button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteRifugioModal" title="elimina">
 									<i class="fa fa-trash-o fa-lg"></i>
@@ -295,7 +307,7 @@
 					  					</button>
 					  					<div class="dropdown-menu" aria-labelledby="modifyButton">
 						    				<a class="dropdown-item" href="/rifugio/<%=idRif%>/modifica">Modifica rifugio</a>
-						    				<a class="dropdown-item" href="/rifugio/<%=idRif%>/modifica/foto">Modifica l'icona del rifugio</a>
+						    				<a class="dropdown-item" href="/rifugio/<%=idRif%>/modifica/foto">Modifica foto</a>
 					  					</div>
 									</div>
 								</div>
@@ -321,15 +333,17 @@
 									<div class="card-body">
 									    <h5 class="card-title">Pernottamento:</h5>
 									    <h6 class="card-subtitle mb-2 text-muted">Prezzo a notte: ${rif.getPrezzoPostoLetto()}€</h6>
-									    <%if(!gestoriRifugio.isEmpty()) { %>
+									    <%if(!gestoriRifugio.isEmpty()) { 
+									    	if(logged) {
+									    %>
 									    <form class="login" method="POST" action="/rifugio/<%=idRif%>/prenotazione">
 											<div class="form-group col-md-9 myCol">
 										 		<label for="inputCheckIn">Check in</label>
-										 		<input id="inputCheckIn" type="date" Class="form-control" name="checkIn" required min="<%=rif.getDataApertura().toString()%>" max="<%=rif.getDataChiusura().toString()%>"/>
+										 		<input id="inputCheckIn" type="date" Class="form-control" name="checkIn" required min="<%=min%>" max="<%=rif.getDataChiusura().toString()%>"/>
 										 	</div>
 										 	<div class="form-group col-md-9 myCol">
 									      		<label for="inputCheckOut">Check out</label>
-									      		<input type="date" class="form-control" id="inputCheckOUT"  name="checkOut" required min="<%=rif.getDataApertura().toString()%>" max="<%=rif.getDataChiusura().toString()%>"/>
+									      		<input type="date" class="form-control" id="inputCheckOUT"  name="checkOut" required min="<%=min%>" max="<%=rif.getDataChiusura().toString()%>"/>
 											</div>
 											<div class="form-group col-md-6 myCol">
 												<label for="inputOspiti">Ospiti</label>
@@ -338,7 +352,14 @@
 											<input type="submit" class="btn btn-primary" value="Cerca"/>
 									    </form>
 									    <% } else { %>
-									    <p>Non si accettano prenotazioni online, si prega di contattare il rifugio direttamente.</p>
+									    <div class="alert alert-primary" role="alert">
+							  				<span><i class="fa fa-info-circle fa-md" style="color: #21618C;"></i> Se vuoi prenotare devi effettuare il login</span>
+										</div>
+									   
+									    <% } } else { %>
+									    <div class="alert alert-primary" role="alert">
+							  				<span><i class="fa fa-info-circle fa-md" style="color: #21618C;"></i> Non si accettano prenotazioni online, si prega di contattare il rifugio direttamente.</span>
+										</div>
 									    <% } %>
 									</div>
 								</div>

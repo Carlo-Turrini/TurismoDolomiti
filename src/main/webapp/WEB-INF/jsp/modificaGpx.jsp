@@ -178,7 +178,9 @@
 			<div class="container">
 				<div class="row">
 					 <%@include file="/include/modEscNav.txt" %>
-					 <div class="col-md-8">
+					 <div class="col-md-9">
+					 	<h1>Modifica gpx</h1>
+					 	<hr>
 						<div id="map" class="mapCss"></div> 
 					 	<springForm:form method="POST" action="/escursione/${idEsc}/modifica/gpx/submit"  enctype="multipart/form-data">
 					 		<div class="input-group mb-3">

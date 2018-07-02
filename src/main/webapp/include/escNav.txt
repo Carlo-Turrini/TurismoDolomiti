@@ -1,0 +1,7 @@
+<div class="col-md-2 myCol"> 
+	<nav class="nav flex-column ">
+		<a class="nav-link  myLink" href="/escursione/<%=idEsc%>">Descrizione</a>
+		<a class="nav-link myLink" href="/escursione/<%=idEsc%>/galleria">Galleria</a>
+		<a class="nav-link myLink" href="/escursione/<%=idEsc%>/commenti">Commenti</a>
+	</nav>
+</div>

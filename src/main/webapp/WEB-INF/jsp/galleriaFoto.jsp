@@ -297,17 +297,12 @@
 			    opacity: 1;
 			    transition: all 0.3s;
 			}
-			@media (min-width: 768px) {
+			
 			.gal-container .modal-dialog {
 			    width: 55%;
 			    margin: 50 auto;
 			}
-			}
-			@media (max-width: 768px) {
-			    .gal-container .modal-content{
-			        height:250px;
-			    }
-			}
+			
 			
 			i.red{
 			    color:#BC0213;

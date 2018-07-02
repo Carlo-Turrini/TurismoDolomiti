@@ -6,6 +6,7 @@
 <%@ page import="com.student.project.TurismoDolomiti.dto.PrenInfoDTO" %>
 <%@ page import="com.student.project.TurismoDolomiti.dto.CameraPrenInfoDTO" %>
 <%@page import="java.util.LinkedList" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.List" %>
 
 <%
@@ -15,6 +16,7 @@
 	PrenInfoDTO prenInfo = (PrenInfoDTO) request.getAttribute("prenInfo");
 	List<CameraPrenInfoDTO> camerePrenInfo = (List<CameraPrenInfoDTO>) request.getAttribute("camerePrenInfo");
 	Prenotazione pren = (Prenotazione) request.getAttribute("pren");
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	String deleteUrl = null;
 	String backUrl = null;
 	String backNameBtn = null;
@@ -210,10 +212,10 @@
 								<hr>
 								<div class="row">
 									<div class="col myCol">
-										<p><span class="boldSpan">Check in:</span> <%=pren.getArrivo().toString()%></p>
+										<p><span class="boldSpan">Check in:</span> <%=pren.getArrivo().toLocalDate().format(formatter)%></p>
 									</div>
 									<div class="col myCol">
-										<p><span class="boldSpan">Check out:</span> <%=pren.getPartenza().toString()%></p>
+										<p><span class="boldSpan">Check out:</span> <%=pren.getPartenza().toLocalDate().format(formatter)%></p>
 									</div>
 								</div>
 								<p><span class="boldSpan">Ospiti:</span> <%=pren.getNumPersone()%></p>

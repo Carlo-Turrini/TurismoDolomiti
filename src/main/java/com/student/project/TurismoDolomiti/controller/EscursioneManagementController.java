@@ -147,18 +147,29 @@ public class EscursioneManagementController {
 				}
 				else {
 					Escursione esc = escRepo.getOne(idEsc);
-					Pageable topPhotoes = PageRequest.of(0, 20);
-					List<FotoSequenceDTO> fotoSequence = fotoRepo.findPhotoesForSequence(idEsc, topPhotoes);
-					Pageable topComments = PageRequest.of(0, 3);
-					List<CommentoCardDto> commentiCard = comRepo.findCommentiByElemento(idEsc, topComments);
-					List<RifugioCartinaEscursioneCardDto> rifugiEscursione = rifRepo.findRifugiEscursione(idEsc);
-					request.setAttribute("rifugiEscursione", rifugiEscursione);
-					request.setAttribute("fotoSequence", fotoSequence);
-					request.setAttribute("commentiCard", commentiCard);
-					request.setAttribute("esc", esc);
-					request.setAttribute("logged", loggedUser != null);
-					request.setAttribute("loggedUser", loggedUser);
-					return "escursione";
+					if(esc.getCompleto()) {
+						Pageable topPhotoes = PageRequest.of(0, 20);
+						List<FotoSequenceDTO> fotoSequence = fotoRepo.findPhotoesForSequence(idEsc, topPhotoes);
+						Pageable topComments = PageRequest.of(0, 3);
+						List<CommentoCardDto> commentiCard = comRepo.findCommentiByElemento(idEsc, topComments);
+						List<RifugioCartinaEscursioneCardDto> rifugiEscursione = rifRepo.findRifugiEscursione(idEsc);
+						request.setAttribute("rifugiEscursione", rifugiEscursione);
+						request.setAttribute("fotoSequence", fotoSequence);
+						request.setAttribute("commentiCard", commentiCard);
+						request.setAttribute("esc", esc);
+						request.setAttribute("logged", loggedUser != null);
+						request.setAttribute("loggedUser", loggedUser);
+						return "escursione";
+					}
+					else {
+						String redirectUrl = null;
+						if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
+							redirectUrl = "/elencoEscursioniDaCompletare";
+						}
+						else redirectUrl = "/home";
+						request.setAttribute("redirectUrl", redirectUrl);
+						throw new ApplicationException("L'escursione non è completa");
+					}
 				}
 		}
 		catch(Exception e) {

@@ -373,7 +373,7 @@
 									<springForm:errors cssClass="error" path="dislivelloDiscesa"/>
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group col-md-11 myCol">
 								<label for="inputDesc">Descrizione</label>
 								<springForm:textarea cssClass="form-control" path="descrizione" id="inputDesc" maxLength="2048" rows="10" cols="100" wrap="hard"/>
 								<springForm:errors cssClass="error" path="descrizione"/>

@@ -4,11 +4,13 @@
 <%@ page import="com.student.project.TurismoDolomiti.entity.CredenzialiUtente" %>
 <%@ page import="com.student.project.TurismoDolomiti.dto.PrenotazioneClienteCardDto" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <%
 	LoggedUserDTO loggedUser = (LoggedUserDTO) request.getAttribute("loggedUser");
 	Boolean logged = (Boolean) request.getAttribute("logged");
 	String messaggio = (String) request.getAttribute("messaggio");
 	List<PrenotazioneClienteCardDto> prenotazioni = (List<PrenotazioneClienteCardDto>) request.getAttribute("prenotazioni");
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 %>
 <!DOCTYPE html>
 <html>
@@ -119,10 +121,10 @@
 										<hr>
 										<div class="row">
 											<div class="col myCol">
-												<p><span class="boldSpan">Check in:</span> <%=pren.getDataArrivo()%></p>
+												<p><span class="boldSpan">Check in:</span> <%=pren.getDataArrivo().toLocalDate().format(formatter)%></p>
 											</div>
 											<div class="col myCol">
-												<p><span class="boldSpan">Check out:</span> <%=pren.getDataPartenza()%></p>
+												<p><span class="boldSpan">Check out:</span> <%=pren.getDataPartenza().toLocalDate().format(formatter)%></p>
 											</div>
 										</div>
 										<p><span class="boldSpan">Ospiti:</span> <%=pren.getNumPersone()%></p>

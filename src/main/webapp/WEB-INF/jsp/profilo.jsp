@@ -8,11 +8,14 @@
 <%@ page import="com.student.project.TurismoDolomiti.entity.Utente" %>
 <%@ page import="com.student.project.TurismoDolomiti.entity.CredenzialiUtente" %>
 <%@ page import="com.student.project.TurismoDolomiti.entity.Sesso" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 
 <%
 	LoggedUserDTO loggedUser = (LoggedUserDTO) request.getAttribute("loggedUser");
 	Boolean logged = (Boolean) request.getAttribute("logged");
 	Utente utente = (Utente) request.getAttribute("utente");
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	String bDay = utente.getDataNascita().toLocalDate().format(formatter);
 	String credenziali = null;
 	String sesso = null;
 	if(utente.getCredenziali().equals(CredenzialiUtente.Normale)) {
@@ -148,7 +151,7 @@
 					<div class="col-md-6">
 						<h1 class="display-4">${utente.getNome()} ${utente.getCognome()}</h1>
 						<p class="lead"><%=credenziali%></p>
-						<p class="lead">Data di nascita: ${utente.getDataNascita().toString()} </p>
+						<p class="lead">Data di nascita: <%=bDay%> </p>
 						<p class="lead">Sesso: <%=sesso%></p>
 						<p class="lead">Email: ${utente.getEmail()} </p>
 						<p class="lead">Telefono: ${utente.getTel()} </p>

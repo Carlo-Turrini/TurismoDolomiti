@@ -49,8 +49,18 @@
 				var latitude = <%=rifForm.getLatitude()%>;
 				var longitude = <%=rifForm.getLongitude()%>;
 				var marker;
+				var rifIcon = L.icon({
+				    iconUrl: '/rifMarker.png',
+				    shadowUrl: '/pin-shadow.png',
+
+				    iconSize:     [70, 70], // size of the icon
+				    shadowSize:   [70, 70], // size of the shadow
+				    iconAnchor:   [33, 69], // point of the icon which will correspond to marker's location
+				    shadowAnchor: [23, 65],  // the same for the shadow
+				    popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
+				});
 				if(latitude != null && longitude != null) {
-					marker = new L.marker([latitude, longitude]).addTo(map);
+					marker = new L.marker([latitude, longitude], {icon: rifIcon}).addTo(map);
 					var latLngs = [ marker.getLatLng() ];
 					var markerBounds = L.latLngBounds(latLngs);
 				  	map.fitBounds(markerBounds);
@@ -63,7 +73,7 @@
 					if(marker) {
 						map.removeLayer(marker);
 					}	
-					marker = new L.Marker(e.latlng).addTo(map);
+					marker = new L.Marker(e.latlng, {icon: rifIcon}).addTo(map);
 				})
     		}
     		window.addEventListener("load", onLoadHandler);

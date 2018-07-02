@@ -7,12 +7,14 @@
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.Date" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <%
 	LoggedUserDTO loggedUser = (LoggedUserDTO) request.getAttribute("loggedUser");
 	Boolean logged = (Boolean) request.getAttribute("logged");
 	String messaggio = (String) request.getAttribute("messaggio");
 	List<Rifugio> rifugi = (List<Rifugio>) request.getAttribute("rifugi");
 	Date oggi = Date.valueOf(LocalDate.now());
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 %>
 <!DOCTYPE html>
 <html>
@@ -207,7 +209,7 @@
 									<div class="card-body">
 										<h5 class="card-title rifCardText"><%=rif.getNome()%>, <%=rif.getAltitudine()%>m</h5>
 										<p class="card-text rifCardSub"><%=rif.getMassiccioMontuoso()%></p>
-										<p class="card-text rifCardText"> <%=rif.getDataApertura().toString()%> - <%=rif.getDataChiusura().toString()%></p>
+										<p class="card-text rifCardText"> <%=rif.getDataApertura().toLocalDate().format(formatter)%> - <%=rif.getDataChiusura().toLocalDate().format(formatter)%></p>
 										<% if(rif.getDataApertura().compareTo(oggi)<=0 && rif.getDataChiusura().compareTo(oggi)>=0) { %>
 											<span class="aperto"><i class="fa fa-circle fa-md" style="color:green;"></i>  Aperto</span>
 											<%} else { %>

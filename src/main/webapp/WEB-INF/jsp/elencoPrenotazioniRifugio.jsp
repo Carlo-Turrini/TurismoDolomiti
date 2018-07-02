@@ -4,6 +4,7 @@
 <%@ page import="com.student.project.TurismoDolomiti.entity.CredenzialiUtente" %>
 <%@ page import="com.student.project.TurismoDolomiti.dto.PrenotazioneRifugioCardDto" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <%
 LoggedUserDTO loggedUser = (LoggedUserDTO) request.getAttribute("loggedUser");
 Boolean logged = (Boolean) request.getAttribute("logged");
@@ -12,6 +13,7 @@ Long idRif = (Long) request.getAttribute("idRif");
 String nomeRif = (String) request.getAttribute("nomeRif");
 String messaggio = (String) request.getAttribute("messaggio");
 List<PrenotazioneRifugioCardDto> prenotazioni = (List<PrenotazioneRifugioCardDto>) request.getAttribute("prenotazioni");
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 %>
 <!DOCTYPE html>
 <html>
@@ -128,10 +130,10 @@ List<PrenotazioneRifugioCardDto> prenotazioni = (List<PrenotazioneRifugioCardDto
 										<hr>
 										<div class="row">
 											<div class="col myCol">
-												<p><span class="boldSpan">Check in:</span> <%=pren.getDataArrivo()%></p>
+												<p><span class="boldSpan">Check in:</span> <%=pren.getDataArrivo().toLocalDate().format(formatter)%></p>
 											</div>
 											<div class="col myCol">
-												<p><span class="boldSpan">Check out:</span> <%=pren.getDataPartenza()%></p>
+												<p><span class="boldSpan">Check out:</span> <%=pren.getDataPartenza().toLocalDate().format(formatter)%></p>
 											</div>
 										</div>
 										<p><span class="boldSpan">Ospiti:</span> <%=pren.getNumPersone()%></p>
