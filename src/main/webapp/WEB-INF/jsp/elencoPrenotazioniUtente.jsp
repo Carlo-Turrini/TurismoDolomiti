@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page session="false" %>
 <%@ page import="com.student.project.TurismoDolomiti.dto.LoggedUserDTO" %>
-<%@ page import="com.student.project.TurismoDolomiti.entity.CredenzialiUtente" %>
+<%@ page import="com.student.project.TurismoDolomiti.enums.CredenzialiUtente" %>
 <%@ page import="com.student.project.TurismoDolomiti.dto.PrenotazioneClienteCardDto" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>

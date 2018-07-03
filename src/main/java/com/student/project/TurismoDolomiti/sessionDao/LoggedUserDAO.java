@@ -1,7 +1,7 @@
 package com.student.project.TurismoDolomiti.sessionDao;
 
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
-import com.student.project.TurismoDolomiti.entity.CredenzialiUtente;
+import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 
 
 

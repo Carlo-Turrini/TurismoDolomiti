@@ -132,38 +132,40 @@
 		<title>Turismo Dolomiti</title>
 	</head>
 	<body>
-		<div class="container myContainer">
-			<div class="row">
-				<div class="col-md-15">
-					<div class="wrap">
-						<% if(messaggio != null) { %>
-						<div class="alert alert-warning myAlert">
-							<p class="lead myLead"><span style="font-size: 1em; color: #FFC300;"><i class="fa fa-exclamation-triangle fa-lg"></i></span>  ${messaggio}</p>
-						</div>
-						<% } %>
-						<springForm:form method="POST" modelAttribute="logForm" cssClass="login" action="/login/submit">
-							<p class="form-title">Sign In </p>
-							
-							<div class="form-group">
-								<label for="emailInput">Email</label>
-								<springForm:input cssClass="form-control" type="email" require="true" minLength="7" maxLength="64" id="emailInput" path="email" placeholder="Email" />
-								<span><springForm:errors path="email" cssClass="error"/></span>
+		<main>
+			<div class="container myContainer">
+				<div class="row">
+					<div class="col-md-15">
+						<div class="wrap">
+							<% if(messaggio != null) { %>
+							<div class="alert alert-warning myAlert">
+								<p class="lead myLead"><span style="font-size: 1em; color: #FFC300;"><i class="fa fa-exclamation-triangle fa-lg"></i></span>  ${messaggio}</p>
 							</div>
-							<div class="form-group">
-								<label for="passInput">Password</label>
-								<springForm:input cssClass="form-control" type="password" required="true" minLength="8" maxLength="64" id="passInput" path="password" placeholder="Password"/>
-								<span><springForm:errors path="password" cssClass="error"/></span>
-							</div>
-							<input type="submit" class="btn btn-primary btn-sm"/>
-							<div class="row myRow">
-								<div class="col-md-15">
-									<p style="font-size:15px;">Non hai ancora un account? <a href="/registrazione">Registrati</a> </p>
+							<% } %>
+							<springForm:form method="POST" modelAttribute="logForm" cssClass="login" action="/login/submit">
+								<p class="form-title">Sign In </p>
+								
+								<div class="form-group">
+									<label for="emailInput">Email</label>
+									<springForm:input cssClass="form-control" type="email" require="true" minLength="7" maxLength="64" id="emailInput" path="email" placeholder="Email" />
+									<span><springForm:errors path="email" cssClass="error"/></span>
 								</div>
-							</div>
-						</springForm:form>
+								<div class="form-group">
+									<label for="passInput">Password</label>
+									<springForm:input cssClass="form-control" type="password" required="true" minLength="8" maxLength="64" id="passInput" path="password" placeholder="Password"/>
+									<span><springForm:errors path="password" cssClass="error"/></span>
+								</div>
+								<input type="submit" class="btn btn-primary btn-sm"/>
+								<div class="row myRow">
+									<div class="col-md-15">
+										<p style="font-size:15px;">Non hai ancora un account? <a href="/registrazione">Registrati</a> </p>
+									</div>
+								</div>
+							</springForm:form>
+						</div>
 					</div>
-				</div>
-			</div>	
-		</div>
+				</div>	
+			</div>
+		</main>
 	</body>
 </html>

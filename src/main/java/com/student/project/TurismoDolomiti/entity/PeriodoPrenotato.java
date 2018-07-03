@@ -51,6 +51,4 @@ public class PeriodoPrenotato implements Serializable {
 	public void setPostoLetto(PostoLetto postoLetto) {
 		this.postoLetto = postoLetto;
 	}
-	//Override metodi equals e hashcode?
-
 }

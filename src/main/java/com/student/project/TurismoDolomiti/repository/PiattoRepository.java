@@ -5,8 +5,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.student.project.TurismoDolomiti.entity.CategoriaMenu;
 import com.student.project.TurismoDolomiti.entity.Piatto;
+import com.student.project.TurismoDolomiti.enums.CategoriaMenu;
+
 import java.util.*;
 
 @Repository

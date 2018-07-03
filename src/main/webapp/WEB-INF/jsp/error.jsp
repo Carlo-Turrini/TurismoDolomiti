@@ -50,20 +50,21 @@
      </script>
 </head>
 <body>
-
-	<div class="jumbotron">
-		<div class="row">
-			<div class="col">
-				<img src="/error.png">
+	<main>
+		<div class="jumbotron">
+			<div class="row">
+				<div class="col">
+					<img src="/error.png">
+				</div>
+				<div class="col">
+					<h1 class="display-4">Errore!</h1>
+					<hr class="my-4">
+					<p class="lead">${message}</p>
+				</div>
+	
 			</div>
-			<div class="col">
-				<h1 class="display-4">Errore!</h1>
-				<hr class="my-4">
-				<p class="lead">${message}</p>
-			</div>
-
 		</div>
-	</div>
+	</main>
 	<%@ include file="/include/footer.txt" %>
 </body>
 </html>

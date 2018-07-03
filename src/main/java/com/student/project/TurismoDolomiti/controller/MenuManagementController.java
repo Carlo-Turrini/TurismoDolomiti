@@ -23,9 +23,9 @@ import com.student.project.TurismoDolomiti.customExceptions.ApplicationException
 import com.student.project.TurismoDolomiti.dto.CommentoCardDto;
 import com.student.project.TurismoDolomiti.dto.FotoSequenceDTO;
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
-import com.student.project.TurismoDolomiti.entity.CategoriaMenu;
-import com.student.project.TurismoDolomiti.entity.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.entity.Piatto;
+import com.student.project.TurismoDolomiti.enums.CategoriaMenu;
+import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.formValidation.PiattoForm;
 import com.student.project.TurismoDolomiti.repository.CommentoRepository;
 import com.student.project.TurismoDolomiti.repository.FotoRepository;

@@ -7,8 +7,8 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.student.project.TurismoDolomiti.entity.DifficoltaEscursione;
-import com.student.project.TurismoDolomiti.entity.TipologiaEscursione;
+import com.student.project.TurismoDolomiti.enums.DifficoltaEscursione;
+import com.student.project.TurismoDolomiti.enums.TipologiaEscursione;
 
 public class EscursioneForm {
 	@NotNull

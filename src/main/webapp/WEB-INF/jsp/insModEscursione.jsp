@@ -4,7 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="springForm"%>
 <%@ page import="com.student.project.TurismoDolomiti.dto.LoggedUserDTO" %>
 <%@ page import="com.student.project.TurismoDolomiti.dto.RifugioNomeIdDTO" %>
-<%@ page import="com.student.project.TurismoDolomiti.entity.CredenzialiUtente" %>
+<%@ page import="com.student.project.TurismoDolomiti.enums.CredenzialiUtente" %>
 <%@ page import="com.student.project.TurismoDolomiti.formValidation.EscursioneForm" %>
 <%@page import="java.util.List" %>
 
@@ -261,6 +261,9 @@
 			.myCol {
 				padding-left:0px;
 			}
+			.pageTitle {
+				font-variant: small-caps;
+			}
 		</style>
 	</head>
 	<body>
@@ -281,7 +284,7 @@
 						
 						<% } %>
 						<springForm:form action="<%=actionUrl%>" method="POST" modelAttribute="escForm" cssClass="login">
-							<h1><%=titoloForm%></h1>
+							<h1 class="pageTitle"><%=titoloForm%></h1>
 							<hr>
 							<div class="form-group col-md-8 ">
 								<label for="inputNome">Nome</label>

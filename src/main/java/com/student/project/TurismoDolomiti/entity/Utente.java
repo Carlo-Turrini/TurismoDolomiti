@@ -9,6 +9,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Where;
 
 import com.student.project.TurismoDolomiti.constants.Constants;
+import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
+import com.student.project.TurismoDolomiti.enums.Sesso;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +45,6 @@ public class Utente implements Serializable {
 	@Column (length = 64, nullable = false)
 	private String password;
 	
-	//@Temporal(TemporalType.DATE)
 	@Column(nullable = false, name = "data_nascita")
 	private Date dataNascita;
 	
@@ -154,20 +155,12 @@ public class Utente implements Serializable {
 	public void setProfilePhotoPath(String profilePhotoPath) {
 		this.profilePhotoPath = profilePhotoPath;
 	}
-	//Commento
+	
 	public List<Commento> getCommenti() {
 		return this.commenti;
 	}
 	public void setCommenti(List<Commento> commenti) {
 		this.commenti = commenti;
-	}
-	public void addCommento(Commento commento) {
-		this.commenti.add(commento);
-		commento.setUtente(this);
-	}
-	public void removeCommento(Commento commento) {
-		this.commenti.remove(commento);
-		commento.setUtente(null);
 	}
 
 	public List<Foto> getFoto() {

@@ -1,6 +1,6 @@
 package com.student.project.TurismoDolomiti.dto;
-import com.student.project.TurismoDolomiti.entity.DifficoltaEscursione;
-import com.student.project.TurismoDolomiti.entity.TipologiaEscursione;
+import com.student.project.TurismoDolomiti.enums.DifficoltaEscursione;
+import com.student.project.TurismoDolomiti.enums.TipologiaEscursione;
 
 public class EscursioneCardDto {
 	private Long id;

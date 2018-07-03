@@ -9,8 +9,8 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.student.project.TurismoDolomiti.entity.CredenzialiUtente;
-import com.student.project.TurismoDolomiti.entity.Sesso;
+import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
+import com.student.project.TurismoDolomiti.enums.Sesso;
 
 
 public class UtenteForm {

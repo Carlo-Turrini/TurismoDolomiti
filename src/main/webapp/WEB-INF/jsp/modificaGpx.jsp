@@ -3,7 +3,7 @@
 <%@ page session="false" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="springForm"%>
 <%@ page import="com.student.project.TurismoDolomiti.dto.LoggedUserDTO" %>
-<%@ page import="com.student.project.TurismoDolomiti.entity.CredenzialiUtente" %>
+<%@ page import="com.student.project.TurismoDolomiti.enums.CredenzialiUtente" %>
 <%
 	LoggedUserDTO loggedUser = (LoggedUserDTO) request.getAttribute("loggedUser");
 	Boolean logged = (Boolean) request.getAttribute("logged");
@@ -170,6 +170,9 @@
 			.col-md-2 {
 				padding:0px;
 			}
+			.pageTitle {
+				font-variant: small-caps;
+			}
 		</style>
 	</head>
 	<body>
@@ -179,7 +182,7 @@
 				<div class="row">
 					 <%@include file="/include/modEscNav.txt" %>
 					 <div class="col-md-9">
-					 	<h1>Modifica gpx</h1>
+					 	<h1 class="pageTitle">Modifica gpx</h1>
 					 	<hr>
 						<div id="map" class="mapCss"></div> 
 					 	<springForm:form method="POST" action="/escursione/${idEsc}/modifica/gpx/submit"  enctype="multipart/form-data">

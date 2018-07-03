@@ -1,8 +1,8 @@
-package com.student.project.TurismoDolomiti.repository;
+package com.student.project.TurismoDolomiti.specifications;
 
 
-import com.student.project.TurismoDolomiti.entity.DifficoltaEscursione;
-import com.student.project.TurismoDolomiti.entity.TipologiaEscursione;
+import com.student.project.TurismoDolomiti.enums.DifficoltaEscursione;
+import com.student.project.TurismoDolomiti.enums.TipologiaEscursione;
 
 public class EscursioneSearch {
 	private String nome;

@@ -8,6 +8,9 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
+import com.student.project.TurismoDolomiti.enums.DifficoltaEscursione;
+import com.student.project.TurismoDolomiti.enums.TipologiaEscursione;
+
 
 @StaticMetamodel(Escursione.class)
 public class Escursione_ extends Elemento_{

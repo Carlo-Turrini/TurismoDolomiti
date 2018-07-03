@@ -1,9 +1,6 @@
-package com.student.project.TurismoDolomiti.repository;
+package com.student.project.TurismoDolomiti.specifications;
 import javax.persistence.criteria.*;
 import javax.persistence.criteria.Root;
-
-import com.student.project.TurismoDolomiti.entity.DifficoltaEscursione;
-
 
 import org.springframework.data.jpa.domain.Specification;
 
@@ -12,7 +9,8 @@ import java.util.List;
 
 import com.student.project.TurismoDolomiti.entity.Escursione;
 import com.student.project.TurismoDolomiti.entity.Escursione_;
-import com.student.project.TurismoDolomiti.entity.TipologiaEscursione;
+import com.student.project.TurismoDolomiti.enums.DifficoltaEscursione;
+import com.student.project.TurismoDolomiti.enums.TipologiaEscursione;
 
 public class EscursioneSpecification implements Specification<Escursione> {
 	private static final long serialVersionUID = -5326872995084852320L;

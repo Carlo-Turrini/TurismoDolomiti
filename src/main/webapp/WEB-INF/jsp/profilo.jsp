@@ -6,8 +6,8 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="springForm"%>
 <%@ page import="com.student.project.TurismoDolomiti.dto.LoggedUserDTO" %>
 <%@ page import="com.student.project.TurismoDolomiti.entity.Utente" %>
-<%@ page import="com.student.project.TurismoDolomiti.entity.CredenzialiUtente" %>
-<%@ page import="com.student.project.TurismoDolomiti.entity.Sesso" %>
+<%@ page import="com.student.project.TurismoDolomiti.enums.CredenzialiUtente" %>
+<%@ page import="com.student.project.TurismoDolomiti.enums.Sesso" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 
 <%

@@ -27,7 +27,6 @@ public class Foto implements Serializable {
 	private String label;
 	@Column(nullable = false, updatable = false)
 	@CreatedDate
-	//@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp timestamp;
 	@Column(name = "deleted", nullable = false)
 	@ColumnDefault("false")
@@ -80,7 +79,4 @@ public class Foto implements Serializable {
 	public void setElemento(Elemento elemento) {
 		this.elemento = elemento;
 	}
-	
-
-	//Override metodi equals e hashcode?
 }

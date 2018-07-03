@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
-import com.student.project.TurismoDolomiti.entity.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.entity.Utente;
+import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.repository.EscursioneRepository;
 import com.student.project.TurismoDolomiti.repository.PossiedeRepository;
 import com.student.project.TurismoDolomiti.repository.RifugioRepository;

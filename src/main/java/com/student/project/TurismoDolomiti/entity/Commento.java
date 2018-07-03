@@ -26,7 +26,6 @@ public class Commento implements Serializable {
 	private String testo;
 	@Column(nullable = false, updatable = false)
 	@CreatedDate
-	//@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp timestamp;
 	@Column(name = "deleted", nullable = false)
 	@ColumnDefault("false")

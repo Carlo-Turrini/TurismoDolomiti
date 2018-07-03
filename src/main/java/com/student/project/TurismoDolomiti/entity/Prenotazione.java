@@ -24,10 +24,8 @@ public class Prenotazione implements Serializable{
 	@Column(name = "num_persone", nullable = false) 
 	private Integer numPersone;
 	@Column(nullable = false)
-	//@Temporal(TemporalType.DATE)
 	private Date arrivo;
 	@Column(nullable = false)
-	//@Temporal(TemporalType.DATE)
 	private Date partenza;
 	@Column(nullable = false)
 	private Integer costo;
@@ -106,7 +104,4 @@ public class Prenotazione implements Serializable{
 	public void setPeriodiPrenotati(List<PeriodoPrenotato> periodiPrenotati) {
 		this.periodiPrenotati = periodiPrenotati;
 	}
-
-	//Mancano metodi add e remove
-	
 }

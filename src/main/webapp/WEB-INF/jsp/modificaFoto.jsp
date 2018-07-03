@@ -3,7 +3,7 @@
 <%@ page session="false" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="springForm"%>
 <%@ page import="com.student.project.TurismoDolomiti.dto.LoggedUserDTO" %>
-<%@ page import="com.student.project.TurismoDolomiti.entity.CredenzialiUtente" %>
+<%@ page import="com.student.project.TurismoDolomiti.enums.CredenzialiUtente" %>
 <%
 	LoggedUserDTO loggedUser = (LoggedUserDTO) request.getAttribute("loggedUser");
 	Boolean logged = (Boolean) request.getAttribute("logged");
@@ -171,6 +171,9 @@
 				color:#5E5956;
 				padding-top:0px;
 			}
+			.pageTitle {
+				font-variant: small-caps;
+			}
 		</style>
 	</head>
 	<body>
@@ -209,7 +212,7 @@
 					 	<%@include file="/include/modRifNav.txt" %>
 					 <% } %>
 					 <div class="col-md-9">
-					 	<h1>Modifica foto</h1>
+					 	<h1 class="pageTitle">Modifica foto</h1>
 					 	<hr>
 					 	<div class="row">
 					 	<div class="col-md-11">

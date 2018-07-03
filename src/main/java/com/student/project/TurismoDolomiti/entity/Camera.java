@@ -14,7 +14,7 @@ import java.util.*;
 @Where(clause = "deleted = false")
 public class Camera implements Serializable {
 	private static final long serialVersionUID = -1645978631314329166L;
-	//OK
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
@@ -76,13 +76,5 @@ public class Camera implements Serializable {
 	}
 	public void setPostiLetto(List<PostoLetto> postiLetto) {
 		this.postiLetto = postiLetto;
-	}
-	public void addPostoLetto(PostoLetto postoLetto) {
-		this.postiLetto.add(postoLetto);
-		postoLetto.setCamera(this);
-	}
-	public void removePostoLetto(PostoLetto postoLetto) {
-		this.postiLetto.remove(postoLetto);
-		postoLetto.setCamera(null);
 	}
 }

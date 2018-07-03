@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
-import com.student.project.TurismoDolomiti.entity.CredenzialiUtente;
+import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 
 public class LoggedUserDAOCookieImpl implements LoggedUserDAO {

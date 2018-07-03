@@ -1,6 +1,6 @@
 package com.student.project.TurismoDolomiti.dto;
 
-import com.student.project.TurismoDolomiti.entity.CredenzialiUtente;
+import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 
 public class LoggedUserDTO {
 	private Long idUtente;

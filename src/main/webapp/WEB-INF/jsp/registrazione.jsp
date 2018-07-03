@@ -118,65 +118,65 @@
 		<title>Turismo Dolomiti</title>
 	</head>
 	<body>
-	
-	<div class="container">
-		<div class="row reg">
-			<div class="col-md-8 reg">
-				<% if(messaggio != null) { %>
-						<div class="alert alert-warning myAlert">
-							<p class="lead myLead" style="font-size:19px;"><span style="font-size: 1em; color: #FFC300;"><i class="fa fa-exclamation-triangle fa-lg"></i></span>  ${messaggio}</p>
+	<main>
+		<div class="container">
+			<div class="row reg">
+				<div class="col-md-8 reg">
+					<% if(messaggio != null) { %>
+							<div class="alert alert-warning myAlert">
+								<p class="lead myLead" style="font-size:19px;"><span style="font-size: 1em; color: #FFC300;"><i class="fa fa-exclamation-triangle fa-lg"></i></span>  ${messaggio}</p>
+							</div>
+					<% } %>
+					<springForm:form action="/registrazione/submit" modelAttribute="regForm" method="POST" cssClass="login">
+						<p class="form-title">Registrazione </p>
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="inputNome">Nome</label>
+								<springForm:input type="text" cssClass="form-control" id="inputNome" placeholder="Nome" path="nome" required="true" minLength="2" maxLength="48"/>
+								<springForm:errors path="nome" cssClass="error"/>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="inputCognome">Cognome</label>
+								<springForm:input type="text" cssClass="form-control" id="inputCognome" placeholder="Cognome" path="cognome" required="true" minLength="2" maxLength="48" />
+								<springForm:errors path="cognome" cssClass="error"/>
+							</div>
 						</div>
-				<% } %>
-				<springForm:form action="/registrazione/submit" modelAttribute="regForm" method="POST" cssClass="login">
-					<p class="form-title">Registrazione </p>
-					<div class="form-row">
-						<div class="form-group col-md-6">
-							<label for="inputNome">Nome</label>
-							<springForm:input type="text" cssClass="form-control" id="inputNome" placeholder="Nome" path="nome" required="true" minLength="2" maxLength="48"/>
-							<springForm:errors path="nome" cssClass="error"/>
-						</div>
-						<div class="form-group col-md-6">
-							<label for="inputCognome">Cognome</label>
-							<springForm:input type="text" cssClass="form-control" id="inputCognome" placeholder="Cognome" path="cognome" required="true" minLength="2" maxLength="48" />
-							<springForm:errors path="cognome" cssClass="error"/>
-						</div>
-					</div>
-					
-					<div class="form-row">
-					    <div class="form-group col-md-6">
-						      <label for="inputEmail">Email</label>
-						      <springForm:input type="email" cssClass="form-control" id="inputEmail" placeholder="Email" path="email" required="true" minLength="7" maxLength="128"/>
-						      <springForm:errors path="email" cssClass="error"/>
-					    </div>
-					    <div class="form-group col-md-6">
-						      <label for="inputPassword">Password</label>
-						      <springForm:input type="password" class="form-control" id="inputPassword" placeholder="Password" path="password" required="true" minLength="8" maxLength="64"/>
-						      <springForm:errors path="password" cssClass="error"/>
-					    </div>
-				 	</div>
-				 	<label for="inputSesso">Sesso</label>
-				 	<div class="form-group col-md-16" id="inputSesso">
-				 		
-				 		<div class="form-check form-check-inline">
-					 	<springForm:radiobutton cssClass="form-check-input" name="SessoOptions" id="inline1" value="M" path="sesso"/>
-					  	<label class="form-check-label" for="inline1">Uomo</label>
-						</div>
-						<div class="form-check form-check-inline">
-					  	<springForm:radiobutton cssClass="form-check-input" name="SessoOptions" id="inline2" value="F" path="sesso"/>
-					  	<label class="form-check-label" for="inline2">Donna</label>
-						</div>
-						<springForm:errors path="sesso" cssClass="error"/>
-				 	</div>
-				 	<div class="form-group col-md-16">
-				 		<label for="inputBDay">Data di nascita</label>
-				 		<springForm:input type="date" cssClass="form-control" id="inputBDay" path="dataNascita"/>
-				 		<springForm:errors path="dataNascita" cssClass="error"/>
-				 	</div>
-				 	<input type="submit" class="btn btn-primary btn-sm"/>
-				</springForm:form>
+						
+						<div class="form-row">
+						    <div class="form-group col-md-6">
+							      <label for="inputEmail">Email</label>
+							      <springForm:input type="email" cssClass="form-control" id="inputEmail" placeholder="Email" path="email" required="true" minLength="7" maxLength="128"/>
+							      <springForm:errors path="email" cssClass="error"/>
+						    </div>
+						    <div class="form-group col-md-6">
+							      <label for="inputPassword">Password</label>
+							      <springForm:input type="password" class="form-control" id="inputPassword" placeholder="Password" path="password" required="true" minLength="8" maxLength="64"/>
+							      <springForm:errors path="password" cssClass="error"/>
+						    </div>
+					 	</div>
+					 	<label for="inputSesso">Sesso</label>
+					 	<div class="form-group col-md-16" id="inputSesso">
+					 		
+					 		<div class="form-check form-check-inline">
+						 	<springForm:radiobutton cssClass="form-check-input" name="SessoOptions" id="inline1" value="M" path="sesso"/>
+						  	<label class="form-check-label" for="inline1">Uomo</label>
+							</div>
+							<div class="form-check form-check-inline">
+						  	<springForm:radiobutton cssClass="form-check-input" name="SessoOptions" id="inline2" value="F" path="sesso"/>
+						  	<label class="form-check-label" for="inline2">Donna</label>
+							</div>
+							<springForm:errors path="sesso" cssClass="error"/>
+					 	</div>
+					 	<div class="form-group col-md-16">
+					 		<label for="inputBDay">Data di nascita</label>
+					 		<springForm:input type="date" cssClass="form-control" id="inputBDay" path="dataNascita"/>
+					 		<springForm:errors path="dataNascita" cssClass="error"/>
+					 	</div>
+					 	<input type="submit" class="btn btn-primary btn-sm"/>
+					</springForm:form>
+				</div>
 			</div>
 		</div>
-	</div>
-	
+	</main>
 	</body>
 </html>

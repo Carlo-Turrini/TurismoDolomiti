@@ -21,9 +21,9 @@ import com.student.project.TurismoDolomiti.customExceptions.ApplicationException
 import com.student.project.TurismoDolomiti.dto.CommentoCardDto;
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
 import com.student.project.TurismoDolomiti.entity.Commento;
-import com.student.project.TurismoDolomiti.entity.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.entity.Elemento;
 import com.student.project.TurismoDolomiti.entity.Utente;
+import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.repository.CommentoRepository;
 import com.student.project.TurismoDolomiti.repository.ElementoRepository;
 import com.student.project.TurismoDolomiti.repository.PossiedeRepository;

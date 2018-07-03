@@ -4,7 +4,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.student.project.TurismoDolomiti.entity.CategoriaMenu;
+import com.student.project.TurismoDolomiti.enums.CategoriaMenu;
 
 public class PiattoForm {
 	

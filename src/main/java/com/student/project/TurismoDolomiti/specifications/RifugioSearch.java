@@ -1,4 +1,4 @@
-package com.student.project.TurismoDolomiti.repository;
+package com.student.project.TurismoDolomiti.specifications;
 
 public class RifugioSearch {
 	private Boolean aperto = false;

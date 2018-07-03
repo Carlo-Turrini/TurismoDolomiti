@@ -4,7 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
 <%@ page import="com.student.project.TurismoDolomiti.dto.LoggedUserDTO" %>
-<%@ page import="com.student.project.TurismoDolomiti.entity.CredenzialiUtente" %>
+<%@ page import="com.student.project.TurismoDolomiti.enums.CredenzialiUtente" %>
     
  <% String messaggio = (String) request.getAttribute("messaggio");
  	LoggedUserDTO loggedUser = (LoggedUserDTO) request.getAttribute("loggedUser");
@@ -132,82 +132,84 @@
 		
 	</head>
 	<body>
-		<div class="home">
-		<%@include file="/include/profileAndLogIcons.txt" %>
-		<div class="title">
-	
-		<h1> Turismo Dolomiti </h1>
-		<pre> 
+		<main>
+			<div class="home">
+			<%@include file="/include/profileAndLogIcons.txt" %>
+			<div class="title">
+		
+			<h1> Turismo Dolomiti </h1>
+			<pre> 
 "Le montagne sono le grandi cattedrali della terra,
 con i loro portali di roccia, i mosaici di nubi,
 i cori dei torrenti, gli altari di neve,
 le volte di porpora scintillanti di stelle."
 									John Ruskin	
-		</pre>
-		</div>
-		</div>
-		
-		<div class="card-deck">
-			<div class="card myCard">
-				<img class="card-img-top" src="escCard.jpg" alt="Card image">
-				<div class="card-img-overlay">
-					<h2 class="card-title"> Escursioni </h2>
-					<p class="card-text"> Le più belle escursioni delle dolomiti </p>
-					<a href="/elencoEscursioni" class="btn btn-primary"> Vedi elenco</a>
-				</div>	
+			</pre>
 			</div>
-			<div class="card myCard">
-				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
-				<div class="card-img-overlay">
-					<h2 class="card-title"> Rifugi </h2>
-					<p class="card-text"> I più bei rifugi delle dolomiti </p>
-					<a href="/elencoRifugi" class="btn btn-primary"> Vedi elenco </a>
-				</div>
-				
 			</div>
 			
-			<% if(logged) { %>
-			<div class="card myCard">
-				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
-				<div class="card-img-overlay">
-					<h2 class="card-title"> Prenotazioni </h2>
-					<p class="card-text"> Controlla i tuoi viaggi </p>
-					<a href="/leMiePrenotazioni" class="btn btn-primary"> Vedi elenco </a>
+			<div class="card-deck">
+				<div class="card myCard">
+					<img class="card-img-top" src="escCard.jpg" alt="Card image">
+					<div class="card-img-overlay">
+						<h2 class="card-title"> Escursioni </h2>
+						<p class="card-text"> Le più belle escursioni delle dolomiti </p>
+						<a href="/elencoEscursioni" class="btn btn-primary"> Vedi elenco</a>
+					</div>	
 				</div>
-			</div>
-			<% if(loggedUser.getCredenziali().compareTo(CredenzialiUtente.GestoreRifugio)>=0) { %>
-			<div class="card myCard">
-				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
-				<div class="card-img-overlay">
-					<h2 class="card-title"> I miei rifugi </h2>
-					<p class="card-text"> Controlla i rifugi che gestisci </p>
-					<a href="/elencoRifugi" class="btn btn-primary"> Vedi elenco </a>
+				<div class="card myCard">
+					<img class="card-img-top" src="rifCard.jpg" alt="Card image">
+					<div class="card-img-overlay">
+						<h2 class="card-title"> Rifugi </h2>
+						<p class="card-text"> I più bei rifugi delle dolomiti </p>
+						<a href="/elencoRifugi" class="btn btn-primary"> Vedi elenco </a>
+					</div>
+					
 				</div>
-			
 				
-			</div>
-			<% } 
-				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
-			%>
-			<div class="card myCard">
-				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
-				<div class="card-img-overlay">
-					<h2 class="card-title"> Escursioni incomplete </h2>
-					<p class="card-text"> Completale </p>
-					<a href="/elencoEscursioniDaCompletare" class="btn btn-primary"> Vedi elenco </a>
+				<% if(logged) { %>
+				<div class="card myCard">
+					<img class="card-img-top" src="rifCard.jpg" alt="Card image">
+					<div class="card-img-overlay">
+						<h2 class="card-title"> Prenotazioni </h2>
+						<p class="card-text"> Controlla i tuoi viaggi </p>
+						<a href="/leMiePrenotazioni" class="btn btn-primary"> Vedi elenco </a>
+					</div>
 				</div>
-			</div>
-			<div class="card myCard">
-				<img class="card-img-top" src="rifCard.jpg" alt="Card image">
-				<div class="card-img-overlay">
-					<h2 class="card-title"> Utenti </h2>
-					<p class="card-text"> Monitora gli utenti nel sistema </p>
-					<a href="/elencoUtenti" class="btn btn-primary"> Vedi elenco </a>
+				<% if(loggedUser.getCredenziali().compareTo(CredenzialiUtente.GestoreRifugio)>=0) { %>
+				<div class="card myCard">
+					<img class="card-img-top" src="rifCard.jpg" alt="Card image">
+					<div class="card-img-overlay">
+						<h2 class="card-title"> I miei rifugi </h2>
+						<p class="card-text"> Controlla i rifugi che gestisci </p>
+						<a href="/elencoRifugi" class="btn btn-primary"> Vedi elenco </a>
+					</div>
+				
+					
 				</div>
+				<% } 
+					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
+				%>
+				<div class="card myCard">
+					<img class="card-img-top" src="rifCard.jpg" alt="Card image">
+					<div class="card-img-overlay">
+						<h2 class="card-title"> Escursioni incomplete </h2>
+						<p class="card-text"> Completale </p>
+						<a href="/elencoEscursioniDaCompletare" class="btn btn-primary"> Vedi elenco </a>
+					</div>
+				</div>
+				<div class="card myCard">
+					<img class="card-img-top" src="rifCard.jpg" alt="Card image">
+					<div class="card-img-overlay">
+						<h2 class="card-title"> Utenti </h2>
+						<p class="card-text"> Monitora gli utenti nel sistema </p>
+						<a href="/elencoUtenti" class="btn btn-primary"> Vedi elenco </a>
+					</div>
+				</div>
+				<% } %>
+				<%  } %>
 			</div>
-			<% } %>
-			<%  } %>
-		</div>
+		</main>
 		<%@ include file="/include/footer.txt" %>
 	</body>
 </html>

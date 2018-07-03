@@ -3,7 +3,7 @@
 <%@ page session="false" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="springForm"%>
 <%@ page import="com.student.project.TurismoDolomiti.dto.LoggedUserDTO" %>
-<%@ page import="com.student.project.TurismoDolomiti.entity.CredenzialiUtente" %>
+<%@ page import="com.student.project.TurismoDolomiti.enums.CredenzialiUtente" %>
 <%
 	LoggedUserDTO loggedUser = (LoggedUserDTO) request.getAttribute("loggedUser");
 	Boolean logged = (Boolean) request.getAttribute("logged");

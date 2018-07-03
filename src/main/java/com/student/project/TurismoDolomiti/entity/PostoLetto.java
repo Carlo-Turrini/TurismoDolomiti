@@ -28,7 +28,6 @@ public class PostoLetto implements Serializable {
 	private Camera camera;
 	@OneToMany(mappedBy = "postoLetto", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<PeriodoPrenotato> periodiPrenotati = new LinkedList<PeriodoPrenotato>();
-	//Manca il @OneToMany di Periodo_Prenotato
 	
 	public Long getId() {
 		return this.id;

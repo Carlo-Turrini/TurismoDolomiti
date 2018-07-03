@@ -3,7 +3,7 @@ package com.student.project.TurismoDolomiti.verifica;
 import javax.servlet.http.HttpServletRequest;
 
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
-import com.student.project.TurismoDolomiti.entity.CredenzialiUtente;
+import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 
 public interface VerificaService {

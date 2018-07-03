@@ -6,6 +6,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.student.project.TurismoDolomiti.enums.CategoriaMenu;
+
 @Entity
 @Table(name = "PIATTO")
 @SQLDelete(sql = "UPDATE PIATTO SET deleted = true WHERE id = ?")

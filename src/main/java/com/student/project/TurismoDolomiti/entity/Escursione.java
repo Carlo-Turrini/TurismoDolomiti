@@ -8,6 +8,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Where;
 
 import com.student.project.TurismoDolomiti.constants.Constants;
+import com.student.project.TurismoDolomiti.enums.DifficoltaEscursione;
+import com.student.project.TurismoDolomiti.enums.TipologiaEscursione;
 
 import java.util.*;
 
@@ -29,7 +31,7 @@ public class Escursione extends Elemento implements Serializable {
 	@Column(nullable = false)
 	private Float durata;
 	@Column(nullable = false)
-	private Integer lunghezza; //km
+	private Integer lunghezza; 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private DifficoltaEscursione difficolta;

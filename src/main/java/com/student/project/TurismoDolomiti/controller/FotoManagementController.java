@@ -19,10 +19,10 @@ import com.student.project.TurismoDolomiti.customExceptions.ApplicationException
 import com.student.project.TurismoDolomiti.dto.FotoCardDto;
 import com.student.project.TurismoDolomiti.dto.FotoInsertDTO;
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
-import com.student.project.TurismoDolomiti.entity.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.entity.Elemento;
 import com.student.project.TurismoDolomiti.entity.Foto;
 import com.student.project.TurismoDolomiti.entity.Utente;
+import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.repository.ElementoRepository;
 import com.student.project.TurismoDolomiti.repository.FotoRepository;
 import com.student.project.TurismoDolomiti.repository.PossiedeRepository;

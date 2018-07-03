@@ -31,10 +31,8 @@ public class Rifugio extends Elemento implements Serializable{
 	@Column(nullable = false) 
 	private Integer altitudine;
 	@Column(nullable = false, name = "data_apertura")
-	//@Temporal(TemporalType.DATE)
 	private Date dataApertura;
 	@Column(nullable = false, name = "data_chiusura")
-	//@Temporal(TemporalType.DATE)
 	private Date dataChiusura;
 	@Column(nullable = false, length = 256)
 	@Email

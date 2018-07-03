@@ -51,5 +51,4 @@ public class PassaPer implements Serializable {
 	public void setRifugio(Rifugio rifugio) {
 		this.rifugio = rifugio;
 	}
-	//Override metodi equals e hashcode?
 }

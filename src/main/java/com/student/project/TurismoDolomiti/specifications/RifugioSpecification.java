@@ -1,4 +1,4 @@
-package com.student.project.TurismoDolomiti.repository;
+package com.student.project.TurismoDolomiti.specifications;
 
 import com.student.project.TurismoDolomiti.entity.Rifugio;
 import com.student.project.TurismoDolomiti.entity.Rifugio_;
