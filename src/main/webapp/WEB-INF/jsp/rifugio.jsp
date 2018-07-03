@@ -216,6 +216,11 @@
     			checkOut.setAttribute("min", this.value);
     			
     		}
+    		function checkOutChangeHandler() {
+    			var checkIn = document.getElementById("inputCheckInt");
+    			checkIn.setAttribute("max", this.value);
+    			
+    		}
     		function onLoadHandler() {
     			var map = L.map( 'map', {
    					center: [46.62303384721474, 12.009429931640625],
@@ -248,6 +253,7 @@
 				}
 				<% if(!gestoriRifugio.isEmpty()) { %>
 					document.getElementById("inputCheckIn").addEventListener("change", checkInChangeHandler);
+					document.getElementById("inputCheckOut").addEventListener("change", checkOutChangeHandler);
 				<% } %>
     		}
     		window.addEventListener("load", onLoadHandler);

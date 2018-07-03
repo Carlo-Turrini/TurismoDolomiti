@@ -1,6 +1,7 @@
 package com.student.project.TurismoDolomiti.controller;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -248,12 +249,13 @@ public class PrenotazioniManagementController {
 			session.initSession(request, response);
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
+			Date oggi = Date.valueOf(LocalDate.now());
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Normale)) {
 				
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(possRepo.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
-						if(checkIn.compareTo(checkOut)<=0 && rifRepo.verificaRifugioApertoInPeriodo(idRif, checkIn, checkOut)>0) {
+						if(checkIn.compareTo(oggi)>=0 && checkIn.compareTo(checkOut)<=0 && rifRepo.verificaRifugioApertoInPeriodo(idRif, checkIn, checkOut)>0) {
 							if(plRepo.findNumPostiLettoRifugioDisponibiliInPeriodo(idRif, checkIn, checkOut) >= numPersone) {
 								List<PostiDisponibiliCameraRifugioDto> plByCamera = plRepo.findPostiLettoRifugioDisponibiliGroupByCamera(idRif, checkIn, checkOut);
 								PrenotazioneForm prenForm = new PrenotazioneForm();

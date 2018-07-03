@@ -177,9 +177,15 @@
 			checkOut.setAttribute("min", this.value);
 			
 		}
+		function checkOutChangeHandler() {
+			var checkIn = document.getElementById("inputCheckInt");
+			checkIn.setAttribute("max", this.value);
+			
+		}
 		function onLoadHandler() {
 			<% if(!gestoriRifugio.isEmpty()) { %>
 				document.getElementById("inputCheckIn").addEventListener("change", checkInChangeHandler);
+				document.getElementById("inputCheckOut").addEventListener("change", checkOutChangeHandler);
 			<% } %>
 		}
 		window.addEventListener("load", onLoadHandler);
