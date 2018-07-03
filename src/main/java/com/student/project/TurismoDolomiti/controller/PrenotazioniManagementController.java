@@ -253,7 +253,7 @@ public class PrenotazioniManagementController {
 				
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(possRepo.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
-						if(checkIn.compareTo(checkOut)<=0 || rifRepo.verificaRifugioApertoInPeriodo(idRif, checkIn, checkOut)>0) {
+						if(checkIn.compareTo(checkOut)<=0 && rifRepo.verificaRifugioApertoInPeriodo(idRif, checkIn, checkOut)>0) {
 							if(plRepo.findNumPostiLettoRifugioDisponibiliInPeriodo(idRif, checkIn, checkOut) >= numPersone) {
 								List<PostiDisponibiliCameraRifugioDto> plByCamera = plRepo.findPostiLettoRifugioDisponibiliGroupByCamera(idRif, checkIn, checkOut);
 								PrenotazioneForm prenForm = new PrenotazioneForm();

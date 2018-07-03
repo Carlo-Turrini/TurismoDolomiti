@@ -211,6 +211,11 @@
     	<script type='text/javascript' src='http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js'></script>
     	<script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
     	<script>
+    		function checkInChangeHandler() {
+    			var checkOut = document.getElementById("inputCheckOut");
+    			checkOut.setAttribute("min", this.value);
+    			
+    		}
     		function onLoadHandler() {
     			var map = L.map( 'map', {
    					center: [46.62303384721474, 12.009429931640625],
@@ -242,12 +247,8 @@
 					
 				}
 				<% if(!gestoriRifugio.isEmpty()) { %>
-	    		document.getElementById("inputCheckIn").onchange = function() {
-	    			var checkOut = document.getElementById("inputCheckOut");
-	    			checkOut.setAttribute("min", this.value);
-	    			
-	    		}
-	    		<% } %>
+					document.getElementById("inputCheckIn").addEventListener("change", checkInChangeHandler);
+				<% } %>
     		}
     		window.addEventListener("load", onLoadHandler);
     	</script>
@@ -343,7 +344,7 @@
 										 	</div>
 										 	<div class="form-group col-md-9 myCol">
 									      		<label for="inputCheckOut">Check out</label>
-									      		<input type="date" class="form-control" id="inputCheckOUT"  name="checkOut" required min="<%=min%>" max="<%=rif.getDataChiusura().toString()%>"/>
+									      		<input type="date" class="form-control" id="inputCheckOut"  name="checkOut" required min="<%=min%>" max="<%=rif.getDataChiusura().toString()%>"/>
 											</div>
 											<div class="form-group col-md-6 myCol">
 												<label for="inputOspiti">Ospiti</label>

@@ -5,7 +5,7 @@
 <%@ page import="com.student.project.TurismoDolomiti.entity.CredenzialiUtente" %>
 <%@ page import="com.student.project.TurismoDolomiti.dto.PostiDisponibiliCameraRifugioDto" %>
 <%@ page import="com.student.project.TurismoDolomiti.formValidation.PrenotazioneForm" %>
-
+<%@ page import="java.time.LocalDate" %>
 <%@page import="java.util.LinkedList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.Date" %>
@@ -23,6 +23,12 @@
 	Integer prezzoNotte = (Integer) request.getAttribute("prezzoNotte");
 	Date dataAperturaRif = (Date) request.getAttribute("dataAperturaRif");
 	Date dataChiusuraRif = (Date) request.getAttribute("dataChiusuraRif");
+	Date oggi = Date.valueOf(LocalDate.now());
+	String min = null;
+	if(oggi.compareTo(dataAperturaRif)>=0) {
+		min = oggi.toString();
+	}
+	else min = dataAperturaRif.toString();
 	String descGruppo = (String) request.getAttribute("descGruppo");
 	PrenotazioneForm prenForm = (PrenotazioneForm) request.getAttribute("prenForm");
 	List<PostiDisponibiliCameraRifugioDto> plByCamera = new LinkedList<PostiDisponibiliCameraRifugioDto>();
@@ -166,15 +172,15 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 		<script type="text/javascript" src="/webjars/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 		<script>
+		function checkInChangeHandler() {
+			var checkOut = document.getElementById("inputCheckOut");
+			checkOut.setAttribute("min", this.value);
+			
+		}
 		function onLoadHandler() {
 			<% if(!gestoriRifugio.isEmpty()) { %>
-			document.getElementById("inputCheckIn").onchange = function() {
-				var checkOut = document.getElementById("inputCheckOut");
-				checkOut.setAttribute("min", this.value);
-				
-			}
+				document.getElementById("inputCheckIn").addEventListener("change", checkInChangeHandler);
 			<% } %>
-			
 		}
 		window.addEventListener("load", onLoadHandler);
 		</script>
@@ -242,11 +248,11 @@
 									    <form class="login" method="POST" action="/rifugio/<%=idRif%>/prenotazione">
 											<div class="form-group col-md-9 myCol">
 										 		<label for="inputCheckIn">Check in</label>
-										 		<input id="inputCheckIn" type="date" Class="form-control" name="checkIn" required min="<%=dataAperturaRif.toString()%>" max="<%=dataChiusuraRif.toString()%>" value="<%=checkIn.toString()%>"/>
+										 		<input id="inputCheckIn" type="date" Class="form-control" name="checkIn" required min="<%=min%>" max="<%=dataChiusuraRif.toString()%>" value="<%=checkIn.toString()%>"/>
 										 	</div>
 										 	<div class="form-group col-md-9 myCol">
 									      		<label for="inputCheckOut">Check out</label>
-									      		<input type="date" class="form-control" id="inputCheckOUT"  name="checkOut" required min="<%=dataAperturaRif.toString()%>" max="<%=dataChiusuraRif.toString()%>" value="<%=checkOut.toString()%>"/>
+									      		<input type="date" class="form-control" id="inputCheckOut"  name="checkOut" required min="<%=min%>" max="<%=dataChiusuraRif.toString()%>" value="<%=checkOut.toString()%>"/>
 											</div>
 											<div class="form-group col-md-6 myCol">
 												<label for="inputOspiti">Ospiti</label>

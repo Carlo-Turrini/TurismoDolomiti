@@ -141,7 +141,7 @@
 "Le montagne sono le grandi cattedrali della terra,
 con i loro portali di roccia, i mosaici di nubi,
 i cori dei torrenti, gli altari di neve,
-le volte di porpora scintillanti ti stelle."
+le volte di porpora scintillanti di stelle."
 									John Ruskin	
 		</pre>
 		</div>
