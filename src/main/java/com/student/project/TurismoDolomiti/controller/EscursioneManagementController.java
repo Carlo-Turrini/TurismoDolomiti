@@ -298,6 +298,21 @@ public class EscursioneManagementController {
 						request.setAttribute("loggedUser", loggedUser);
 						request.setAttribute("idEsc", idEsc);
 						request.setAttribute("azione", "modifica");
+						if(!esc.getCompleto()) {
+							String incompleteMessage = null;
+							if(esc.getAltimetriaPath() == null && esc.getGpxPath() == null) {
+								incompleteMessage = "Mancano il file di altimetria e il file gpx";
+							}
+							else {
+								if(esc.getAltimetriaPath() == null) {
+									incompleteMessage = "Manca il file di altimetria";
+								}
+								else if(esc.getGpxPath() == null) {
+									incompleteMessage = "Manca il file gpx";
+								}
+							}
+							request.setAttribute("incompleteMessage", incompleteMessage);
+						}
 						EscursioneForm escForm = new EscursioneForm();
 						escForm.setNome(esc.getNome());
 						escForm.setDescrizione(esc.getDescrizione());

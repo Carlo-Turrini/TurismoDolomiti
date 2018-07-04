@@ -15,6 +15,7 @@
 	List<RifugioNomeIdDTO> rifugiId = (List<RifugioNomeIdDTO>) request.getAttribute("nomiIdRif");
 	EscursioneForm escForm = (EscursioneForm) request.getAttribute("escForm");
 	String messaggio = (String) request.getAttribute("messaggio");
+	String incompleteMessage = (String) request.getAttribute("incompleteMessage");
 	String actionUrl = null;
 	String titoloForm = null;
 	String gpxPath = null;
@@ -264,6 +265,10 @@
 			.pageTitle {
 				font-variant: small-caps;
 			}
+			.lead.myLead {
+				margin-bottom:0px;
+				font-size: 15px;
+			}
 		</style>
 	</head>
 	<body>
@@ -280,8 +285,11 @@
 							<p class="lead myLead"><span style="font-size: 1em; color: #FFC300;"><i class="fa fa-exclamation-triangle fa-lg"></i></span>  ${messaggio}</p>
 							
 						</div>
-						
-						
+						<% } %>
+						<% if(incompleteMessage != null) { %>
+							<div class="alert alert-warning myAlert">
+								<p class="lead myLead"><span style="font-size: 1em; color: #FFC300;"><i class="fa fa-exclamation-triangle fa-lg"></i></span>  ${incompleteMessage}</p>
+							</div>
 						<% } %>
 						<springForm:form action="<%=actionUrl%>" method="POST" modelAttribute="escForm" cssClass="login">
 							<h1 class="pageTitle"><%=titoloForm%></h1>
