@@ -16,7 +16,7 @@ import java.util.*;
 public interface EscursioneRepository extends JpaRepository<Escursione, Long>, JpaSpecificationExecutor<Escursione> {
 	Optional<Escursione> findById(Long id);
 	
-	List<EscursioneCardDto> findAllDtoedBy();
+
 	
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.EscursioneCardDto(esc.id, esc.nome, esc.iconPath, esc.durata, esc.dislivelloSalita, esc.dislivelloDiscesa, esc.lunghezza, esc.difficolta, esc.tipologia, esc.massiccioMontuoso, esc.label) FROM Escursione esc JOIN PassaPer pp ON esc.id = pp.escursione.id WHERE pp.rifugio.id = :id_rifugio AND esc.completo = TRUE")
 	List<EscursioneCardDto> findElencoEscursioniPerRifugio(@Param("id_rifugio")Long rifugioId);
@@ -39,4 +39,7 @@ public interface EscursioneRepository extends JpaRepository<Escursione, Long>, J
 	
 	@Query("SELECT e.gpxPath FROM Escursione e WHERE e.id = :id_esc")
 	String findGpxPath(@Param("id_esc")Long idEsc);
+	
+	@Query("SELECT e.completo FROM Escursione e WHERE e.id = :id_esc")
+	Boolean findIfCompleto(@Param("id_esc")Long idEsc);
 }

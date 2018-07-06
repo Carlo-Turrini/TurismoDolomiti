@@ -298,6 +298,7 @@ public class EscursioneManagementController {
 						request.setAttribute("loggedUser", loggedUser);
 						request.setAttribute("idEsc", idEsc);
 						request.setAttribute("azione", "modifica");
+						request.setAttribute("completo", esc.getCompleto());
 						if(!esc.getCompleto()) {
 							String incompleteMessage = null;
 							if(esc.getAltimetriaPath() == null && esc.getGpxPath() == null) {
@@ -366,6 +367,7 @@ public class EscursioneManagementController {
 					request.setAttribute("latitude",escForm.getLatitude());
 					request.setAttribute("longitude", escForm.getLongitude());
 					request.setAttribute("gpxPath", escRepo.findGpxPath(idEsc));
+					request.setAttribute("completo", escRepo.findIfCompleto(idEsc));
 					if(bindingResult.hasErrors()) {
 						request.setAttribute("azione", "modifca");
 						return "insModEscursione";
@@ -450,6 +452,7 @@ public class EscursioneManagementController {
 					request.setAttribute("tipologia", "escursione");
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
+					request.setAttribute("completo", escRepo.findIfCompleto(idEsc));
 					return "modificaFoto";
 				}
 				else throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -551,6 +554,7 @@ public class EscursioneManagementController {
 					request.setAttribute("altimetriaPath", altimetriaPath);
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
+					request.setAttribute("completo", escRepo.findIfCompleto(idEsc));
 					return "modificaAltimetria";
 					
 				}
@@ -626,6 +630,7 @@ public class EscursioneManagementController {
 					request.setAttribute("idEsc", idEsc);
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
+					request.setAttribute("completo", escRepo.findIfCompleto(idEsc));
 					return "modificaGpx";
 					
 				}

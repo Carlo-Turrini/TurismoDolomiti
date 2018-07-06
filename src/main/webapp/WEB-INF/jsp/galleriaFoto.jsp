@@ -88,79 +88,8 @@
 		
 		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/turismoDolomitiCommon.css"/>
 		<style>
-			.row {
-				padding-right:0px;
-				margin-left: 0px;
-				margin-right: 0px;
-			}
-			.row.header-sfondo {
-				height:250px;
-			}
-			.header-sfondo {
-				background-image: url("/header-sfondo1.jpg");
-				background-repeat: no-repeat;
-				
-				background-size: cover;
-			}
-			.col-md-1.log {
-				position:absolute;
-				right:10px;
-			}
-			.title-header {
-				font-variant: small-caps;
-				font-family: "Bahnschrift Light Condensed", Bahnschrift, serif;
-				color: white;
-				font-size: 500%;
-				padding-left:20px;
-			}
-			.divisoreNav {
-				margin-top:0px;			
-			
-			}
-			footer {
-				margin-left:auto;
-				margin-right:auto;
-				margin-top: 20px;
-			  	padding:20px 40px;
-			  	border-top: 1px solid #d4d4d4;
-				text-align:right;
-				font-size:11px;
-				background-color:white;
-				max-width: 1219px;
-			}
-			
-			footer a{
-			  	text-decoration:none;
-			  	color:#5E5956;
-			}
-			
-			footer #privacy {
-			  	float:right;
-			}
-			.lead {
-				margin-bottom:1px;
-			}
-			.display-4 {
-				font-size:2.5rem;
-			}
-			.nav-link{
-				color:#5E5956;
-				font-size: 16px; 
-			}
-			.nav-link:hover, .myBtnLink:hover, .deleteBtn:hover {
-				transition: color 0.5s ease;
-				color:#d3d3d3;
-			}
-			.myBtnLink {
-				padding: 0rem .75rem;
-				color:#5E5956;
-			}
-			.myDelLink {
-				padding:0px;
-				color:#5E5956;
-			}
-			
 			.myComBtnLink {
 				text-decoration:none;
 				padding-right:7px;
@@ -192,8 +121,7 @@
 				right:7px;
 				color:#5E5956;
 			}
-			<!--PROVA FOTO GALLERY CSS -->
-			@import url(https://fonts.googleapis.com/css?family=Quicksand:400,300);
+			<!--FOTO GALLERY CSS -->
 			
 			.gal-container{
 				padding: 12px;
@@ -301,11 +229,6 @@
 			.gal-container .modal-dialog {
 			    width: 55%;
 			    margin: 50 auto;
-			}
-			
-			
-			i.red{
-			    color:#BC0213;
 			}
 			.labelPhoto {
 				margin-bottom:0px;

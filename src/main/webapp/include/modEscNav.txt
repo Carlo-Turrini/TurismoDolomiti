@@ -4,6 +4,8 @@
 		<a class="nav-link myLink" href="/escursione/${idEsc}/modifica/foto">Foto</a>
 		<a class="nav-link myLink" href="/escursione/${idEsc}/modifica/gpx">Gpx</a>
 		<a class="nav-link myLink" href="/escursione/${idEsc}/modifica/altimetria">Altimetria</a>
-		<a class="btn btn-outline-secondary nav-btn" href="/escursione/${idEsc}">Escursione</a>
+		<% if(completo){ %>
+			<a class="btn btn-outline-secondary nav-btn" href="/escursione/${idEsc}">Escursione</a>
+		<% } %>
 	</nav>
 </div>

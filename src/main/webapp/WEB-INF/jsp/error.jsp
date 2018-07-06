@@ -15,30 +15,12 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Turismo Dolomiti</title>
 	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="/css/turismoDolomitiCommon.css"/>
 	<style>
-		footer {
-				margin-left:auto;
-				margin-right:auto;
-				margin-top: 20px;
-			  	padding:20px 40px;
-			  	border-top: 1px solid #d4d4d4;
-				text-align:right;
-				font-size:11px;
-				max-width: 1219px;
-			}
-			
-			footer a{
-			  	text-decoration:none;
-			  	color:#5E5956;
-			}
-			
-			footer #privacy {
-			  	float:right;
-			}
-			img {
-				width:420px;
-				height:420px;
-			}
+		img {
+			width:420px;
+			height:420px;
+		}
 	</style>
     <script>
      	function onLoadHandler() {

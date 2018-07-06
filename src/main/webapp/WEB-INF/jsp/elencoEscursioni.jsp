@@ -21,137 +21,16 @@
 		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-		
+		<link rel="stylesheet" type="text/css" href="/css/turismoDolomitiCommon.css"/>
 		<style>
-			
-			form.login input[type="email"], form.login input[type="password"], form.login input[type="text"], form.login input[type="tel"], form.login input[type="date"], form.login input[type="number"], .input-group-text.myAppend
-			{
-			    width: 100%;
-			    margin: 0;
-			    padding: 5px 10px;
-			    background: 0;
-			    border: 0;
-			    border-bottom: 1px solid #5E5956;
-			    outline: 0;
-			    font-style: italic;
-			    font-size: 12px;
-			    font-weight: 400;
-			    letter-spacing: 1px;
-			    margin-bottom: 5px;
-			    color: black;
-			    outline: 0;
-			}
-			
-			form.login input[type="submit"]
-			{
-			    width: 100%;
-			    font-size: 14px;
-			    text-transform: uppercase;
-			    font-weight: 500;
-			    margin-top: 16px;
-			    outline: 0;
-			    cursor: pointer;
-			    letter-spacing: 1px;
-			}
-			
-			form.login input[type="submit"]:hover
-			{
-			    transition: background-color 0.5s ease;
-			}
-			form.login label
-			{
-			    font-size: 15px;
-			    font-weight: 400;
-			    color: black;
-			}
-			
-			.row {
-				padding-right:0px;
-				margin-left: 0px;
-				margin-right: 0px;
-			}
-			.row.header-sfondo {
-				height:250px;
-			}
-			.header-sfondo {
-				background-image: url("/header-sfondo1.jpg");
-				background-repeat: no-repeat;
-				
-				background-size: cover;
-			}
-			.title-header {
-				font-variant: small-caps;
-				font-family: "Bahnschrift Light Condensed", Bahnschrift, serif;
-				color: white;
-				font-size: 500%;
-				padding-left:20px;
-			}
-			.divisoreNav {
-				margin-top:0px;			
-			
-			}
-			footer {
-				margin-left:auto;
-				margin-right:auto;
-				margin-top: 20px;
-			  	padding:20px 40px;
-			  	border-top: 1px solid #d4d4d4;
-				text-align:right;
-				font-size:11px;
-				background-color:white;
-				max-width: 1219px;
-			}
-			
-			footer a{
-			  	text-decoration:none;
-			  	color:#5E5956;
-			}
-			
-			footer #privacy {
-			  	float:right;
-			}
-			.log {
-				
-				padding-right:10px;
-			}
-			.col-md-8 {
-				padding-left:0px;
-				
-			}
+
 			.col-md-2 {
 				padding:0px;
-			}
-			.nav-link.active {
-				color:black;
-				font-weight: 500;
-			}
-			.nav-link.active:hover {
-				color:black;
-			}
-			.nav-link{
-				color:#5E5956;
-				font-size: 16px; 
-			}
-			.nav-link:hover {
-				transition: color 0.5s ease;
-				color:#d3d3d3;
-			}
-			.nav-link.myLink {
-				padding-left:0px;
-			}
-			.btn.nav-btn {
-				margin-top:.5rem;
-			}
-			.lead.myLead {
-				margin-bottom:0px;
 			}
 			form.login input.my-input-group {
 				width:70%
 			}
-			.myCol {
-				padding-left:0px;
-			}
-						.fotoArticle {
+			.fotoArticle {
 				width:150px;
 				height:150px;
 				object-fit:cover;
@@ -171,9 +50,6 @@
 				color:#5E5956;
 				font-size: 1.05rem;
 				margin-bottom:5px;
-			}
-			.pageTitle {
-				font-variant: small-caps;
 			}
 			a.cardHref {
 				text-decoration:none;
@@ -305,7 +181,7 @@
 					</div>
 					<div class="col-md-8">
 						<div class="row">
-								<div class="col-md-9">
+								<div class="col-md-9 myCol">
 									<h1 class="pageTitle">Elenco delle escursioni</h1>
 								</div>
 								<div class="col-md-3">

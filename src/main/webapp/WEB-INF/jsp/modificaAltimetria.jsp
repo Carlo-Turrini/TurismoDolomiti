@@ -10,6 +10,7 @@
 	String tipologia = (String) request.getAttribute("tipologia");
 	Long idEsc = (Long) request.getAttribute("idEsc");
 	String altimetriaPath = (String) request.getAttribute("altimetriaPath");
+	Boolean completo = (Boolean) request.getAttribute("completo");
 	if(altimetriaPath == null) {
 		altimetriaPath = "/noImage.png";
 	}
@@ -58,80 +59,11 @@
 		
 		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/turismoDolomitiCommon.css"/>
 		<style>
 			.myFileInput {
 				margin-bottom:0px;
-			}
-			.container.my-container {
-				margin-right: 70px;
-				margin-left: 70px;
-			}
-			.row {
-				padding-right:0px;
-				margin-left: 0px;
-				margin-right: 0px;
-			}
-			.row.header-sfondo {
-				height:250px;
-			}
-			.header-sfondo {
-				background-image: url("/header-sfondo1.jpg");
-				background-repeat: no-repeat;
-				
-				background-size: cover;
-			}
-			.title-header {
-				font-variant: small-caps;
-				font-family: "Bahnschrift Light Condensed", Bahnschrift, serif;
-				color: white;
-				font-size: 500%;
-				padding-left:20px;
-			}
-			.divisoreNav {
-				margin-top:0px;			
-			
-			}
-			footer {
-				margin-left:auto;
-				margin-right:auto;
-				margin-top: 20px;
-			  	padding:20px 40px;
-			  	border-top: 1px solid #d4d4d4;
-				text-align:right;
-				font-size:11px;
-				background-color:white;
-				max-width: 1219px;
-			}
-			
-			footer a{
-			  	text-decoration:none;
-			  	color:#5E5956;
-			}
-			
-			footer #privacy {
-			  	float:right;
-			}
-			.nav-link.active {
-				color:black;
-				font-weight: 500;
-			}
-			.nav-link.active:hover {
-				color:black;
-			}
-			.nav-link{
-				color:#5E5956;
-				font-size: 16px; 
-			}
-			.nav-link:hover {
-				transition: color 0.5s ease;
-				color:#d3d3d3;
-			}
-			.nav-link.myLink {
-				padding-left:0px;
-			}
-			.btn.nav-btn {
-				margin-top:.5rem;
-			}
+			}	
 			.altimetria {
 				width:550px;
 				height:333px;
@@ -151,9 +83,6 @@
 			}
 			.col-md-2 {
 				padding:0px;
-			}
-			.pageTitle {
-				font-variant: small-caps;
 			}
 		</style>
 	</head>

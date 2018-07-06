@@ -11,12 +11,14 @@
 	String fotoPath = (String) request.getAttribute("fotoPath");
 	String actionUrl = null;
 	String deleteUrl = null;
+	Boolean completo = null;
 	if(tipologia.equals("profilo")) {
 		Long idUtente = (Long) request.getAttribute("idUtente");
 		actionUrl="/profilo/" + idUtente + "/modifica/foto/submit";
 		deleteUrl="/profilo/" + idUtente + "/modifica/foto/cancella";
 	}
 	else if(tipologia.equals("escursione")) {
+		completo = (Boolean) request.getAttribute("completo");
 		Long idEsc = (Long) request.getAttribute("idEsc");
 		actionUrl = "/escursione/" + idEsc + "/modifica/foto/submit";
 		deleteUrl="/escursione/" + idEsc + "/modifica/foto/cancella";
@@ -70,80 +72,12 @@
 		
 		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/turismoDolomitiCommon.css"/>
 		<style>
 			.myFileInput {
 				margin-bottom:0px;
 			}
-			.container.my-container {
-				margin-right: 70px;
-				margin-left: 70px;
-			}
-			.row {
-				padding-right:0px;
-				margin-left: 0px;
-				margin-right: 0px;
-			}
-			.row.header-sfondo {
-				height:250px;
-			}
-			.header-sfondo {
-				background-image: url("/header-sfondo1.jpg");
-				background-repeat: no-repeat;
-				
-				background-size: cover;
-			}
-			.title-header {
-				font-variant: small-caps;
-				font-family: "Bahnschrift Light Condensed", Bahnschrift, serif;
-				color: white;
-				font-size: 500%;
-				padding-left:20px;
-			}
-			.divisoreNav {
-				margin-top:0px;			
 			
-			}
-			footer {
-				margin-left:auto;
-				margin-right:auto;
-				margin-top: 20px;
-			  	padding:20px 40px;
-			  	border-top: 1px solid #d4d4d4;
-				text-align:right;
-				font-size:11px;
-				background-color:white;
-				max-width: 1219px;
-			}
-			
-			footer a{
-			  	text-decoration:none;
-			  	color:#5E5956;
-			}
-			
-			footer #privacy {
-			  	float:right;
-			}
-			.nav-link.active {
-				color:black;
-				font-weight: 500;
-			}
-			.nav-link.active:hover {
-				color:black;
-			}
-			.nav-link{
-				color:#5E5956;
-				font-size: 16px; 
-			}
-			.nav-link:hover, .btn-link:hover, .deleteBtn:hover {
-				transition: color 0.5s ease;
-				color:#d3d3d3;
-			}
-			.nav-link.myLink {
-				padding-left:0px;
-			}
-			.btn.nav-btn {
-				margin-top:.5rem;
-			}
 			.rounded-circle.Photo {
 				width:250px;
 				height:250px;
@@ -163,16 +97,6 @@
 			}
 			.col-md-2 {
 				padding:0px;
-			}
-			.btn-link {
-				color:#5E5956;
-			}
-			.deleteBtn {
-				color:#5E5956;
-				padding-top:0px;
-			}
-			.pageTitle {
-				font-variant: small-caps;
 			}
 		</style>
 	</head>
@@ -228,7 +152,7 @@
 						</springForm:form>
 					 </div>
 					 <div class="col-md-1">
-					 	<button type="button" class="btn btn-link deleteBtn" data-toggle="modal" data-target="#deleteFotoModal">
+					 	<button type="button" class="btn btn-link myDelLink" data-toggle="modal" data-target="#deleteFotoModal">
 							<i class="fa fa-trash-o fa-lg"></i>
 						</button>
 					 </div>
