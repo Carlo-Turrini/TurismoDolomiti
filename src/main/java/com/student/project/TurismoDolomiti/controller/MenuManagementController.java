@@ -20,6 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.student.project.TurismoDolomiti.constants.Constants;
 import com.student.project.TurismoDolomiti.customExceptions.ApplicationException;
+import com.student.project.TurismoDolomiti.dao.CommentoDAO;
+import com.student.project.TurismoDolomiti.dao.FotoDAO;
+import com.student.project.TurismoDolomiti.dao.PiattoDAO;
+import com.student.project.TurismoDolomiti.dao.PossiedeDAO;
+import com.student.project.TurismoDolomiti.dao.RifugioDAO;
 import com.student.project.TurismoDolomiti.dto.CommentoCardDto;
 import com.student.project.TurismoDolomiti.dto.FotoSequenceDTO;
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
@@ -27,11 +32,6 @@ import com.student.project.TurismoDolomiti.entity.Piatto;
 import com.student.project.TurismoDolomiti.enums.CategoriaMenu;
 import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.formValidation.PiattoForm;
-import com.student.project.TurismoDolomiti.repository.CommentoRepository;
-import com.student.project.TurismoDolomiti.repository.FotoRepository;
-import com.student.project.TurismoDolomiti.repository.PiattoRepository;
-import com.student.project.TurismoDolomiti.repository.PossiedeRepository;
-import com.student.project.TurismoDolomiti.repository.RifugioRepository;
 import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 import com.student.project.TurismoDolomiti.sessionDao.SessionDAOFactory;
 import com.student.project.TurismoDolomiti.verifica.VerificaService;
@@ -42,15 +42,15 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class MenuManagementController {
 	@Autowired
-	FotoRepository fotoRepo;
+	FotoDAO fotoDAO;
 	@Autowired
-	CommentoRepository comRepo;
+	CommentoDAO comDAO;
 	@Autowired
-	RifugioRepository rifRepo;
+	RifugioDAO rifDAO;
 	@Autowired
-	PossiedeRepository possRepo;
+	PossiedeDAO possDAO;
 	@Autowired
-	PiattoRepository piattoRepo;
+	PiattoDAO piattoDAO;
 	@Autowired 
 	VerificaService verificaService;
 	
@@ -72,7 +72,7 @@ public class MenuManagementController {
 			}
 			else {
 				request.setAttribute("categoriaMenu", categoria);
-				List<Piatto> piatti = piattoRepo.findByRifugioIdAndCategoria(idRif, categoria);
+				List<Piatto> piatti = piattoDAO.findByRifugioIdAndCategoria(idRif, categoria);
 				if(piatti.isEmpty()) {
 					request.setAttribute("messaggio", "Non ci sono " + categoria);
 				}
@@ -139,7 +139,7 @@ public class MenuManagementController {
 							return "insModPiatto";
 						}
 						else {
-							if(piattoRepo.findPiattoByNomeAndRifugioId(idRif, piattoForm.getNome())>0) {
+							if(piattoDAO.findPiattoByNomeAndRifugioId(idRif, piattoForm.getNome())>0) {
 								request.setAttribute("messaggio", "Esiste già un piatto con questo nome");
 								setInfo(loggedUser, idRif, request);
 								request.setAttribute("piattoForm", piattoForm);
@@ -152,8 +152,8 @@ public class MenuManagementController {
 								piatto.setDescrizione(piattoForm.getDescrizione());
 								piatto.setNome(piattoForm.getNome());
 								piatto.setPrezzo(piattoForm.getPrezzo());
-								piatto.setRifugio(rifRepo.getOne(idRif));
-								piattoRepo.save(piatto);
+								piatto.setRifugio(rifDAO.getOne(idRif));
+								piattoDAO.save(piatto);
 								return "redirect:/rifugio/" + idRif + "/menu/" + piattoForm.getCategoria();
 							}
 						}
@@ -185,7 +185,7 @@ public class MenuManagementController {
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
 				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
 					if(verificaService.verificaEsistenzaRif(idRif, request)) {
-						Piatto piatto = piattoRepo.getOne(idPiatto);
+						Piatto piatto = piattoDAO.getOne(idPiatto);
 						if(piatto == null) {
 							request.setAttribute("redirectUrl", "/rifugio/" + idRif + "/menu/" + CategoriaMenu.Primi.toString());
 							throw new ApplicationException("Piatto inesistente");
@@ -231,7 +231,7 @@ public class MenuManagementController {
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
 				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
 						if(verificaService.verificaEsistenzaRif(idRif, request)) {
-							Piatto piatto = piattoRepo.getOne(idPiatto);
+							Piatto piatto = piattoDAO.getOne(idPiatto);
 							if(piatto == null) {
 								request.setAttribute("redirectUrl", "/rifugio/" + idRif + "/menu/" + CategoriaMenu.Primi.toString());
 								throw new ApplicationException("Piatto inesistente");
@@ -244,7 +244,7 @@ public class MenuManagementController {
 									return "insModPiatto";
 								}
 								else {
-									Piatto piattoConStessoNome = piattoRepo.getPiattoByNomeAndRifugioId(idRif, piattoForm.getNome());
+									Piatto piattoConStessoNome = piattoDAO.getPiattoByNomeAndRifugioId(idRif, piattoForm.getNome());
 									if(piattoConStessoNome != null && piattoConStessoNome.getId() != idPiatto) {
 										request.setAttribute("messaggio", "Esiste già un piatto con questo nome");
 										request.setAttribute("piattoForm", piattoForm);
@@ -258,7 +258,7 @@ public class MenuManagementController {
 										piatto.setDescrizione(piattoForm.getDescrizione());
 										piatto.setNome(piattoForm.getNome());
 										piatto.setPrezzo(piattoForm.getPrezzo());
-										piattoRepo.save(piatto);
+										piattoDAO.save(piatto);
 										return "redirect:/rifugio/" + idRif + "/menu/" + piattoForm.getCategoria().toString();
 									}
 								}
@@ -290,7 +290,7 @@ public class MenuManagementController {
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
 				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
 						if(verificaService.verificaEsistenzaRif(idRif, request)) {
-							piattoRepo.deleteById(idPiatto);
+							piattoDAO.deleteById(idPiatto);
 							return "redirect:/rifugio/" + idRif + "/menu/" + categoria.toString();
 						}
 						else throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -310,9 +310,9 @@ public class MenuManagementController {
 		try {
 			request.setAttribute("logged", loggedUser != null);
 			request.setAttribute("loggedUser", loggedUser);
-			request.setAttribute("nomeRif", rifRepo.findNomeRifugio(idRif));
+			request.setAttribute("nomeRif", rifDAO.findNomeRifugio(idRif));
 			request.setAttribute("idRif", idRif);
-			List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
+			List<Long> gestoriRifugio = possDAO.gestoriRifugio(idRif);
 			request.setAttribute("gestoriRifugio", gestoriRifugio);
 		}
 		catch(Exception e) {
@@ -326,9 +326,9 @@ public class MenuManagementController {
 		try {
 			setInfo(loggedUser, idRif, request);
 			Pageable topPhotoes = PageRequest.of(0,5);
-			List<FotoSequenceDTO> fotoSequence = fotoRepo.findPhotoesForSequence(idRif, topPhotoes);
+			List<FotoSequenceDTO> fotoSequence = fotoDAO.findPhotoesForSequence(idRif, topPhotoes);
 			Pageable topComments = PageRequest.of(0,3);
-			List<CommentoCardDto> commentiCard = comRepo.findCommentiByElemento(idRif, topComments);
+			List<CommentoCardDto> commentiCard = comDAO.findCommentiByElemento(idRif, topComments);
 			request.setAttribute("fotoSequence", fotoSequence);
 			request.setAttribute("commentiCard", commentiCard);
 		}

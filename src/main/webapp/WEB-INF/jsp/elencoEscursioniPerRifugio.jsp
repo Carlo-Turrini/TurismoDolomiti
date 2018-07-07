@@ -70,7 +70,7 @@
 					<%@ include file="/include/rifNav.txt" %>
 					<div class="col-md-10 myCol">
 						<h1><%=nomeRif%></h1>
-						<p class="lead subtitle">Escursioni:</p>
+						<p class="lead subtitle">Escursioni</p>
 						<hr>
 						<% if(messaggio != null) { %>
 							<div class="alert alert-primary" role="alert">

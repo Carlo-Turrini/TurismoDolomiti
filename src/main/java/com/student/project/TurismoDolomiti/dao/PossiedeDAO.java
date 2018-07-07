@@ -1,4 +1,4 @@
-package com.student.project.TurismoDolomiti.repository;
+package com.student.project.TurismoDolomiti.dao;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import com.student.project.TurismoDolomiti.entity.Utente;
 
 
 @Repository
-public interface PossiedeRepository extends JpaRepository<Possiede, Long> {
+public interface PossiedeDAO extends JpaRepository<Possiede, Long> {
 	@Query("SELECT COUNT(p) FROM Possiede p WHERE p.rifugio.id = :id_rifugio AND p.proprietario.id = :id_utente")
 	public Integer verificaProprieta(@Param("id_rifugio") Long idRifugio, @Param("id_utente") Long idUtente);
 	@Query("SELECT p.proprietario.id FROM Possiede p WHERE p.rifugio.id = :id_rifugio")

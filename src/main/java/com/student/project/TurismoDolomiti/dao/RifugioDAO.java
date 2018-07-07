@@ -1,4 +1,4 @@
-package com.student.project.TurismoDolomiti.repository;
+package com.student.project.TurismoDolomiti.dao;
 
 import com.student.project.TurismoDolomiti.dto.RifugioCartinaEscursioneCardDto;
 import com.student.project.TurismoDolomiti.dto.RifugioNomeIdDTO;
@@ -14,7 +14,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Repository
-public interface RifugioRepository extends JpaRepository<Rifugio, Long>, JpaSpecificationExecutor<Rifugio>{
+public interface RifugioDAO extends JpaRepository<Rifugio, Long>, JpaSpecificationExecutor<Rifugio>{
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.RifugioCardDto(r.id, r.nome, r.massiccioMontuoso, r.altitudine, r.dataApertura, r.dataChiusura, r.iconPath) FROM Possiede p JOIN p.rifugio r WHERE p.proprietario.id = :id_utente")
 	List<RifugioCardDto> elencoRifugiPosseduti(@Param("id_utente") Long idUtente);
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.RifugioCartinaEscursioneCardDto(r.id, r.nome, r.latitude, r.longitude, r.iconPath) FROM Rifugio r JOIN Elemento e ON r.id = e.id JOIN PassaPer pp ON r.id = pp.rifugio.id WHERE pp.escursione.id = :id_escursione")

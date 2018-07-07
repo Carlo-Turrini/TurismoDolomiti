@@ -1,4 +1,4 @@
-package com.student.project.TurismoDolomiti.repository;
+package com.student.project.TurismoDolomiti.dao;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import com.student.project.TurismoDolomiti.dto.CommentoCardDto;
 import com.student.project.TurismoDolomiti.entity.Commento;
 
 @Repository
-public interface CommentoRepository extends JpaRepository<Commento, Long> {
+public interface CommentoDAO extends JpaRepository<Commento, Long> {
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.CommentoCardDto(c.id, c.testo, c.timestamp, c.utente.id, c.utente.nome, c.utente.cognome, c.utente.profilePhotoPath) FROM Commento c  WHERE c.elemento.id = :id_elemento ORDER BY c.timestamp DESC")
 	List<CommentoCardDto> findCommentiByElemento(@Param("id_elemento")Long idElemento, Pageable pageable); //Altrimenti page
 	@Query("SELECT COUNT(c) FROM Commento c WHERE c.id = :id_com AND c.elemento.id = :id_el")

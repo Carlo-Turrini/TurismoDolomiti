@@ -163,7 +163,6 @@
 			.gal-container .modal.fade .modal-dialog {
 
 			    transform: scale(1);
-			    top: 70px;
 			    opacity: 1;
 			    transition: all 0.3s;
 			    max-width:760px;
@@ -348,7 +347,7 @@
 									</a>
 									</div>
 					        	<div class="modal fade" id="altimetriaModal" tabindex="-1" role="dialog">
-						          <div class="modal-dialog" role="document">
+						          <div class="modal-dialog modal-dialog-centered" role="document">
 						            <div class="modal-content">
 						                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 						              <div class="modal-body">

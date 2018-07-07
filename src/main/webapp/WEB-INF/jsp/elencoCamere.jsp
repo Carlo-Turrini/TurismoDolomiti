@@ -97,7 +97,7 @@
 					<%@include file="/include/rifNav.txt" %>
 					<div class="col-md-10">
 						<h1>${nomeRif}</h1>
-						<p class="lead subtitle">Camere:</p>
+						<p class="lead subtitle">Camere</p>
 						<hr>
 						<% if(messaggio != null) { %>
 							<div class="alert alert-primary" role="alert">

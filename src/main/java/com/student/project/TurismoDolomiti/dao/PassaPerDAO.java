@@ -1,4 +1,4 @@
-package com.student.project.TurismoDolomiti.repository;
+package com.student.project.TurismoDolomiti.dao;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import com.student.project.TurismoDolomiti.entity.PassaPer;
 
 
 @Repository
-public interface PassaPerRepository extends JpaRepository<PassaPer, Long> {
+public interface PassaPerDAO extends JpaRepository<PassaPer, Long> {
 	@Query("SELECT pp.rifugio.id FROM PassaPer pp WHERE pp.escursione.id = :id_esc")
 	List<Long> findPuntiRistoroEsc(@Param("id_esc")Long idEsc);
 	

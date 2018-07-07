@@ -37,11 +37,6 @@ import com.student.project.TurismoDolomiti.entity.PassaPer;
 import com.student.project.TurismoDolomiti.entity.Rifugio;
 import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.formValidation.EscursioneForm;
-import com.student.project.TurismoDolomiti.repository.CommentoRepository;
-import com.student.project.TurismoDolomiti.repository.EscursioneRepository;
-import com.student.project.TurismoDolomiti.repository.FotoRepository;
-import com.student.project.TurismoDolomiti.repository.PassaPerRepository;
-import com.student.project.TurismoDolomiti.repository.RifugioRepository;
 import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 import com.student.project.TurismoDolomiti.sessionDao.SessionDAOFactory;
 import com.student.project.TurismoDolomiti.specifications.EscursioneSearch;
@@ -50,6 +45,11 @@ import com.student.project.TurismoDolomiti.upload.TipologiaFile;
 import com.student.project.TurismoDolomiti.upload.UploadService;
 import com.student.project.TurismoDolomiti.verifica.VerificaService;
 import com.student.project.TurismoDolomiti.customExceptions.ApplicationException;
+import com.student.project.TurismoDolomiti.dao.CommentoDAO;
+import com.student.project.TurismoDolomiti.dao.EscursioneDAO;
+import com.student.project.TurismoDolomiti.dao.FotoDAO;
+import com.student.project.TurismoDolomiti.dao.PassaPerDAO;
+import com.student.project.TurismoDolomiti.dao.RifugioDAO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,19 +57,19 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class EscursioneManagementController {
 	@Autowired
-	EscursioneRepository escRepo;
+	EscursioneDAO escDAO;
 	@Autowired
-	FotoRepository fotoRepo;
+	FotoDAO fotoDAO;
 	@Autowired
-	CommentoRepository comRepo;
+	CommentoDAO comDAO;
 	@Autowired
-	RifugioRepository rifRepo;
+	RifugioDAO rifDAO;
 	@Autowired 
 	VerificaService verificaService;
 	@Autowired
 	UploadService uploadService;
 	@Autowired 
-	PassaPerRepository passaPerRepo;
+	PassaPerDAO passaPerDAO;
 	
 	private static final Logger logger = LoggerFactory.getLogger(EscursioneManagementController.class);
 	
@@ -86,7 +86,7 @@ public class EscursioneManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			EscursioneSpecification eSpec = new EscursioneSpecification(escursioneSearch);
-			List<Escursione> elencoEsc = escRepo.findAll(eSpec);
+			List<Escursione> elencoEsc = escDAO.findAll(eSpec);
 			if(elencoEsc.isEmpty()) {
 				messaggio = "Non sono state trovate escursioni";	
 				request.setAttribute("messaggio", messaggio);
@@ -116,7 +116,7 @@ public class EscursioneManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				List<EscursioneCardDto> elencoEscDaCompletare = escRepo.findElencoEscursioniDaCompletare();
+				List<EscursioneCardDto> elencoEscDaCompletare = escDAO.findElencoEscursioniDaCompletare();
 				if(elencoEscDaCompletare.isEmpty()) request.setAttribute("messaggio", "Non ci sono escursioni da completare");
 				else request.setAttribute("elencoEscDaCompletare", elencoEscDaCompletare);
 				request.setAttribute("logged", loggedUser != null);
@@ -146,13 +146,13 @@ public class EscursioneManagementController {
 					 throw new ApplicationException((String) request.getAttribute("messaggio"));
 				}
 				else {
-					Escursione esc = escRepo.getOne(idEsc);
+					Escursione esc = escDAO.getOne(idEsc);
 					if(esc.getCompleto()) {
 						Pageable topPhotoes = PageRequest.of(0, 20);
-						List<FotoSequenceDTO> fotoSequence = fotoRepo.findPhotoesForSequence(idEsc, topPhotoes);
+						List<FotoSequenceDTO> fotoSequence = fotoDAO.findPhotoesForSequence(idEsc, topPhotoes);
 						Pageable topComments = PageRequest.of(0, 3);
-						List<CommentoCardDto> commentiCard = comRepo.findCommentiByElemento(idEsc, topComments);
-						List<RifugioCartinaEscursioneCardDto> rifugiEscursione = rifRepo.findRifugiEscursione(idEsc);
+						List<CommentoCardDto> commentiCard = comDAO.findCommentiByElemento(idEsc, topComments);
+						List<RifugioCartinaEscursioneCardDto> rifugiEscursione = rifDAO.findRifugiEscursione(idEsc);
 						request.setAttribute("rifugiEscursione", rifugiEscursione);
 						request.setAttribute("fotoSequence", fotoSequence);
 						request.setAttribute("commentiCard", commentiCard);
@@ -190,7 +190,7 @@ public class EscursioneManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-					List<RifugioNomeIdDTO> nomiIdRif = rifRepo.findRifugioNomeAndId();
+					List<RifugioNomeIdDTO> nomiIdRif = rifDAO.findRifugioNomeAndId();
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
 					request.setAttribute("escForm", new EscursioneForm());
@@ -222,15 +222,15 @@ public class EscursioneManagementController {
 				request.setAttribute("logged", loggedUser != null);
 				request.setAttribute("loggedUser", loggedUser);
 				if(bindingResult.hasErrors()) {
-					List<RifugioNomeIdDTO> nomiIdRif = rifRepo.findRifugioNomeAndId();
+					List<RifugioNomeIdDTO> nomiIdRif = rifDAO.findRifugioNomeAndId();
 					request.setAttribute("nomiIdRif", nomiIdRif);
 					request.setAttribute("azione", "inserimento");
 					return "insModEscursione";
 				}
 				else {
-					Escursione esc = escRepo.findByNome(escForm.getNome());
+					Escursione esc = escDAO.findByNome(escForm.getNome());
 					if(esc != null) {
-						List<RifugioNomeIdDTO> nomiIdRif = rifRepo.findRifugioNomeAndId();
+						List<RifugioNomeIdDTO> nomiIdRif = rifDAO.findRifugioNomeAndId();
 						request.setAttribute("nomiIdRif", nomiIdRif);
 						request.setAttribute("messaggio", "Esiste già un'escursione con questo nome");
 						request.setAttribute("escForm", escForm);
@@ -252,18 +252,18 @@ public class EscursioneManagementController {
 						esc.setNome(escForm.getNome());
 						esc.setTipologia(escForm.getTipologia());
 						esc.setIconPath(Constants.DEF_ICONA_ESC);
-						Escursione savedEsc = escRepo.save(esc);
+						Escursione savedEsc = escDAO.save(esc);
 						List<Long> idPuntiRistoro = escForm.getIdPuntiRistoro();
 						for(Long id : idPuntiRistoro) {
-							Rifugio rif = rifRepo.getOne(id);
+							Rifugio rif = rifDAO.getOne(id);
 							if(rif != null) {
 								PassaPer pp = new PassaPer();
 								pp.setEscursione(savedEsc);
 								pp.setRifugio(rif);
-								passaPerRepo.save(pp);
+								passaPerDAO.save(pp);
 							}
 						}
-						return "redirect:/escursione/" + savedEsc.getId() ;
+						return "redirect:/elencoEscursioniDaCompletare";
 					}
 				}
 			}
@@ -291,8 +291,8 @@ public class EscursioneManagementController {
 						 throw new ApplicationException((String) request.getAttribute("messaggio"));
 					}
 					else {
-						Escursione esc = escRepo.getOne(idEsc);
-						List<RifugioNomeIdDTO> nomiIdRif = rifRepo.findRifugioNomeAndId();
+						Escursione esc = escDAO.getOne(idEsc);
+						List<RifugioNomeIdDTO> nomiIdRif = rifDAO.findRifugioNomeAndId();
 						request.setAttribute("nomiIdRif", nomiIdRif);
 						request.setAttribute("logged", loggedUser != null);
 						request.setAttribute("loggedUser", loggedUser);
@@ -327,7 +327,7 @@ public class EscursioneManagementController {
 						escForm.setLunghezza(esc.getLunghezza());
 						escForm.setMassiccioMontuoso(esc.getMassiccioMontuoso());
 						escForm.setTipologia(esc.getTipologia());
-						escForm.setIdPuntiRistoro(passaPerRepo.findPuntiRistoroEsc(idEsc));
+						escForm.setIdPuntiRistoro(passaPerDAO.findPuntiRistoroEsc(idEsc));
 						request.setAttribute("escForm", escForm);
 						request.setAttribute("latitude",esc.getLatitude());
 						request.setAttribute("longitude", esc.getLongitude());
@@ -366,14 +366,14 @@ public class EscursioneManagementController {
 					request.setAttribute("idEsc", idEsc);
 					request.setAttribute("latitude",escForm.getLatitude());
 					request.setAttribute("longitude", escForm.getLongitude());
-					request.setAttribute("gpxPath", escRepo.findGpxPath(idEsc));
-					request.setAttribute("completo", escRepo.findIfCompleto(idEsc));
+					request.setAttribute("gpxPath", escDAO.findGpxPath(idEsc));
+					request.setAttribute("completo", escDAO.findIfCompleto(idEsc));
 					if(bindingResult.hasErrors()) {
 						request.setAttribute("azione", "modifca");
 						return "insModEscursione";
 					}
 					else {
-						Escursione nomeVerifyEsc = escRepo.findByNome(escForm.getNome());
+						Escursione nomeVerifyEsc = escDAO.findByNome(escForm.getNome());
 						if(nomeVerifyEsc != null && nomeVerifyEsc.getId() != idEsc) {
 							request.setAttribute("messaggio", "Esiste già un'escursione con questo nome");
 							request.setAttribute("escForm", escForm);
@@ -381,7 +381,7 @@ public class EscursioneManagementController {
 							return "insModEscursione";
 						}
 						else {
-							Escursione esc = escRepo.getOne(idEsc);
+							Escursione esc = escDAO.getOne(idEsc);
 							esc.setDescrizione(escForm.getDescrizione());
 							esc.setDifficolta(escForm.getDifficolta());
 							esc.setDislivelloDiscesa(escForm.getDislivelloDiscesa());
@@ -394,8 +394,8 @@ public class EscursioneManagementController {
 							esc.setMassiccioMontuoso(escForm.getMassiccioMontuoso());
 							esc.setNome(escForm.getNome());
 							esc.setTipologia(escForm.getTipologia());
-							escRepo.save(esc);
-							List<Long> idPuntiRistoroEsc = passaPerRepo.findPuntiRistoroEsc(idEsc);
+							escDAO.save(esc);
+							List<Long> idPuntiRistoroEsc = passaPerDAO.findPuntiRistoroEsc(idEsc);
 							List<Long> nuoviIdPuntiRistoroEsc = escForm.getIdPuntiRistoro();
 							if(!idPuntiRistoroEsc.equals(nuoviIdPuntiRistoroEsc)) {
 								for(Long idPuntoRistoro : idPuntiRistoroEsc) {
@@ -403,20 +403,20 @@ public class EscursioneManagementController {
 										nuoviIdPuntiRistoroEsc.remove(idPuntoRistoro);
 									}
 									else {
-										PassaPer pp = passaPerRepo.findPassaPerByRifAndEsc(idEsc, idPuntoRistoro);
+										PassaPer pp = passaPerDAO.findPassaPerByRifAndEsc(idEsc, idPuntoRistoro);
 										if(pp != null) {
-											passaPerRepo.delete(pp);
+											passaPerDAO.delete(pp);
 										}
 									}
 								}
 								if(!nuoviIdPuntiRistoroEsc.isEmpty()) {
 									for(Long idPuntoRistoro : nuoviIdPuntiRistoroEsc) {
-										Rifugio rif = rifRepo.getOne(idPuntoRistoro);
+										Rifugio rif = rifDAO.getOne(idPuntoRistoro);
 										if(rif != null) {
 											PassaPer pp = new PassaPer();
 											pp.setEscursione(esc);
 											pp.setRifugio(rif);
-											passaPerRepo.save(pp);
+											passaPerDAO.save(pp);
 										}
 									}
 								}
@@ -446,13 +446,13 @@ public class EscursioneManagementController {
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
 				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
-					String iconaEsc = escRepo.findEscIconPath(idEsc);
+					String iconaEsc = escDAO.findEscIconPath(idEsc);
 					request.setAttribute("idEsc", idEsc);
 					request.setAttribute("fotoPath", iconaEsc);
 					request.setAttribute("tipologia", "escursione");
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
-					request.setAttribute("completo", escRepo.findIfCompleto(idEsc));
+					request.setAttribute("completo", escDAO.findIfCompleto(idEsc));
 					return "modificaFoto";
 				}
 				else throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -478,7 +478,7 @@ public class EscursioneManagementController {
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
 				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					if(!iconaEsc.isEmpty()) {
-						Escursione esc = escRepo.getOne(idEsc);
+						Escursione esc = escDAO.getOne(idEsc);
 						String filename = null;
 						if(esc.getIconPath().equals(Constants.DEF_ICONA_ESC)) {
 							filename = uploadService.store(iconaEsc, TipologiaFile.IconaEscRif, null);
@@ -487,7 +487,7 @@ public class EscursioneManagementController {
 							filename = uploadService.store(iconaEsc, TipologiaFile.IconaEscRif, esc.getIconPath());
 						}
 						esc.setIconPath(filename);
-						escRepo.save(esc);
+						escDAO.save(esc);
 						return "redirect:/escursione/" + idEsc + "/modifica/foto";
 					}
 					else {
@@ -518,11 +518,11 @@ public class EscursioneManagementController {
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
 				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
-					Escursione esc = escRepo.getOne(idEsc);
+					Escursione esc = escDAO.getOne(idEsc);
 					String iconaEsc = esc.getIconPath();
 					if(!iconaEsc.equals(Constants.DEF_ICONA_ESC)) {
 						esc.setIconPath(Constants.DEF_ICONA_ESC);
-						escRepo.save(esc);
+						escDAO.save(esc);
 						Path iconPath = Paths.get(Constants.ICONA_ESC_RIF_DIR, iconaEsc);
 						Files.delete(iconPath);
 					}
@@ -549,12 +549,12 @@ public class EscursioneManagementController {
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
 				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
-					String altimetriaPath = escRepo.findEscAltimetriaPath(idEsc);
+					String altimetriaPath = escDAO.findEscAltimetriaPath(idEsc);
 					request.setAttribute("idEsc", idEsc);
 					request.setAttribute("altimetriaPath", altimetriaPath);
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
-					request.setAttribute("completo", escRepo.findIfCompleto(idEsc));
+					request.setAttribute("completo", escDAO.findIfCompleto(idEsc));
 					return "modificaAltimetria";
 					
 				}
@@ -581,7 +581,7 @@ public class EscursioneManagementController {
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
 				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					if(!altimetria.isEmpty()) {
-						Escursione esc = escRepo.getOne(idEsc);
+						Escursione esc = escDAO.getOne(idEsc);
 						String altimetriaFile = null;
 						if(esc.getAltimetriaPath() == null) {
 							altimetriaFile = uploadService.store(altimetria, TipologiaFile.Altimetria, null);
@@ -625,12 +625,12 @@ public class EscursioneManagementController {
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
 				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
-					String gpxPath = escRepo.findEscGpxPath(idEsc);
+					String gpxPath = escDAO.findEscGpxPath(idEsc);
 					request.setAttribute("gpxPath", gpxPath);
 					request.setAttribute("idEsc", idEsc);
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
-					request.setAttribute("completo", escRepo.findIfCompleto(idEsc));
+					request.setAttribute("completo", escDAO.findIfCompleto(idEsc));
 					return "modificaGpx";
 					
 				}
@@ -657,12 +657,12 @@ public class EscursioneManagementController {
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
 				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
 					if(!gpx.isEmpty()) {
-						Escursione esc = escRepo.getOne(idEsc);
+						Escursione esc = escDAO.getOne(idEsc);
 						String gpxFile = null;
 						if(esc.getGpxPath() == null) {
 							gpxFile = uploadService.store(gpx, TipologiaFile.Gpx, null);
 							esc.setGpxPath(gpxFile);
-							escRepo.save(esc);
+							escDAO.save(esc);
 						}
 						else {
 							gpxFile = uploadService.store(gpx, TipologiaFile.Gpx, esc.getGpxPath());
@@ -703,23 +703,23 @@ public class EscursioneManagementController {
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
 				if(verificaService.verificaEsistenzaEsc(idEsc, request)) {
-					Escursione esc = escRepo.getOne(idEsc);
+					Escursione esc = escDAO.getOne(idEsc);
 					List<PassaPer> passaPer = esc.getPassaPer();
 					List<Foto> fotoEsc = esc.getFoto();
 					List<Commento> commentiEsc = esc.getCommenti();
 					for(Foto foto : fotoEsc) {
-						fotoRepo.delete(foto);
+						fotoDAO.delete(foto);
 					}
 					for(Commento com : commentiEsc) {
-						comRepo.delete(com);
+						comDAO.delete(com);
 					}
 					for(PassaPer pp : passaPer) {
-						passaPerRepo.delete(pp);
+						passaPerDAO.delete(pp);
 					}
 					UUID delUUID = UUID.randomUUID();
 					esc.setDeletionToken(delUUID);
 					esc.setDeletionTokenEl(delUUID);
-					escRepo.save(esc);
+					escDAO.save(esc);
 				}
 				
 				return "redirect:/elencoEscursioni";

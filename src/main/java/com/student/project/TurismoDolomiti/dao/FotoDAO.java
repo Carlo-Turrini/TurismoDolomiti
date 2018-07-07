@@ -1,4 +1,4 @@
-package com.student.project.TurismoDolomiti.repository;
+package com.student.project.TurismoDolomiti.dao;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import com.student.project.TurismoDolomiti.dto.FotoSequenceDTO;
 import com.student.project.TurismoDolomiti.entity.Foto;
 
 @Repository
-public interface FotoRepository extends JpaRepository<Foto, Long> {
+public interface FotoDAO extends JpaRepository<Foto, Long> {
 	
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.FotoCardDto(f.id, f.photoPath, f.label, f.timestamp, f.utente.id, f.utente.nome, f.utente.cognome, f.utente.profilePhotoPath) FROM Foto f WHERE f.elemento.id = :id_elemento ORDER BY f.timestamp DESC")
 	List<FotoCardDto> findPhotoesByElemento(@Param("id_elemento") Long idElemento);

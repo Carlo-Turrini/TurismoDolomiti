@@ -28,6 +28,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.student.project.TurismoDolomiti.constants.Constants;
 import com.student.project.TurismoDolomiti.customExceptions.ApplicationException;
+import com.student.project.TurismoDolomiti.dao.CameraDAO;
+import com.student.project.TurismoDolomiti.dao.CommentoDAO;
+import com.student.project.TurismoDolomiti.dao.EscursioneDAO;
+import com.student.project.TurismoDolomiti.dao.FotoDAO;
+import com.student.project.TurismoDolomiti.dao.PassaPerDAO;
+import com.student.project.TurismoDolomiti.dao.PiattoDAO;
+import com.student.project.TurismoDolomiti.dao.PossiedeDAO;
+import com.student.project.TurismoDolomiti.dao.PrenotazioneDAO;
+import com.student.project.TurismoDolomiti.dao.RifugioDAO;
+import com.student.project.TurismoDolomiti.dao.UtenteDAO;
 import com.student.project.TurismoDolomiti.dto.CommentoCardDto;
 import com.student.project.TurismoDolomiti.dto.EscursioneCardDto;
 import com.student.project.TurismoDolomiti.dto.FotoSequenceDTO;
@@ -45,16 +55,6 @@ import com.student.project.TurismoDolomiti.entity.Rifugio;
 import com.student.project.TurismoDolomiti.entity.Utente;
 import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.formValidation.RifugioForm;
-import com.student.project.TurismoDolomiti.repository.CameraRepository;
-import com.student.project.TurismoDolomiti.repository.CommentoRepository;
-import com.student.project.TurismoDolomiti.repository.EscursioneRepository;
-import com.student.project.TurismoDolomiti.repository.FotoRepository;
-import com.student.project.TurismoDolomiti.repository.PassaPerRepository;
-import com.student.project.TurismoDolomiti.repository.PiattoRepository;
-import com.student.project.TurismoDolomiti.repository.PossiedeRepository;
-import com.student.project.TurismoDolomiti.repository.PrenotazioneRepository;
-import com.student.project.TurismoDolomiti.repository.RifugioRepository;
-import com.student.project.TurismoDolomiti.repository.UtenteRepository;
 import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 import com.student.project.TurismoDolomiti.sessionDao.SessionDAOFactory;
 import com.student.project.TurismoDolomiti.specifications.RifugioSearch;
@@ -69,29 +69,29 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class RifugioManagementController {
 	@Autowired
-	private EscursioneRepository escRepo;
+	private EscursioneDAO escDAO;
 	@Autowired
-	private FotoRepository fotoRepo;
+	private FotoDAO fotoDAO;
 	@Autowired
-	private CommentoRepository comRepo;
+	private CommentoDAO comDAO;
 	@Autowired
-	private RifugioRepository rifRepo;
+	private RifugioDAO rifDAO;
 	@Autowired 
-	private UtenteRepository utenteRepo;
+	private UtenteDAO utenteDAO;
 	@Autowired
-	private PossiedeRepository possRepo;
+	private PossiedeDAO possDAO;
 	@Autowired 
 	private VerificaService verificaService;
 	@Autowired
 	private UploadService uploadService;
 	@Autowired 
-	private PrenotazioneRepository prenRepo;
+	private PrenotazioneDAO prenDAO;
 	@Autowired
-	private PiattoRepository piattoRepo;
+	private PiattoDAO piattoDAO;
 	@Autowired
-	private PassaPerRepository passaPerRepo;
+	private PassaPerDAO passaPerDAO;
 	@Autowired
-	private CameraRepository camRepo;
+	private CameraDAO camDAO;
 
 	private static final Logger logger = LoggerFactory.getLogger(RifugioManagementController.class);
 	
@@ -107,7 +107,7 @@ public class RifugioManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			RifugioSpecification rSpec = new RifugioSpecification(rSearch);
-			List<Rifugio> elencoRifugi = rifRepo.findAll(rSpec);
+			List<Rifugio> elencoRifugi = rifDAO.findAll(rSpec);
 			if(elencoRifugi.isEmpty()) {
 				String messaggio = "Non sono state trovati rifugi";
 				request.setAttribute("messaggio", messaggio);
@@ -139,17 +139,17 @@ public class RifugioManagementController {
 				 throw new ApplicationException((String) request.getAttribute("messaggio"));
 			}
 			else {
-				Rifugio rif = rifRepo.getOne(idRif);
+				Rifugio rif = rifDAO.getOne(idRif);
 				Boolean aperto;
 				if(rif.getDataApertura().compareTo(Date.valueOf(LocalDate.now()))<=0 && rif.getDataChiusura().compareTo(Date.valueOf(LocalDate.now()))>=0) {
 					aperto = true;
 				}
 				else aperto = false;
 				Pageable topPhotoes = PageRequest.of(0,5);
-				List<FotoSequenceDTO> fotoSequence = fotoRepo.findPhotoesForSequence(idRif, topPhotoes);
+				List<FotoSequenceDTO> fotoSequence = fotoDAO.findPhotoesForSequence(idRif, topPhotoes);
 				Pageable topComments = PageRequest.of(0,3);
-				List<CommentoCardDto> commentiCard = comRepo.findCommentiByElemento(idRif, topComments);
-				List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
+				List<CommentoCardDto> commentiCard = comDAO.findCommentiByElemento(idRif, topComments);
+				List<Long> gestoriRifugio = possDAO.gestoriRifugio(idRif);
 				request.setAttribute("gestoriRifugio", gestoriRifugio);
 				request.setAttribute("fotoSequence", fotoSequence);
 				request.setAttribute("commentiCard", commentiCard);
@@ -171,7 +171,6 @@ public class RifugioManagementController {
 	public String elencoEscursioniPerRifugio( @PathVariable("id")Long idRif, HttpServletRequest request, HttpServletResponse response) {
 		SessionDAOFactory session;
 		LoggedUserDTO loggedUser;
-		String messaggio = null;
 		
 		try {
 			session = SessionDAOFactory.getSesssionDAOFactory(Constants.SESSION_IMPL);
@@ -179,22 +178,16 @@ public class RifugioManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaEsistenzaRif(idRif, request)) {
-				List<EscursioneCardDto> escursioniPerRifugio =  escRepo.findElencoEscursioniPerRifugio(idRif);
+				List<EscursioneCardDto> escursioniPerRifugio =  escDAO.findElencoEscursioniPerRifugio(idRif);
 				if(escursioniPerRifugio.isEmpty()) {
 					request.setAttribute("messaggio", "Non sono ancora registrate escursioni che passino per questo rifugio");
 					
 				}
 				else request.setAttribute("escursioniPerRifugio", escursioniPerRifugio);
-				//Pageable topPhotoes = PageRequest.of(0, 5);
-				//List<FotoSequenceDTO> fotoRifugioSequence = fotoRepo.findPhotoesForSequence(idRif, topPhotoes);
-				//Pageable topComments = PageRequest.of(0, 3);
-				//List<CommentoCardDto> commentiCard = comRepo.findCommentiByElemento(idRif, topComments);
-				List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
+				List<Long> gestoriRifugio = possDAO.gestoriRifugio(idRif);
 				request.setAttribute("gestoriRifugio", gestoriRifugio);
-				//request.setAttribute("fotoSequence", fotoRifugioSequence);
-				//request.setAttribute("commentiCard", commentiCard);
 				request.setAttribute("idRif", idRif);
-				request.setAttribute("nomeRif", rifRepo.findNomeRifugio(idRif));
+				request.setAttribute("nomeRif", rifDAO.findNomeRifugio(idRif));
 				request.setAttribute("logged", loggedUser != null);
 				request.setAttribute("loggedUser", loggedUser);
 				return "elencoEscursioniPerRifugio";
@@ -222,13 +215,13 @@ public class RifugioManagementController {
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
 				if(loggedUser.getIdUtente() == idUtente || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
-					List<RifugioCardDto> rifugiGestiti = rifRepo.elencoRifugiPosseduti(idUtente);
+					List<RifugioCardDto> rifugiGestiti = rifDAO.elencoRifugiPosseduti(idUtente);
 					if(rifugiGestiti.isEmpty()) {
 						request.setAttribute("messaggio", "Non possiede rifugi!");
 					}
 					else request.setAttribute("rifugiGestiti", rifugiGestiti);
 					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
-						List<RifugioNomeIdDTO> nomiIdRifugi = rifRepo.findRifugioNomeAndId();
+						List<RifugioNomeIdDTO> nomiIdRifugi = rifDAO.findRifugioNomeAndId();
 						request.setAttribute("nomiRifugi", nomiIdRifugi);
 					}
 					request.setAttribute("idUtente", idUtente);
@@ -266,12 +259,12 @@ public class RifugioManagementController {
 				if(verificaService.verificaEsistenzaUtente(idUtente, request) && verificaService.verificaCredUtenteGestore(idUtente, request)) { 
 					if(verificaService.verificaEsistenzaRif(idRif, request)) {
 						if(verificaService.verificaNonGestore(idRif, idUtente, request)) {
-							Utente utente = utenteRepo.getOne(idUtente);
-							Rifugio rif = rifRepo.getOne(idRif);
+							Utente utente = utenteDAO.getOne(idUtente);
+							Rifugio rif = rifDAO.getOne(idRif);
 							Possiede poss = new Possiede();
 							poss.setProprietario(utente);
 							poss.setRifugio(rif);
-							possRepo.save(poss);
+							possDAO.save(poss);
 							return "redirect:/profilo/" + idUtente + "/elencoRifugiGestiti";
 						}
 						throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -312,9 +305,9 @@ public class RifugioManagementController {
 					}
 					else {
 						if(verificaService.verificaGestore(idRif, idUtente, request)) {
-							Utente utente = utenteRepo.getOne(idUtente);
-							Rifugio rif = rifRepo.getOne(idRif);
-							possRepo.deleteByProprietarioAndRifugio(utente, rif);
+							Utente utente = utenteDAO.getOne(idUtente);
+							Rifugio rif = rifDAO.getOne(idRif);
+							possDAO.deleteByProprietarioAndRifugio(utente, rif);
 							return "redirect:/profilo/" + idUtente + "/elencoRifugiGestiti";
 						}
 						else {
@@ -379,9 +372,9 @@ public class RifugioManagementController {
 					return "insModRifugio";
 				}
 				else {
-					Integer esistenzaByNome = rifRepo.verificaEsistenzaRifugioByNome(rifForm.getNome());
-					Integer esistenzaByTel =  rifRepo.verificaEsistenzaRifugioByTel(rifForm.getTel());
-					Integer esistenzaByMail = rifRepo.verificaEsistenzaRifugioByEmail(rifForm.getEmail());
+					Integer esistenzaByNome = rifDAO.verificaEsistenzaRifugioByNome(rifForm.getNome());
+					Integer esistenzaByTel =  rifDAO.verificaEsistenzaRifugioByTel(rifForm.getTel());
+					Integer esistenzaByMail = rifDAO.verificaEsistenzaRifugioByEmail(rifForm.getEmail());
 					if(esistenzaByNome > 0 || esistenzaByTel > 0 || esistenzaByMail > 0) {
 						List<String> messaggi = new LinkedList<String>();
 						if(esistenzaByNome > 0) {
@@ -412,7 +405,7 @@ public class RifugioManagementController {
 						rif.setPrezzoPostoLetto(rifForm.getPrezzoPostoLetto());
 						rif.setTel(rifForm.getTel());
 						rif.setIconPath(Constants.DEF_ICONA_RIF);
-						Rifugio savedRif = rifRepo.save(rif);
+						Rifugio savedRif = rifDAO.save(rif);
 						return "redirect:/rifugio/" + savedRif.getId();
 					}
 				}
@@ -441,7 +434,7 @@ public class RifugioManagementController {
 					throw new ApplicationException((String) request.getAttribute("messaggio"));
 				}
 				else if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)|| verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
-					Rifugio rif = rifRepo.getOne(idRif);
+					Rifugio rif = rifDAO.getOne(idRif);
 					RifugioForm rifForm = new RifugioForm();
 					rifForm.setAltitudine(rif.getAltitudine());
 					rifForm.setDataApertura(rif.getDataApertura().toString());
@@ -500,9 +493,9 @@ public class RifugioManagementController {
 						return "insModRifugio";
 					}
 					else {
-						Rifugio rifByNome = rifRepo.findByNome(rifForm.getNome());
-						Rifugio rifByTel =  rifRepo.findByTel(rifForm.getTel());
-						Rifugio rifByEmail = rifRepo.findByEmail(rifForm.getEmail());
+						Rifugio rifByNome = rifDAO.findByNome(rifForm.getNome());
+						Rifugio rifByTel =  rifDAO.findByTel(rifForm.getTel());
+						Rifugio rifByEmail = rifDAO.findByEmail(rifForm.getEmail());
 						if((rifByNome != null && rifByNome.getId() != idRif) || (rifByTel != null && rifByTel.getId() != idRif) || (rifByEmail != null && rifByEmail.getId() != idRif)) {
 
 							List<String> messaggi = new LinkedList<String>();
@@ -521,7 +514,7 @@ public class RifugioManagementController {
 							return "insModRifugio";
 						}
 						else {
-							Rifugio rif = rifRepo.getOne(idRif);
+							Rifugio rif = rifDAO.getOne(idRif);
 							rif.setNome(rifForm.getNome());
 							rif.setAltitudine(rifForm.getAltitudine());
 							rif.setDataApertura(Date.valueOf(rifForm.getDataApertura()));
@@ -533,7 +526,7 @@ public class RifugioManagementController {
 							rif.setMassiccioMontuoso(rifForm.getMassiccioMontuoso());
 							rif.setPrezzoPostoLetto(rifForm.getPrezzoPostoLetto());
 							rif.setTel(rifForm.getTel());
-							rifRepo.save(rif);
+							rifDAO.save(rif);
 							return "redirect:/rifugio/"+ idRif + "/modifica";
 						}
 					
@@ -567,7 +560,7 @@ public class RifugioManagementController {
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
-						String iconaRifugio = rifRepo.findRifugioIconPath(idRif);
+						String iconaRifugio = rifDAO.findRifugioIconPath(idRif);
 						request.setAttribute("fotoPath", iconaRifugio);
 						request.setAttribute("tipologia", "rifugio");
 						request.setAttribute("idRif", idRif);
@@ -603,7 +596,7 @@ public class RifugioManagementController {
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
 						if(!iconaRifugio.isEmpty()) {
-							Rifugio rif = rifRepo.getOne(idRif);
+							Rifugio rif = rifDAO.getOne(idRif);
 							String filename = null;
 							if(rif.getIconPath().equals(Constants.DEF_ICONA_RIF)) {
 								filename = uploadService.store(iconaRifugio, TipologiaFile.IconaEscRif, null);
@@ -612,7 +605,7 @@ public class RifugioManagementController {
 								filename = uploadService.store(iconaRifugio, TipologiaFile.IconaEscRif, rif.getIconPath());
 							}
 							rif.setIconPath(filename);
-							rifRepo.save(rif);
+							rifDAO.save(rif);
 							return "redirect:/rifugio/" + idRif + "/modifica/foto";
 						}
 						else {
@@ -648,11 +641,11 @@ public class RifugioManagementController {
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
-						Rifugio rif = rifRepo.getOne(idRif);
+						Rifugio rif = rifDAO.getOne(idRif);
 						String iconaRif = rif.getIconPath();
 						if(!iconaRif.equals(Constants.DEF_ICONA_RIF)) {
 							rif.setIconPath(Constants.DEF_ICONA_RIF);
-							rifRepo.save(rif);
+							rifDAO.save(rif);
 							Path iconPath = Paths.get(Constants.ICONA_ESC_RIF_DIR, iconaRif);
 							Files.delete(iconPath);
 						}
@@ -684,7 +677,7 @@ public class RifugioManagementController {
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
-					Rifugio rif = rifRepo.getOne(idRif);
+					Rifugio rif = rifDAO.getOne(idRif);
 					List<Foto> fotoRif = rif.getFoto();
 					List<Commento> comRif = rif.getCommenti();
 					List<Prenotazione> prenRif = rif.getPrenotazioni();
@@ -693,30 +686,30 @@ public class RifugioManagementController {
 					List<PassaPer> passaPer = rif.getPassaPer();
 					List<Possiede> gestoriRif = rif.getPossessori();
 					for(Foto foto : fotoRif) {
-						fotoRepo.delete(foto);
+						fotoDAO.delete(foto);
 					}
 					for(Commento com : comRif) {
-						comRepo.delete(com);
+						comDAO.delete(com);
 					}
 					for(Prenotazione pren : prenRif) {
-						prenRepo.delete(pren);
+						prenDAO.delete(pren);
 					}
 					for(Piatto piatto : piattiRif) {
-						piattoRepo.delete(piatto);
+						piattoDAO.delete(piatto);
 					}
 					for(Camera cam : camereRif) {
-						camRepo.delete(cam);
+						camDAO.delete(cam);
 					}
 					for(PassaPer pp : passaPer) {
-						passaPerRepo.delete(pp);
+						passaPerDAO.delete(pp);
 					}
 					for(Possiede poss : gestoriRif) {
-						possRepo.delete(poss);
+						possDAO.delete(poss);
 					}
 					UUID delUUID = UUID.randomUUID();
 					rif.setDeletionToken(delUUID);
 					rif.setDeletionTokenEl(delUUID);
-					rifRepo.save(rif);
+					rifDAO.save(rif);
 					
 				}
 				return "redirect:/elencoRifugi";

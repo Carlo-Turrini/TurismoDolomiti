@@ -1,4 +1,4 @@
-package com.student.project.TurismoDolomiti.repository;
+package com.student.project.TurismoDolomiti.dao;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import com.student.project.TurismoDolomiti.dto.PrenotazioneClienteCardDto;
 import com.student.project.TurismoDolomiti.dto.PrenotazioneRifugioCardDto;
 
 @Repository
-public interface PrenotazioneRepository extends JpaRepository<Prenotazione, Long> {
+public interface PrenotazioneDAO extends JpaRepository<Prenotazione, Long> {
 	
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.PrenotazioneClienteCardDto(p.id, p.numPersone, p.arrivo, p.partenza, p.rifugio.nome, p.rifugio.iconPath) FROM Prenotazione p WHERE p.cliente.id = :id_cliente")
 	List<PrenotazioneClienteCardDto> findAllPrenotazioniCliente(@Param("id_cliente") Long idCliente);

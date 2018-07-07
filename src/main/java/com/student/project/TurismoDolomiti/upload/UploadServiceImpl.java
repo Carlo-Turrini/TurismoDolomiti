@@ -37,7 +37,8 @@ public class UploadServiceImpl implements UploadService {
 	               String nomeFile = null;
 	               String oldFile = null;
 	               String oldExt = null;
-	               String fileExt = StringUtils.getFilenameExtension(uploadedFilename);
+	               String fileExt = StringUtils.getFilenameExtension(uploadedFilename).toLowerCase();
+	               
 	               if(tipologia.equals(TipologiaFile.Gpx)) {
 	            	   if(fileExt.equals("gpx")) {
 	            		   dir = Constants.GPX_DIR;

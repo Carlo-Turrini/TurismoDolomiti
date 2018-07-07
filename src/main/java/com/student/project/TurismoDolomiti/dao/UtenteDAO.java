@@ -1,4 +1,4 @@
-package com.student.project.TurismoDolomiti.repository;
+package com.student.project.TurismoDolomiti.dao;
 
 import java.util.Optional;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.student.project.TurismoDolomiti.entity.Utente;
 
 @Repository
-public interface UtenteRepository extends JpaRepository<Utente, Long> {
+public interface UtenteDAO extends JpaRepository<Utente, Long> {
 	Optional<Utente> findById(Long id);
 	Utente findByEmail(String email);
 	@Query("SELECT COUNT(u) FROM Utente u WHERE u.id = :id_utente")

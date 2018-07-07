@@ -121,6 +121,10 @@
 				right:7px;
 				color:#5E5956;
 			}
+			.deleteBtn:hover {
+				transition: color 0.5s ease;
+				color:#d3d3d3;
+			}
 			<!--FOTO GALLERY CSS -->
 			
 			.gal-container{
@@ -221,14 +225,14 @@
 			.gal-container .modal.fade .modal-dialog {
 
 			    transform: scale(1);
-			    top: 100px;
 			    opacity: 1;
 			    transition: all 0.3s;
 			}
-			
 			.gal-container .modal-dialog {
 			    width: 55%;
-			    margin: 50 auto;
+			    max-width: 700px;
+			    max-height:400px;
+    			margin: 1.75rem auto;
 			}
 			.labelPhoto {
 				margin-bottom:0px;
@@ -273,7 +277,7 @@
 				        </button>
 				      </div>
 				      <div class="modal-body">
-						<springForm:form cssClass="login" name="addForm" method="POST" action="<%=addUrl%>" enctype="multipart/form-data">  
+						<springForm:form name="addForm" method="POST" action="<%=addUrl%>" enctype="multipart/form-data">  
 							<div class="input-group mb-3">
 								<label class="input-group-prepend myFileInput">
 									<span class="btn btn-primary">Sfoglia&hellip; <input type="file" style="display: none;" name="foto" accept=".gif, .jpg, .png, .tiff"></span>
@@ -302,9 +306,9 @@
 					<% } %>
 					<div class="col-md-10">
 						<div class="row">
-							<div class="col-md-9">
+							<div class="col-md-9 myCol">
 								<h1>${nomeEl}</h1>
-								<p class="lead subtitle">Foto:</p>
+								<p class="lead subtitle">Foto</p>
 							</div>
 							<div class="col-md-3">
 							<% if(logged) { %>
@@ -333,7 +337,7 @@
 								</button>
 								<% } %>
 						        <div class="modal fade" id="<%=i%>" tabindex="-1" role="dialog">
-						          <div class="modal-dialog" role="document">
+						          <div class="modal-dialog modal-dialog-centered" role="document">
 						            <div class="modal-content">
 						                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 						              <div class="modal-body">

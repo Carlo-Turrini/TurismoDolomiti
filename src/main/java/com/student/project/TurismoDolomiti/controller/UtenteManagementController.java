@@ -26,6 +26,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.student.project.TurismoDolomiti.constants.Constants;
 import com.student.project.TurismoDolomiti.customExceptions.ApplicationException;
+import com.student.project.TurismoDolomiti.dao.CommentoDAO;
+import com.student.project.TurismoDolomiti.dao.FotoDAO;
+import com.student.project.TurismoDolomiti.dao.PossiedeDAO;
+import com.student.project.TurismoDolomiti.dao.PrenotazioneDAO;
+import com.student.project.TurismoDolomiti.dao.UtenteDAO;
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
 import com.student.project.TurismoDolomiti.entity.Commento;
 import com.student.project.TurismoDolomiti.entity.Foto;
@@ -36,11 +41,6 @@ import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.formValidation.LoginForm;
 import com.student.project.TurismoDolomiti.formValidation.RegistrazioneForm;
 import com.student.project.TurismoDolomiti.formValidation.UtenteForm;
-import com.student.project.TurismoDolomiti.repository.CommentoRepository;
-import com.student.project.TurismoDolomiti.repository.FotoRepository;
-import com.student.project.TurismoDolomiti.repository.PossiedeRepository;
-import com.student.project.TurismoDolomiti.repository.PrenotazioneRepository;
-import com.student.project.TurismoDolomiti.repository.UtenteRepository;
 import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 import com.student.project.TurismoDolomiti.sessionDao.SessionDAOFactory;
 import com.student.project.TurismoDolomiti.upload.TipologiaFile;
@@ -55,19 +55,19 @@ public class UtenteManagementController {
 
 	
 	@Autowired
-	private UtenteRepository utenteRepo;
+	private UtenteDAO utenteDAO;
 	@Autowired 
 	private VerificaService verificaService;
 	@Autowired
 	private UploadService uploadService;
 	@Autowired 
-	private FotoRepository fotoRepo;
+	private FotoDAO fotoDAO;
 	@Autowired
-	private CommentoRepository comRepo;
+	private CommentoDAO comDAO;
 	@Autowired
-	private PrenotazioneRepository prenRepo;
+	private PrenotazioneDAO prenDAO;
 	@Autowired
-	private PossiedeRepository possRepo;
+	private PossiedeDAO possDAO;
 	
 	private static final Logger logger = LoggerFactory.getLogger(UtenteManagementController.class);
 	
@@ -112,7 +112,7 @@ public class UtenteManagementController {
 					return "login";
 				}
 				
-				Utente utente = utenteRepo.findByEmail(logForm.getEmail());
+				Utente utente = utenteDAO.findByEmail(logForm.getEmail());
 				if(utente != null && utente.getPassword().equals(logForm.getPassword())) {
 					loggedUser = loggedUserDAO.create(utente.getId(), utente.getCredenziali());
 					return "redirect:/profilo/" + utente.getId();
@@ -144,7 +144,7 @@ public class UtenteManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaEsistenzaUtente(idUtente, request)) {
-				Utente utente = utenteRepo.getOne(idUtente);
+				Utente utente = utenteDAO.getOne(idUtente);
 				request.setAttribute("utente", utente);
 				request.setAttribute("logged", loggedUser!= null);
 				request.setAttribute("loggedUser", loggedUser);
@@ -211,7 +211,7 @@ public class UtenteManagementController {
 				}
 				else {
 					String email = regForm.getEmail();
-					Utente utente = utenteRepo.findByEmail(email);
+					Utente utente = utenteDAO.findByEmail(email);
 				
 					if(utente != null) {
 						messaggio = "Email già in uso!";
@@ -227,7 +227,7 @@ public class UtenteManagementController {
 						utente.setDataNascita(Date.valueOf(regForm.getDataNascita()));
 						utente.setPassword(regForm.getPassword());
 						utente.setSesso(regForm.getSesso());
-						utenteRepo.save(utente);
+						utenteDAO.save(utente);
 
 						return "redirect:/login";
 					}
@@ -260,7 +260,7 @@ public class UtenteManagementController {
 							throw new ApplicationException((String) request.getAttribute("messaggio"));
 						}
 				}
-				Utente utente = utenteRepo.getOne(idUtente);
+				Utente utente = utenteDAO.getOne(idUtente);
 				UtenteForm utenteForm = new UtenteForm();
 				utenteForm.setNome(utente.getNome());
 				utenteForm.setCognome(utente.getCognome());
@@ -318,7 +318,7 @@ public class UtenteManagementController {
 					return "modificaProfilo";
 				}	
 				else {
-							Utente utente = utenteRepo.findByEmail(utenteForm.getEmail());
+							Utente utente = utenteDAO.findByEmail(utenteForm.getEmail());
 							
 							if(utente != null && utente.getId() != idUtente) {
 								request.setAttribute("messaggio", "Esiste già un altro utente con questa email");
@@ -342,13 +342,13 @@ public class UtenteManagementController {
 								if((vecchieCred.equals(CredenzialiUtente.GestoreRifugio) || vecchieCred.equals(CredenzialiUtente.Admin)) && nuoveCred.equals(CredenzialiUtente.Normale)) {
 									List<Possiede> rifGestiti = utente.getRifGestiti();
 									for(Possiede poss : rifGestiti) {
-										possRepo.delete(poss);
+										possDAO.delete(poss);
 									}
 								}
 								utente.setCredenziali(utenteForm.getCredenziali());
 								
 							}
-							utenteRepo.save(utente);
+							utenteDAO.save(utente);
 							return "redirect:/profilo/" + idUtente + "/modifica";
 						}
 					}
@@ -380,7 +380,7 @@ public class UtenteManagementController {
 						}
 					}
 					request.setAttribute("idUtente", idUtente);
-					String fotoPath = utenteRepo.findProfilePhotoPath(idUtente);
+					String fotoPath = utenteDAO.findProfilePhotoPath(idUtente);
 					request.setAttribute("fotoPath", fotoPath);
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
@@ -420,7 +420,7 @@ public class UtenteManagementController {
 						}
 					}
 					if(!fotoProfilo.isEmpty()) {
-						Utente utente = utenteRepo.getOne(idUtente);
+						Utente utente = utenteDAO.getOne(idUtente);
 						String filename = null;
 						if(utente.getProfilePhotoPath().equals(Constants.profileDef)) {
 							filename = uploadService.store(fotoProfilo, TipologiaFile.IconaUtente, null);
@@ -429,7 +429,7 @@ public class UtenteManagementController {
 							filename = uploadService.store(fotoProfilo,  TipologiaFile.IconaUtente, utente.getProfilePhotoPath());
 						}
 						utente.setProfilePhotoPath(filename);
-						utenteRepo.save(utente);
+						utenteDAO.save(utente);
 						return "redirect:/profilo/" + idUtente + "/modifica/foto";
 					}
 					else {
@@ -469,11 +469,11 @@ public class UtenteManagementController {
 							throw new ApplicationException((String) request.getAttribute("messaggio"));
 						}
 					}
-					Utente utente = utenteRepo.getOne(idUtente);
+					Utente utente = utenteDAO.getOne(idUtente);
 					String fotoProfilo = utente.getProfilePhotoPath();
 					if(!fotoProfilo.equals(Constants.profileDef)) {
 						utente.setProfilePhotoPath(Constants.profileDef);
-						utenteRepo.save(utente);
+						utenteDAO.save(utente);
 						Path fotoProfiloPath = Paths.get(Constants.ICONA_UTENTE_DIR, fotoProfilo);
 						Files.delete(fotoProfiloPath);
 					}
@@ -540,27 +540,27 @@ public class UtenteManagementController {
 						else {
 							returnValue = "redirect:/home";
 						}
-						Utente utente = utenteRepo.getOne(idUtente);
+						Utente utente = utenteDAO.getOne(idUtente);
 						List<Commento> comUtente = utente.getCommenti();
 						List<Foto> fotoUtente = utente.getFoto();
 						List<Prenotazione> prenUtente = utente.getPrenotazioni();
 						if(utente.getCredenziali().equals(CredenzialiUtente.GestoreRifugio)) {
 							List<Possiede> rifGestitiUtente = utente.getRifGestiti();
 							for(Possiede rifGestito : rifGestitiUtente) {
-								possRepo.delete(rifGestito);
+								possDAO.delete(rifGestito);
 							}
 						}
 						for(Foto foto : fotoUtente) {
-							fotoRepo.delete(foto);
+							fotoDAO.delete(foto);
 						}
 						for(Commento com : comUtente) {
-							comRepo.delete(com);
+							comDAO.delete(com);
 						}
 						for(Prenotazione pren : prenUtente) {
-							prenRepo.delete(pren);
+							prenDAO.delete(pren);
 						}
 						utente.setDeletionToken(UUID.randomUUID());
-						utenteRepo.save(utente);
+						utenteDAO.save(utente);
 						if(loggedUser.getIdUtente() == idUtente) {
 							loggedUserDAO.destroy();
 						}
@@ -591,7 +591,7 @@ public class UtenteManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				List<Utente> utenti = utenteRepo.findAll();
+				List<Utente> utenti = utenteDAO.findAll();
 				request.setAttribute("logged", loggedUser != null);
 				request.setAttribute("loggedUser", loggedUser);
 				request.setAttribute("utenti", utenti);

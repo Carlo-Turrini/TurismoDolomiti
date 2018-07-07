@@ -56,6 +56,9 @@
 			.escIcon {
 				color:#6E2C00;
 			}
+			.disP {
+				font-size:0.99rem;
+			}
 		</style>
 	</head>
 	<body>
@@ -65,7 +68,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="row">
-								<div class="col-md-10">
+								<div class="col-md-10 myCol">
 									<h1 class="pageTitle">Elenco delle escursioni da completare</h1>
 								</div>
 								<div class="col-md-2">
@@ -82,7 +85,7 @@
 						<% } else { %>
 							<div class="row">
 							<% for(EscursioneCardDto esc : elencoEscDaCompletare){%>
-							<div class="col-md-6">
+							<div class="col-md-6 myCol">
 								<a href="/escursione/<%=esc.getId()%>/modifica" class="cardHref">
 									<div class="card rifCard mb-2">
 										<img class="card-img-top myCardImg" src="<%=esc.getIconPath()%>">
@@ -113,8 +116,8 @@
 															</span>
 															
 														<div class="col myCol">
-															<p class="mb-0" style="line-height:20px;"><%=esc.getDislivelloSalita()%>m</p>
-															<p class="mb-0"><span class="text-muted"><%=esc.getDislivelloDiscesa()%>m</span></p>													
+															<p class="mb-0 disP" style="line-height:20px;"><%=esc.getDislivelloSalita()%>m</p>
+															<p class="mb-0 disP"><span class="text-muted"><%=esc.getDislivelloDiscesa()%>m</span></p>													
 														</div>
 													</div>
 												</div>

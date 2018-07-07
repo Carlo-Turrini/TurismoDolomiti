@@ -74,7 +74,7 @@
 							<% for(Utente ut : utenti) { %>
 							<div class="col-md-4">
 								<a href="/profilo/<%=ut.getId()%>" class="cardHref">
-									<div class="card rifCard">
+									<div class="card rifCard mb-2">
 										<img class="card-img-top myCardImg" src="<%=ut.getProfilePhotoPath()%>">
 										<div class="card-body">
 											<h5 class="card-title cardText"><%=ut.getNome()%> <%=ut.getCognome()%></h5>

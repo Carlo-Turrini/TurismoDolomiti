@@ -61,7 +61,7 @@
 			
 		}
 		function checkOutChangeHandler() {
-			var checkIn = document.getElementById("inputCheckInt");
+			var checkIn = document.getElementById("inputCheckIn");
 			checkIn.setAttribute("max", this.value);
 			
 		}
@@ -82,7 +82,7 @@
 					<%@ include file="/include/rifNav.txt" %>
 					<div class="col-md-10 myCol">
 						<h1>${nomeRif}</h1>
-						<p class="lead subtitle">Prenota:</p>
+						<p class="lead subtitle">Prenota</p>
 						<hr>
 						<div class="row">
 							<div class="col-md-7 myCol">

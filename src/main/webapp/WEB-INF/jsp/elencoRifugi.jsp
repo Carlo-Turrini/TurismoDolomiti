@@ -99,7 +99,7 @@
 							<% for(Rifugio rif : rifugi){%>
 							<div class="col-md-6">
 								<a href="/rifugio/<%=rif.getId()%>" class="cardHref">
-								<div class="card rifCard">
+								<div class="card rifCard mb-2">
 									<img class="card-img-top myCardImg" src="<%=rif.getIconPath()%>">
 									<div class="card-body">
 										<h5 class="card-title rifCardText"><%=rif.getNome()%>, <%=rif.getAltitudine()%>m</h5>

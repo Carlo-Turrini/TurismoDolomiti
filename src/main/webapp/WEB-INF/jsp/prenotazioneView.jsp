@@ -164,6 +164,7 @@
 									<p><span class="boldSpan">Posti letto prenotati:</span> <%=camInfo.getNumPostiLettoPren()%></p>
 									<hr>
 								<% } %>
+							</div>
 						</div>
 					</div>
 				</div>

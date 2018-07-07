@@ -1,4 +1,4 @@
-package com.student.project.TurismoDolomiti.repository;
+package com.student.project.TurismoDolomiti.dao;
 
 import com.student.project.TurismoDolomiti.dto.EscursioneCardDto;
 
@@ -13,7 +13,7 @@ import com.student.project.TurismoDolomiti.entity.Escursione;
 import java.util.*;
 
 @Repository
-public interface EscursioneRepository extends JpaRepository<Escursione, Long>, JpaSpecificationExecutor<Escursione> {
+public interface EscursioneDAO extends JpaRepository<Escursione, Long>, JpaSpecificationExecutor<Escursione> {
 	Optional<Escursione> findById(Long id);
 	
 

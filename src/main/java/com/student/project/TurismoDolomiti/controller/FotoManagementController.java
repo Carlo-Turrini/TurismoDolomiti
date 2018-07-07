@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.student.project.TurismoDolomiti.constants.Constants;
 import com.student.project.TurismoDolomiti.customExceptions.ApplicationException;
+import com.student.project.TurismoDolomiti.dao.ElementoDAO;
+import com.student.project.TurismoDolomiti.dao.FotoDAO;
+import com.student.project.TurismoDolomiti.dao.PossiedeDAO;
+import com.student.project.TurismoDolomiti.dao.UtenteDAO;
 import com.student.project.TurismoDolomiti.dto.FotoCardDto;
 import com.student.project.TurismoDolomiti.dto.FotoInsertDTO;
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
@@ -23,11 +27,6 @@ import com.student.project.TurismoDolomiti.entity.Elemento;
 import com.student.project.TurismoDolomiti.entity.Foto;
 import com.student.project.TurismoDolomiti.entity.Utente;
 import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
-import com.student.project.TurismoDolomiti.repository.ElementoRepository;
-import com.student.project.TurismoDolomiti.repository.FotoRepository;
-import com.student.project.TurismoDolomiti.repository.PossiedeRepository;
-import com.student.project.TurismoDolomiti.repository.RifugioRepository;
-import com.student.project.TurismoDolomiti.repository.UtenteRepository;
 import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 import com.student.project.TurismoDolomiti.sessionDao.SessionDAOFactory;
 import com.student.project.TurismoDolomiti.upload.TipologiaFile;
@@ -40,19 +39,17 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class FotoManagementController {
 	@Autowired
-	FotoRepository fotoRepo;
-	@Autowired
-	RifugioRepository rifRepo;
+	FotoDAO fotoDAO;
 	@Autowired 
 	VerificaService verificaService;
 	@Autowired
-	UtenteRepository utenteRepo;
+	UtenteDAO utenteRepo;
 	@Autowired
 	UploadService uploadService;
 	@Autowired
-	PossiedeRepository possRepo;
+	PossiedeDAO possDAO;
 	@Autowired
-	ElementoRepository elRepo;
+	ElementoDAO elDAO;
 	
 	private static final Logger logger = LoggerFactory.getLogger(FotoManagementController.class);
 	
@@ -84,7 +81,7 @@ public class FotoManagementController {
 				Galleria(idRif, request, response);
 				request.setAttribute("tipologia", "rifugio");
 				request.setAttribute("idRif", idRif);
-				request.setAttribute("gestoriRifugio", possRepo.gestoriRifugio(idRif));
+				request.setAttribute("gestoriRifugio", possDAO.gestoriRifugio(idRif));
 				return "galleriaFoto";
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -105,10 +102,10 @@ public class FotoManagementController {
 			session.initSession(request, response);
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
-			List<FotoCardDto> foto = fotoRepo.findPhotoesByElemento(idEl);
+			List<FotoCardDto> foto = fotoDAO.findPhotoesByElemento(idEl);
 			if(foto.isEmpty()) request.setAttribute("messaggio", "Non ci sono foto");
 			else request.setAttribute("foto", foto);
-			request.setAttribute("nomeEl", elRepo.findNomeEl(idEl));
+			request.setAttribute("nomeEl", elDAO.findNomeEl(idEl));
 			request.setAttribute("logged", loggedUser != null);
 			request.setAttribute("loggedUser", loggedUser);
 		}
@@ -167,14 +164,14 @@ public class FotoManagementController {
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Normale)) {
 				String fotoPath = uploadService.store(foto.getFoto(), TipologiaFile.Foto, null);
-				Elemento el = elRepo.getOne(idEl);
+				Elemento el = elDAO.getOne(idEl);
 				Utente utente = utenteRepo.getOne(loggedUser.getIdUtente());
 				Foto photo = new Foto();
 				photo.setElemento(el);
 				photo.setUtente(utente);
 				photo.setPhotoPath(fotoPath);
 				photo.setLabel(foto.getLabel());
-				fotoRepo.save(photo);
+				fotoDAO.save(photo);
 			}
 		}
 		catch(Exception e) {
@@ -183,7 +180,7 @@ public class FotoManagementController {
 		}
 	}
 	
-	@RequestMapping("escursione/{id}/galleria/cacella") 
+	@RequestMapping("escursione/{id}/galleria/cancella") 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String CancellaFotoEsc(@RequestParam("idFoto")Long idFoto, @PathVariable("id")Long idEsc, HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -227,9 +224,9 @@ public class FotoManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Normale)) {
-				if(fotoRepo.verificaEsistenzaFotoEl(idFoto, idEl)>0) {
-					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || fotoRepo.verificaUtenteFoto(idFoto, loggedUser.getIdUtente())>0) {
-						fotoRepo.deleteById(idFoto);
+				if(fotoDAO.verificaEsistenzaFotoEl(idFoto, idEl)>0) {
+					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || fotoDAO.verificaUtenteFoto(idFoto, loggedUser.getIdUtente())>0) {
+						fotoDAO.deleteById(idFoto);
 					}
 					else {
 						request.setAttribute("redirectUrl", "/home");

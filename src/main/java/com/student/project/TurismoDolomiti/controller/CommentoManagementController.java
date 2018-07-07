@@ -18,17 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.student.project.TurismoDolomiti.constants.Constants;
 import com.student.project.TurismoDolomiti.customExceptions.ApplicationException;
+import com.student.project.TurismoDolomiti.dao.CommentoDAO;
+import com.student.project.TurismoDolomiti.dao.ElementoDAO;
+import com.student.project.TurismoDolomiti.dao.PossiedeDAO;
+import com.student.project.TurismoDolomiti.dao.UtenteDAO;
 import com.student.project.TurismoDolomiti.dto.CommentoCardDto;
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
 import com.student.project.TurismoDolomiti.entity.Commento;
 import com.student.project.TurismoDolomiti.entity.Elemento;
 import com.student.project.TurismoDolomiti.entity.Utente;
 import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
-import com.student.project.TurismoDolomiti.repository.CommentoRepository;
-import com.student.project.TurismoDolomiti.repository.ElementoRepository;
-import com.student.project.TurismoDolomiti.repository.PossiedeRepository;
-import com.student.project.TurismoDolomiti.repository.RifugioRepository;
-import com.student.project.TurismoDolomiti.repository.UtenteRepository;
 import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 import com.student.project.TurismoDolomiti.sessionDao.SessionDAOFactory;
 import com.student.project.TurismoDolomiti.verifica.VerificaService;
@@ -39,17 +38,15 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class CommentoManagementController {
 	@Autowired
-	CommentoRepository comRepo;
-	@Autowired
-	RifugioRepository rifRepo;
+	CommentoDAO comDAO;
 	@Autowired 
 	VerificaService verificaService;
 	@Autowired
-	PossiedeRepository possRepo;
+	PossiedeDAO possDAO;
 	@Autowired
-	ElementoRepository elRepo;
+	ElementoDAO elDAO;
 	@Autowired
-	UtenteRepository utenteRepo;
+	UtenteDAO utenteDAO;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CommentoManagementController.class);
 	
@@ -79,7 +76,7 @@ public class CommentoManagementController {
 		try {
 			if(verificaService.verificaEsistenzaRif(idRif, request)) {
 				ElencoCommenti(idRif, request, response);
-				request.setAttribute("gestoriRifugio", possRepo.gestoriRifugio(idRif));
+				request.setAttribute("gestoriRifugio", possDAO.gestoriRifugio(idRif));
 				request.setAttribute("idRif", idRif);
 				request.setAttribute("tipologia", "Rifugio");
 				return "elencoCommenti";
@@ -104,9 +101,9 @@ public class CommentoManagementController {
 			loggedUser = loggedUserDAO.find();
 			request.setAttribute("logged", loggedUser != null);
 			request.setAttribute("loggedUser", loggedUser);
-			request.setAttribute("nomeEl", elRepo.findNomeEl(idEl));
+			request.setAttribute("nomeEl", elDAO.findNomeEl(idEl));
 			Pageable allComments = PageRequest.of(0, Integer.MAX_VALUE);
-			List<CommentoCardDto> commenti = comRepo.findCommentiByElemento(idEl, allComments);
+			List<CommentoCardDto> commenti = comDAO.findCommentiByElemento(idEl, allComments);
 			if(commenti.isEmpty()) request.setAttribute("messaggio", "Non ci sono commenti");
 			else request.setAttribute("commenti", commenti);
 		}
@@ -165,13 +162,13 @@ public class CommentoManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Normale)) {
-				Elemento el = elRepo.getOne(idEl);
-				Utente utente = utenteRepo.getOne(loggedUser.getIdUtente());
+				Elemento el = elDAO.getOne(idEl);
+				Utente utente = utenteDAO.getOne(loggedUser.getIdUtente());
 				Commento com = new Commento();
 				com.setElemento(el);
 				com.setUtente(utente);
 				com.setTesto(commento);
-				comRepo.save(com);
+				comDAO.save(com);
 				
 			}
 			else throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -231,9 +228,9 @@ public class CommentoManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Normale)) {
-				if(comRepo.verificaEsistenzaCommentoRifugio(idCommento, idEl)>0) {
-					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || comRepo.verificaUtenteCommento(idCommento, loggedUser.getIdUtente())>0) {
-						comRepo.deleteById(idCommento);
+				if(comDAO.verificaEsistenzaCommentoRifugio(idCommento, idEl)>0) {
+					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || comDAO.verificaUtenteCommento(idCommento, loggedUser.getIdUtente())>0) {
+						comDAO.deleteById(idCommento);
 					}
 					else {
 						request.setAttribute("redirectUrl", "/home");

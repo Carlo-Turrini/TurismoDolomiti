@@ -1,4 +1,4 @@
-package com.student.project.TurismoDolomiti.repository;
+package com.student.project.TurismoDolomiti.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +11,7 @@ import com.student.project.TurismoDolomiti.enums.CategoriaMenu;
 import java.util.*;
 
 @Repository
-public interface PiattoRepository extends JpaRepository<Piatto, Long> {
+public interface PiattoDAO extends JpaRepository<Piatto, Long> {
 	@Query("SELECT p FROM Piatto p WHERE p.rifugio.id = :id_rifugio AND p.categoria = :categoria")
 	List<Piatto> findByRifugioIdAndCategoria(@Param("id_rifugio") Long idRifugio,@Param("categoria") CategoriaMenu categoria);
 	@Query("SELECT COUNT(p) FROM Piatto p WHERE p.rifugio.id = :id_rifugio AND p.nome = :nome_piatto")

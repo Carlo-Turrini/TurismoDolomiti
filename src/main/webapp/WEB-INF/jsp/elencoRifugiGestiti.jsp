@@ -141,7 +141,7 @@
 							<div class="row">
 							<% for(RifugioCardDto rif : rifugiGestiti){%>
 							<div class="col-md-6">
-								<div class="card rifCard">
+								<div class="card rifCard mb-2">
 									<a href="/rifugio/<%=rif.getIdRifugio()%>" class="cardGestHref"></a>
 									<img class="card-img-top myCardImg" src="<%=rif.getIconPath()%>">
 									<button type="button" class="btn btn-link myCardDelBtnLink" data-toggle="modal" data-target="#deleteGestitoModal" data-id="<%=rif.getIdRifugio()%>" title="cancella">

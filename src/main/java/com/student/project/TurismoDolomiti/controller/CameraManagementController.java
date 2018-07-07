@@ -18,18 +18,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.student.project.TurismoDolomiti.constants.Constants;
 import com.student.project.TurismoDolomiti.customExceptions.ApplicationException;
+import com.student.project.TurismoDolomiti.dao.CameraDAO;
+import com.student.project.TurismoDolomiti.dao.PeriodoPrenotatoDAO;
+import com.student.project.TurismoDolomiti.dao.PossiedeDAO;
+import com.student.project.TurismoDolomiti.dao.PostoLettoDAO;
+import com.student.project.TurismoDolomiti.dao.PrenotazioneDAO;
+import com.student.project.TurismoDolomiti.dao.RifugioDAO;
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
 import com.student.project.TurismoDolomiti.entity.Camera;
 import com.student.project.TurismoDolomiti.entity.PostoLetto;
 import com.student.project.TurismoDolomiti.entity.Rifugio;
 import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.formValidation.CameraForm;
-import com.student.project.TurismoDolomiti.repository.CameraRepository;
-import com.student.project.TurismoDolomiti.repository.PeriodoPrenotatoRepository;
-import com.student.project.TurismoDolomiti.repository.PossiedeRepository;
-import com.student.project.TurismoDolomiti.repository.PostoLettoRepository;
-import com.student.project.TurismoDolomiti.repository.PrenotazioneRepository;
-import com.student.project.TurismoDolomiti.repository.RifugioRepository;
 import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 import com.student.project.TurismoDolomiti.sessionDao.SessionDAOFactory;
 import com.student.project.TurismoDolomiti.verifica.VerificaService;
@@ -40,19 +40,19 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class CameraManagementController {
 	@Autowired
-	private RifugioRepository rifRepo;
+	private RifugioDAO rifDAO;
 	@Autowired 
 	private VerificaService verificaService;
 	@Autowired
-	PrenotazioneRepository prenRepo;
+	PrenotazioneDAO prenDAO;
 	@Autowired
-	PostoLettoRepository plRepo;
+	PostoLettoDAO plDAO;
 	@Autowired
-	CameraRepository camRepo;
+	CameraDAO camDAO;
 	@Autowired
-	PossiedeRepository possRepo;
+	PossiedeDAO possDAO;
 	@Autowired
-	PeriodoPrenotatoRepository ppRepo;
+	PeriodoPrenotatoDAO ppDAO;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CameraManagementController.class);
 	
@@ -70,14 +70,14 @@ public class CameraManagementController {
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request) ) {
-						List<Camera> camereRifugio = camRepo.findCamereByRifugioId(idRif);
-						request.setAttribute("gestoriRifugio", possRepo.gestoriRifugio(idRif));
+						List<Camera> camereRifugio = camDAO.findCamereByRifugioId(idRif);
+						request.setAttribute("gestoriRifugio", possDAO.gestoriRifugio(idRif));
 						if(!camereRifugio.isEmpty()) request.setAttribute("camere", camereRifugio);
 						else request.setAttribute("messaggio", "Non ci sono camere");
 						request.setAttribute("logged", loggedUser != null);
 						request.setAttribute("loggedUser", loggedUser);
 						request.setAttribute("idRif", idRif);
-						request.setAttribute("nomeRif", rifRepo.findNomeRifugio(idRif));
+						request.setAttribute("nomeRif", rifDAO.findNomeRifugio(idRif));
 						request.setAttribute("camForm", new CameraForm());
 						return "elencoCamere";
 					}
@@ -108,41 +108,41 @@ public class CameraManagementController {
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request) ) {
 						if(bindingResult.hasErrors()) {
-							List<Camera> camereRifugio = camRepo.findCamereByRifugioId(idRif);
-							request.setAttribute("gestoriRifugio", possRepo.gestoriRifugio(idRif));
+							List<Camera> camereRifugio = camDAO.findCamereByRifugioId(idRif);
+							request.setAttribute("gestoriRifugio", possDAO.gestoriRifugio(idRif));
 							if(!camereRifugio.isEmpty()) request.setAttribute("camere", camereRifugio);
 							else request.setAttribute("messaggio", "Non ci sono camere");
 							request.setAttribute("logged", loggedUser != null);
 							request.setAttribute("loggedUser", loggedUser);
 							request.setAttribute("idRif", idRif);
-							request.setAttribute("nomeRif", rifRepo.findNomeRifugio(idRif));
+							request.setAttribute("nomeRif", rifDAO.findNomeRifugio(idRif));
 							return "elencoCamere";
 						}
 						else {
-							if(camRepo.verificaNumeroCamera(idRif, camForm.getNumCamera())>0) {
-								List<Camera> camereRifugio = camRepo.findCamereByRifugioId(idRif);
-								request.setAttribute("gestoriRifugio", possRepo.gestoriRifugio(idRif));
+							if(camDAO.verificaNumeroCamera(idRif, camForm.getNumCamera())>0) {
+								List<Camera> camereRifugio = camDAO.findCamereByRifugioId(idRif);
+								request.setAttribute("gestoriRifugio", possDAO.gestoriRifugio(idRif));
 								if(!camereRifugio.isEmpty()) request.setAttribute("camere", camereRifugio);
 								else request.setAttribute("messaggio", "Non ci sono camere");
 								request.setAttribute("logged", loggedUser != null);
 								request.setAttribute("loggedUser", loggedUser);
 								request.setAttribute("idRif", idRif);
-								request.setAttribute("nomeRif", rifRepo.findNomeRifugio(idRif));
+								request.setAttribute("nomeRif", rifDAO.findNomeRifugio(idRif));
 								request.setAttribute("insertMessage", "Esiste già una camera con questo numero");
 								return "elencoCamere";
 							}
 							else {
-								Rifugio rif = rifRepo.getOne(idRif);
+								Rifugio rif = rifDAO.getOne(idRif);
 								Camera cam = new Camera();
 								cam.setRifugio(rif);
 								cam.setCapienza(camForm.getCapienza());
 								cam.setNumCamera(camForm.getNumCamera());
 								cam.setTipologia(camForm.getTipologia());
-								Camera savedCam = camRepo.save(cam);
+								Camera savedCam = camDAO.save(cam);
 								for(int i=0; i < savedCam.getCapienza(); i++) {
 									PostoLetto pl = new PostoLetto();
 									pl.setCamera(savedCam);
-									plRepo.save(pl);
+									plDAO.save(pl);
 								}
 								return "redirect:/rifugio/" + idRif + "/elencoCamere";
 							}
@@ -174,18 +174,18 @@ public class CameraManagementController {
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
 					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request) ) {
-						if(camRepo.verificaCameraRifugio(idRif, idCam)>0) {
-							List<Long> prenotazioniCamera = ppRepo.findPrenotazioniByCamera(idCam);
+						if(camDAO.verificaCameraRifugio(idRif, idCam)>0) {
+							List<Long> prenotazioniCamera = ppDAO.findPrenotazioniByCamera(idCam);
 							for(Long prenId : prenotazioniCamera) {
-								prenRepo.deleteById(prenId);
+								prenDAO.deleteById(prenId);
 							}
-							camRepo.deleteById(idCam);
+							camDAO.deleteById(idCam);
 							
 							return "redirect:/rifugio/" + idRif + "/elencoCamere";
 						}
 						else {
 							request.setAttribute("redirectUrl", "/rifugio/" + idRif + "/elencoCamere");
-							throw new ApplicationException(rifRepo.findNomeRifugio(idRif) + ": camera inesistente!");
+							throw new ApplicationException(rifDAO.findNomeRifugio(idRif) + ": camera inesistente!");
 						}
 						
 					}	

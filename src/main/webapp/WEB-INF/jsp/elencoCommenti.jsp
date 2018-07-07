@@ -119,7 +119,7 @@
 					<% } %>
 					<div class="col-md-10">
 						<h1>${nomeEl}</h1>
-						<p class="lead subtitle">Commenti:</p>
+						<p class="lead subtitle">Commenti</p>
 						<hr>
 						<% if(messaggio != null){ %>
 							<div class="alert alert-primary" role="alert">

@@ -94,7 +94,7 @@
     			
     		}
     		function checkOutChangeHandler() {
-    			var checkIn = document.getElementById("inputCheckInt");
+    			var checkIn = document.getElementById("inputCheckIn");
     			checkIn.setAttribute("max", this.value);
     			
     		}

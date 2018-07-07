@@ -20,6 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.student.project.TurismoDolomiti.constants.Constants;
 import com.student.project.TurismoDolomiti.customExceptions.ApplicationException;
+import com.student.project.TurismoDolomiti.dao.CameraDAO;
+import com.student.project.TurismoDolomiti.dao.PeriodoPrenotatoDAO;
+import com.student.project.TurismoDolomiti.dao.PossiedeDAO;
+import com.student.project.TurismoDolomiti.dao.PostoLettoDAO;
+import com.student.project.TurismoDolomiti.dao.PrenotazioneDAO;
+import com.student.project.TurismoDolomiti.dao.RifugioDAO;
+import com.student.project.TurismoDolomiti.dao.UtenteDAO;
 import com.student.project.TurismoDolomiti.dto.CameraPrenInfoDTO;
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
 import com.student.project.TurismoDolomiti.dto.PostiDisponibiliCameraRifugioDto;
@@ -33,13 +40,6 @@ import com.student.project.TurismoDolomiti.entity.Rifugio;
 import com.student.project.TurismoDolomiti.entity.Utente;
 import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.formValidation.PrenotazioneForm;
-import com.student.project.TurismoDolomiti.repository.CameraRepository;
-import com.student.project.TurismoDolomiti.repository.PeriodoPrenotatoRepository;
-import com.student.project.TurismoDolomiti.repository.PossiedeRepository;
-import com.student.project.TurismoDolomiti.repository.PostoLettoRepository;
-import com.student.project.TurismoDolomiti.repository.PrenotazioneRepository;
-import com.student.project.TurismoDolomiti.repository.RifugioRepository;
-import com.student.project.TurismoDolomiti.repository.UtenteRepository;
 import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 import com.student.project.TurismoDolomiti.sessionDao.SessionDAOFactory;
 import com.student.project.TurismoDolomiti.verifica.VerificaService;
@@ -50,21 +50,21 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class PrenotazioniManagementController {
 	@Autowired
-	private RifugioRepository rifRepo;
+	private RifugioDAO rifDAO;
 	@Autowired 
-	private UtenteRepository utenteRepo;
+	private UtenteDAO utenteDAO;
 	@Autowired
-	private PossiedeRepository possRepo;
+	private PossiedeDAO possDAO;
 	@Autowired 
 	private VerificaService verificaService;
 	@Autowired
-	PrenotazioneRepository prenRepo;
+	PrenotazioneDAO prenDAO;
 	@Autowired
-	PostoLettoRepository plRepo;
+	PostoLettoDAO plDAO;
 	@Autowired
-	PeriodoPrenotatoRepository ppRepo;
+	PeriodoPrenotatoDAO ppDAO;
 	@Autowired
-	CameraRepository camRepo;
+	CameraDAO camDAO;
 	
 	private static final Logger logger = LoggerFactory.getLogger(PrenotazioniManagementController.class);
 	
@@ -80,7 +80,7 @@ public class PrenotazioniManagementController {
 			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
 			loggedUser = loggedUserDAO.find();
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Normale)) {
-				if(prenRepo.verificaPrenotazioneUtente(idPrenotazione, loggedUser.getIdUtente())>0) {
+				if(prenDAO.verificaPrenotazioneUtente(idPrenotazione, loggedUser.getIdUtente())>0) {
 					prenotazioneInfo(idPrenotazione, request);
 					request.setAttribute("logged", loggedUser != null);
 					request.setAttribute("loggedUser", loggedUser);
@@ -114,11 +114,10 @@ public class PrenotazioniManagementController {
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
-					if(possRepo.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
+					if(possDAO.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
 						if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
-							if(prenRepo.verificaPenotazioneRifugio(idPren, idRif)>0) {
+							if(prenDAO.verificaPenotazioneRifugio(idPren, idRif)>0) {
 								prenotazioneInfo(idPren, request);
-								List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
 								request.setAttribute("logged", loggedUser != null);
 								request.setAttribute("loggedUser", loggedUser);
 								request.setAttribute("tipologia", "rifugio");
@@ -134,7 +133,7 @@ public class PrenotazioniManagementController {
 					}
 					else {
 						request.setAttribute("redirectUrl", "/rifugio/" + idRif);
-						throw new ApplicationException(rifRepo.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
+						throw new ApplicationException(rifDAO.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
 					}
 				}
 				else throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -150,9 +149,9 @@ public class PrenotazioniManagementController {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void prenotazioneInfo(Long idPren, HttpServletRequest request) {
 		try {
-			Prenotazione pren = prenRepo.getOne(idPren);
-			PrenInfoDTO prenInfo = prenRepo.findPrenInfo(idPren);
-			List<CameraPrenInfoDTO> camerePrenInfo = camRepo.findCamerePrenInfo(idPren);
+			Prenotazione pren = prenDAO.getOne(idPren);
+			PrenInfoDTO prenInfo = prenDAO.findPrenInfo(idPren);
+			List<CameraPrenInfoDTO> camerePrenInfo = camDAO.findCamerePrenInfo(idPren);
 			request.setAttribute("pren", pren);
 			request.setAttribute("prenInfo", prenInfo);
 			request.setAttribute("camerePrenInfo", camerePrenInfo);
@@ -177,7 +176,7 @@ public class PrenotazioniManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Normale)) {
-				List<PrenotazioneClienteCardDto> prenotazioniCliente = prenRepo.findAllPrenotazioniCliente(loggedUser.getIdUtente());
+				List<PrenotazioneClienteCardDto> prenotazioniCliente = prenDAO.findAllPrenotazioniCliente(loggedUser.getIdUtente());
 				if(prenotazioniCliente.isEmpty()) request.setAttribute("messaggio", "Non ci sono prenotazioni");
 				else request.setAttribute("prenotazioni", prenotazioniCliente);
 				request.setAttribute("logged", loggedUser != null);
@@ -207,13 +206,13 @@ public class PrenotazioniManagementController {
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
-					if(possRepo.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
+					if(possDAO.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
 						if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
-							List<PrenotazioneRifugioCardDto> prenotazioniRifugio = prenRepo.findAllPrenotazioniRifugio(idRif);
-							List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
+							List<PrenotazioneRifugioCardDto> prenotazioniRifugio = prenDAO.findAllPrenotazioniRifugio(idRif);
+							List<Long> gestoriRifugio = possDAO.gestoriRifugio(idRif);
 							request.setAttribute("gestoriRifugio", gestoriRifugio);
 							request.setAttribute("idRif", idRif);
-							request.setAttribute("nomeRif", rifRepo.findNomeRifugio(idRif));
+							request.setAttribute("nomeRif", rifDAO.findNomeRifugio(idRif));
 							if(prenotazioniRifugio.isEmpty()) request.setAttribute("messaggio", "Non ci sono prenotazioni");
 							else request.setAttribute("prenotazioni", prenotazioniRifugio);
 							request.setAttribute("logged", loggedUser != null);
@@ -225,7 +224,7 @@ public class PrenotazioniManagementController {
 					}
 					else {
 						request.setAttribute("redirectUrl", "/rifugio/" + idRif);
-						throw new ApplicationException(rifRepo.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
+						throw new ApplicationException(rifDAO.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
 					}
 				}
 				else throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -254,44 +253,20 @@ public class PrenotazioniManagementController {
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Normale)) {
 				
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
-					if(possRepo.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
-						if(checkIn.compareTo(oggi)>=0 && checkIn.compareTo(checkOut)<=0 && rifRepo.verificaRifugioApertoInPeriodo(idRif, checkIn, checkOut)>0) {
-							if(plRepo.findNumPostiLettoRifugioDisponibiliInPeriodo(idRif, checkIn, checkOut) >= numPersone) {
-								List<PostiDisponibiliCameraRifugioDto> plByCamera = plRepo.findPostiLettoRifugioDisponibiliGroupByCamera(idRif, checkIn, checkOut);
+					if(possDAO.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
+						if(checkIn.compareTo(oggi)>=0 && checkIn.compareTo(checkOut)<=0 && rifDAO.verificaRifugioApertoInPeriodo(idRif, checkIn, checkOut)>0) {
+							if(plDAO.findNumPostiLettoRifugioDisponibiliInPeriodo(idRif, checkIn, checkOut) >= numPersone) {
+								List<PostiDisponibiliCameraRifugioDto> plByCamera = plDAO.findPostiLettoRifugioDisponibiliGroupByCamera(idRif, checkIn, checkOut);
 								PrenotazioneForm prenForm = new PrenotazioneForm();
 								prenForm.setPlByCamera(plByCamera);
-								List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
-								Rifugio rif = rifRepo.getOne(idRif);
-								request.setAttribute("gestoriRifugio", gestoriRifugio);
+								infoPerPrenotazione(idRif, checkIn, checkOut, numPersone, loggedUser, request);
 								request.setAttribute("prenForm", prenForm);
-								request.setAttribute("numPersone", numPersone);
-								request.setAttribute("checkIn", checkIn);
-								request.setAttribute("checkOut", checkOut);
-								request.setAttribute("logged", loggedUser != null);
-								request.setAttribute("loggedUser", loggedUser);
-								request.setAttribute("nomeRif", rif.getNome());
-								request.setAttribute("idRif", idRif);
 								request.setAttribute("descGruppo", new String());
-								request.setAttribute("prezzoNotte", rif.getPrezzoPostoLetto());
-								request.setAttribute("dataAperturaRif", rif.getDataApertura());
-								request.setAttribute("dataChiusuraRif", rif.getDataChiusura());
 								return "prenotazione";
 							}
 							else {
 								request.setAttribute("messaggio", "Siamo spiacenti ma non ci sono sufficienti posti liberi nel periodo da lei richiesto...");
-								List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
-								Rifugio rif = rifRepo.getOne(idRif);
-								request.setAttribute("gestoriRifugio", gestoriRifugio);
-								request.setAttribute("numPersone", numPersone);
-								request.setAttribute("checkIn", checkIn);
-								request.setAttribute("checkOut", checkOut);
-								request.setAttribute("logged", loggedUser != null);
-								request.setAttribute("loggedUser", loggedUser);
-								request.setAttribute("nomeRif", rif.getNome());
-								request.setAttribute("idRif", idRif);
-								request.setAttribute("prezzoNotte", rif.getPrezzoPostoLetto());
-								request.setAttribute("dataAperturaRif", rif.getDataApertura());
-								request.setAttribute("dataChiusuraRif", rif.getDataChiusura());
+								infoPerPrenotazione(idRif, checkIn, checkOut, numPersone, loggedUser, request);
 								return "prenotazione";
 							}
 						}
@@ -302,7 +277,7 @@ public class PrenotazioniManagementController {
 					}
 					else {
 						request.setAttribute("redirectUrl", "/rifugio/" + idRif);
-						throw new ApplicationException(rifRepo.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
+						throw new ApplicationException(rifDAO.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
 					}
 				}
 				else throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -329,9 +304,9 @@ public class PrenotazioniManagementController {
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Normale)) {
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
-					if(possRepo.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
-						if(checkIn.compareTo(checkOut)>=0 || rifRepo.verificaRifugioApertoInPeriodo(idRif, checkIn, checkOut)>0) {
-							if(plRepo.findNumPostiLettoRifugioDisponibiliInPeriodo(idRif, checkIn, checkOut) >= numPersone) {
+					if(possDAO.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
+						if(checkIn.compareTo(checkOut)>=0 || rifDAO.verificaRifugioApertoInPeriodo(idRif, checkIn, checkOut)>0) {
+							if(plDAO.findNumPostiLettoRifugioDisponibiliInPeriodo(idRif, checkIn, checkOut) >= numPersone) {
 								int contatore = 0;
 								List<PostiDisponibiliCameraRifugioDto> plByCamera = prenForm.getPlByCamera();
 								for(int i=0; i<plByCamera.size(); i++) {
@@ -339,31 +314,18 @@ public class PrenotazioniManagementController {
 								}
 								if(contatore == numPersone) {
 									for(int i=0; i<plByCamera.size(); i++) {
-										if((plByCamera.get(i).getPostiLettoCameraSel() > plRepo.findNumPostiLettoRifugioDisponibiliInPeriodoByCamera(checkIn, checkOut, idRif, plByCamera.get(i).getIdCamera()))) {
-											Rifugio rif = rifRepo.getOne(idRif);
+										if((plByCamera.get(i).getPostiLettoCameraSel() > plDAO.findNumPostiLettoRifugioDisponibiliInPeriodoByCamera(checkIn, checkOut, idRif, plByCamera.get(i).getIdCamera()))) {
 											request.setAttribute("prenMessage", "Siamo spiacenti ma alcuni dei posti da voi selezionati non sono più disponibili, prego riprovare..");
-											List<PostiDisponibiliCameraRifugioDto> newPlByCamera = plRepo.findPostiLettoRifugioDisponibiliGroupByCamera(idRif, checkIn, checkOut);
-											PrenotazioneForm newPrenForm = new PrenotazioneForm();
+											List<PostiDisponibiliCameraRifugioDto> newPlByCamera = plDAO.findPostiLettoRifugioDisponibiliGroupByCamera(idRif, checkIn, checkOut);
 											prenForm.setPlByCamera(newPlByCamera);
-											List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
-											request.setAttribute("gestoriRifugio", gestoriRifugio);
-											request.setAttribute("newPrenForm", prenForm);
-											request.setAttribute("numPersone", numPersone);
-											request.setAttribute("checkIn", checkIn);
-											request.setAttribute("checkOut", checkOut);
-											request.setAttribute("logged", loggedUser != null);
-											request.setAttribute("loggedUser", loggedUser);
-											request.setAttribute("nomeRif", rif.getNome());
-											request.setAttribute("idRif", idRif);
+											infoPerPrenotazione(idRif, checkIn, checkOut, numPersone, loggedUser, request);
+											request.setAttribute("prenForm", prenForm);
 											request.setAttribute("descGruppo", descGruppo);
-											request.setAttribute("prezzoNotte", rif.getPrezzoPostoLetto());
-											request.setAttribute("dataAperturaRif", rif.getDataApertura());
-											request.setAttribute("dataChiusuraRif", rif.getDataChiusura());
 											return "prenotazione";
 										}
 									}
-									Utente utente = utenteRepo.getOne(loggedUser.getIdUtente());
-									Rifugio rif = rifRepo.getOne(idRif);
+									Utente utente = utenteDAO.getOne(loggedUser.getIdUtente());
+									Rifugio rif = rifDAO.getOne(idRif);
 									Prenotazione pren = new Prenotazione();
 									pren.setArrivo(checkIn);
 									pren.setPartenza(checkOut);
@@ -372,16 +334,16 @@ public class PrenotazioniManagementController {
 									pren.setCosto((rif.getPrezzoPostoLetto()*numPersone));
 									pren.setRifugio(rif);
 									pren.setCliente(utente);
-									Prenotazione savedPren = prenRepo.save(pren);
+									Prenotazione savedPren = prenDAO.save(pren);
 									for(PostiDisponibiliCameraRifugioDto item : plByCamera) {
 										if(item.getPostiLettoCameraSel()>0) {
 											Pageable pageable = PageRequest.of(0, item.getPostiLettoCameraSel());
-											List<PostoLetto> plPrenotazione = plRepo.findByCameraIdFreeInPeriodo(item.getIdCamera(), checkIn, checkOut, idRif, pageable);
+											List<PostoLetto> plPrenotazione = plDAO.findByCameraIdFreeInPeriodo(item.getIdCamera(), checkIn, checkOut, idRif, pageable);
 											for(PostoLetto pl : plPrenotazione) {
 												PeriodoPrenotato pp = new PeriodoPrenotato();
 												pp.setPostoLetto(pl);
 												pp.setPrenotazione(savedPren);
-												ppRepo.save(pp);
+												ppDAO.save(pp);
 											}
 										}
 									}
@@ -389,39 +351,15 @@ public class PrenotazioniManagementController {
 								}
 								else {
 									request.setAttribute("prenMessage", "Non hai selezionato un numero di posti letto uguale al numero di ospiti che hai inserito!");
-									Rifugio rif = rifRepo.getOne(idRif);
-									List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
-									request.setAttribute("gestoriRifugio", gestoriRifugio);
+									infoPerPrenotazione(idRif, checkIn, checkOut, numPersone, loggedUser, request);
 									request.setAttribute("prenForm", prenForm);
-									request.setAttribute("numPersone", numPersone);
-									request.setAttribute("checkIn", checkIn);
-									request.setAttribute("checkOut", checkOut);
-									request.setAttribute("logged", loggedUser != null);
-									request.setAttribute("loggedUser", loggedUser);
-									request.setAttribute("nomeRif", rif.getNome());
-									request.setAttribute("idRif", idRif);
 									request.setAttribute("descGruppo", descGruppo);
-									request.setAttribute("prezzoNotte", rif.getPrezzoPostoLetto());
-									request.setAttribute("dataAperturaRif", rif.getDataApertura());
-									request.setAttribute("dataChiusuraRif", rif.getDataChiusura());
 									return "prenotazione";
 								}
 							}
 							else {
 								request.setAttribute("messaggio", "Siamo spiacenti ma non ci sono sufficienti posti liberi nel periodo da lei richiesto...");
-								Rifugio rif = rifRepo.getOne(idRif);
-								List<Long> gestoriRifugio = possRepo.gestoriRifugio(idRif);
-								request.setAttribute("gestoriRifugio", gestoriRifugio);
-								request.setAttribute("numPersone", numPersone);
-								request.setAttribute("checkIn", checkIn);
-								request.setAttribute("checkOut", checkOut);
-								request.setAttribute("logged", loggedUser != null);
-								request.setAttribute("loggedUser", loggedUser);
-								request.setAttribute("nomeRif", rif.getNome());
-								request.setAttribute("idRif", idRif);
-								request.setAttribute("prezzoNotte", rif.getPrezzoPostoLetto());
-								request.setAttribute("dataAperturaRif", rif.getDataApertura());
-								request.setAttribute("dataChiusuraRif", rif.getDataChiusura());
+								infoPerPrenotazione(idRif, checkIn, checkOut, numPersone, loggedUser, request);
 								return "prenotazione";
 							}
 						}
@@ -432,7 +370,7 @@ public class PrenotazioniManagementController {
 					}	
 					else {
 						request.setAttribute("redirectUrl", "/rifugio/" + idRif);
-						throw new ApplicationException(rifRepo.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
+						throw new ApplicationException(rifDAO.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
 					}
 				}
 				else throw new ApplicationException((String) request.getAttribute("messaggio"));
@@ -443,6 +381,23 @@ public class PrenotazioniManagementController {
 			logger.error("Controller error", e);
 			throw new RuntimeException(e);
 		}
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void infoPerPrenotazione(Long idRif, Date checkIn, Date checkOut, Integer numPersone, LoggedUserDTO loggedUser, HttpServletRequest request) {
+		List<Long> gestoriRifugio = possDAO.gestoriRifugio(idRif);
+		Rifugio rif = rifDAO.getOne(idRif);
+		request.setAttribute("gestoriRifugio", gestoriRifugio);
+		request.setAttribute("numPersone", numPersone);
+		request.setAttribute("checkIn", checkIn);
+		request.setAttribute("checkOut", checkOut);
+		request.setAttribute("logged", loggedUser != null);
+		request.setAttribute("loggedUser", loggedUser);
+		request.setAttribute("nomeRif", rif.getNome());
+		request.setAttribute("idRif", idRif);
+		request.setAttribute("prezzoNotte", rif.getPrezzoPostoLetto());
+		request.setAttribute("dataAperturaRif", rif.getDataApertura());
+		request.setAttribute("dataChiusuraRif", rif.getDataChiusura());
 	}
 	
 	@RequestMapping("/leMiePrenotazioni/{id}/cancella")
@@ -458,8 +413,8 @@ public class PrenotazioniManagementController {
 			loggedUser = loggedUserDAO.find();
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Normale)) {
-				if(prenRepo.verificaPrenotazioneUtente(idPren, loggedUser.getIdUtente())>0) {
-					prenRepo.deleteById(idPren);
+				if(prenDAO.verificaPrenotazioneUtente(idPren, loggedUser.getIdUtente())>0) {
+					prenDAO.deleteById(idPren);
 					return "redirect:/leMiePrenotazioni";
 				}
 				else {
@@ -489,11 +444,11 @@ public class PrenotazioniManagementController {
 			
 			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
 				if(verificaService.verificaEsistenzaRif(idRif, request)) {
-					if(possRepo.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
+					if(possDAO.verificaEsistenzaAlmenoUnGestoreRifugio(idRif)>0) {
 						if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) || verificaService.verificaGestore(idRif, loggedUser.getIdUtente(), request)) {
-							if(prenRepo.verificaPenotazioneRifugio(idPren, idRif)>0) {
-								prenRepo.deleteById(idPren);
-								return "redirect:/rifugio/" + rifRepo.findNomeRifugio(idRif) + "/" + idRif + "/prenotazioni";
+							if(prenDAO.verificaPenotazioneRifugio(idPren, idRif)>0) {
+								prenDAO.deleteById(idPren);
+								return "redirect:/rifugio/" + rifDAO.findNomeRifugio(idRif) + "/" + idRif + "/prenotazioni";
 							}
 							else {
 								request.setAttribute("redirectUrl", "/rifugio/" + idRif + "/prenotazioni");
@@ -504,7 +459,7 @@ public class PrenotazioniManagementController {
 					}
 					else {
 						request.setAttribute("redirectUrl", "/rifugio/"  + idRif);
-						throw new ApplicationException(rifRepo.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
+						throw new ApplicationException(rifDAO.findNomeRifugio(idRif) + ": non si accettano prenotazioni online");
 					}
 				}
 				else throw new ApplicationException((String) request.getAttribute("messaggio"));
