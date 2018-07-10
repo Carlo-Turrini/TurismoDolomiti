@@ -38,15 +38,15 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class CommentoManagementController {
 	@Autowired
-	CommentoDAO comDAO;
+	private CommentoDAO comDAO;
 	@Autowired 
-	VerificaService verificaService;
+	private VerificaService verificaService;
 	@Autowired
-	PossiedeDAO possDAO;
+	private PossiedeDAO possDAO;
 	@Autowired
-	ElementoDAO elDAO;
+	private ElementoDAO elDAO;
 	@Autowired
-	UtenteDAO utenteDAO;
+	private UtenteDAO utenteDAO;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CommentoManagementController.class);
 	

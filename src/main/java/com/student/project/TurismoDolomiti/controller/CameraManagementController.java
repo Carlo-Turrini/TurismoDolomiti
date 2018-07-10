@@ -44,15 +44,15 @@ public class CameraManagementController {
 	@Autowired 
 	private VerificaService verificaService;
 	@Autowired
-	PrenotazioneDAO prenDAO;
+	private PrenotazioneDAO prenDAO;
 	@Autowired
-	PostoLettoDAO plDAO;
+	private PostoLettoDAO plDAO;
 	@Autowired
-	CameraDAO camDAO;
+	private CameraDAO camDAO;
 	@Autowired
-	PossiedeDAO possDAO;
+	private PossiedeDAO possDAO;
 	@Autowired
-	PeriodoPrenotatoDAO ppDAO;
+	private PeriodoPrenotatoDAO ppDAO;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CameraManagementController.class);
 	

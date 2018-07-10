@@ -58,13 +58,13 @@ public class PrenotazioniManagementController {
 	@Autowired 
 	private VerificaService verificaService;
 	@Autowired
-	PrenotazioneDAO prenDAO;
+	private PrenotazioneDAO prenDAO;
 	@Autowired
-	PostoLettoDAO plDAO;
+	private PostoLettoDAO plDAO;
 	@Autowired
-	PeriodoPrenotatoDAO ppDAO;
+	private PeriodoPrenotatoDAO ppDAO;
 	@Autowired
-	CameraDAO camDAO;
+	private CameraDAO camDAO;
 	
 	private static final Logger logger = LoggerFactory.getLogger(PrenotazioniManagementController.class);
 	

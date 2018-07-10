@@ -42,6 +42,9 @@ form.login textarea {
     color: black;
     outline: 0;
 }
+form.login select {
+	border: 1px solid #5E5956;
+}
 
 form.login input[type="submit"]
 {

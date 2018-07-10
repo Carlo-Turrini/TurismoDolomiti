@@ -42,7 +42,7 @@
 									<springForm:errors cssClass="error" path="credenziali"/>
 								<% } 
 									else if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {%>
-										<springForm:select path="credenziali" required="true" items="${credUt}"/>
+										<springForm:select path="credenziali" cssClass="form-control" required="true" items="${credUt}"/>
 										<springForm:errors cssClass="error" path="credenziali"/>
 								<% } %>
 							</div>

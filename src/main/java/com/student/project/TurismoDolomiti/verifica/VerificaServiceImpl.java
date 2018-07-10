@@ -20,13 +20,13 @@ import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 @Service
 public class VerificaServiceImpl implements VerificaService {
 	@Autowired
-	RifugioDAO rifDAO;
+	private RifugioDAO rifDAO;
 	@Autowired 
-	UtenteDAO utenteDAO;
+	private UtenteDAO utenteDAO;
 	@Autowired
-	PossiedeDAO possDAO;
+	private PossiedeDAO possDAO;
 	@Autowired
-	EscursioneDAO escDAO;
+	private EscursioneDAO escDAO;
 	
 	
 	@Override

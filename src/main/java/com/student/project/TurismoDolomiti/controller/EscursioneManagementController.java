@@ -57,19 +57,19 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class EscursioneManagementController {
 	@Autowired
-	EscursioneDAO escDAO;
+	private EscursioneDAO escDAO;
 	@Autowired
-	FotoDAO fotoDAO;
+	private FotoDAO fotoDAO;
 	@Autowired
-	CommentoDAO comDAO;
+	private CommentoDAO comDAO;
 	@Autowired
-	RifugioDAO rifDAO;
+	private RifugioDAO rifDAO;
 	@Autowired 
-	VerificaService verificaService;
+	private VerificaService verificaService;
 	@Autowired
-	UploadService uploadService;
+	private UploadService uploadService;
 	@Autowired 
-	PassaPerDAO passaPerDAO;
+	private PassaPerDAO passaPerDAO;
 	
 	private static final Logger logger = LoggerFactory.getLogger(EscursioneManagementController.class);
 	

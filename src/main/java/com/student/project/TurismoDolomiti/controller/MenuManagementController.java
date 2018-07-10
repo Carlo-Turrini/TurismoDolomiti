@@ -42,17 +42,17 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class MenuManagementController {
 	@Autowired
-	FotoDAO fotoDAO;
+	private FotoDAO fotoDAO;
 	@Autowired
-	CommentoDAO comDAO;
+	private CommentoDAO comDAO;
 	@Autowired
-	RifugioDAO rifDAO;
+	private RifugioDAO rifDAO;
 	@Autowired
-	PossiedeDAO possDAO;
+	private PossiedeDAO possDAO;
 	@Autowired
-	PiattoDAO piattoDAO;
+	private PiattoDAO piattoDAO;
 	@Autowired 
-	VerificaService verificaService;
+	private VerificaService verificaService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(MenuManagementController.class);
 	

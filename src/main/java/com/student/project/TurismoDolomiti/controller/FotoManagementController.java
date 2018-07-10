@@ -39,17 +39,17 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class FotoManagementController {
 	@Autowired
-	FotoDAO fotoDAO;
+	private FotoDAO fotoDAO;
 	@Autowired 
-	VerificaService verificaService;
+	private VerificaService verificaService;
 	@Autowired
-	UtenteDAO utenteRepo;
+	private UtenteDAO utenteRepo;
 	@Autowired
-	UploadService uploadService;
+	private UploadService uploadService;
 	@Autowired
-	PossiedeDAO possDAO;
+	private PossiedeDAO possDAO;
 	@Autowired
-	ElementoDAO elDAO;
+	private ElementoDAO elDAO;
 	
 	private static final Logger logger = LoggerFactory.getLogger(FotoManagementController.class);
 	
