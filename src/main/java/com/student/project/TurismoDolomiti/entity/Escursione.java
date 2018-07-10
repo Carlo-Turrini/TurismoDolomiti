@@ -17,7 +17,7 @@ import java.util.*;
 @Table(name = "ESCURSIONE")
 @DiscriminatorValue("Escursione")
 @PrimaryKeyJoinColumn(name = "id")
-@Where(clause = "deletion_token = 0")
+@Where(clause = "deletion_token = 0x00000000000000000000000000000000")
 public class Escursione extends Elemento implements Serializable {
 	private static final long serialVersionUID = 1791991398669653817L;
 	

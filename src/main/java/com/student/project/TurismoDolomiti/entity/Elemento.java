@@ -15,7 +15,7 @@ import com.student.project.TurismoDolomiti.constants.Constants;
 @Table(name = "ELEMENTO", uniqueConstraints = @UniqueConstraint(columnNames = {"nome", "deletion_token_el"}))
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "tipo_el")
-@Where(clause = "deletion_token_el = 0")
+@Where(clause = "deletion_token_el = 0x00000000000000000000000000000000")
 public abstract class Elemento {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

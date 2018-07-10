@@ -546,21 +546,24 @@ public class UtenteManagementController {
 						List<Prenotazione> prenUtente = utente.getPrenotazioni();
 						if(utente.getCredenziali().equals(CredenzialiUtente.GestoreRifugio)) {
 							List<Possiede> rifGestitiUtente = utente.getRifGestiti();
-							for(Possiede rifGestito : rifGestitiUtente) {
+							for(int i=0 ; i<rifGestitiUtente.size(); i++) {
+								Possiede rifGestito = rifGestitiUtente.remove(i);
 								possDAO.delete(rifGestito);
 							}
 						}
-						for(Foto foto : fotoUtente) {
+						for(int i=0 ; i<fotoUtente.size(); i++) {
+							Foto foto = fotoUtente.remove(i);
 							fotoDAO.delete(foto);
 						}
-						for(Commento com : comUtente) {
+						for(int i=0; i<comUtente.size(); i++) {
+							Commento com = comUtente.remove(i);
 							comDAO.delete(com);
 						}
-						for(Prenotazione pren : prenUtente) {
+						for(int i=0; i<prenUtente.size(); i++) {
+							Prenotazione pren = prenUtente.remove(i);
 							prenDAO.delete(pren);
 						}
-						utente.setDeletionToken(UUID.randomUUID());
-						utenteDAO.save(utente);
+						utenteDAO.setDeletionTokenUtente(UUID.randomUUID(), idUtente);
 						if(loggedUser.getIdUtente() == idUtente) {
 							loggedUserDAO.destroy();
 						}

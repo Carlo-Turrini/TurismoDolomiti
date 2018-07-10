@@ -20,7 +20,7 @@ import java.sql.Date;
 @Table(name = "RIFUGIO", uniqueConstraints = {@UniqueConstraint(columnNames = {"email", "deletion_token"}), @UniqueConstraint(columnNames = {"tel", "deletion_token"})})
 @DiscriminatorValue("Rifugio")
 @PrimaryKeyJoinColumn(name = "id")
-@Where(clause = "deletion_token = 0")
+@Where(clause = "deletion_token = 0x00000000000000000000000000000000")
 public class Rifugio extends Elemento implements Serializable{
 	private static final long serialVersionUID = -3643975631314389166L;
 	

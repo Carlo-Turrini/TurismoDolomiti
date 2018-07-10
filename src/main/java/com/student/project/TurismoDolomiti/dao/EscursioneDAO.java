@@ -4,6 +4,7 @@ import com.student.project.TurismoDolomiti.dto.EscursioneCardDto;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -42,4 +43,8 @@ public interface EscursioneDAO extends JpaRepository<Escursione, Long>, JpaSpeci
 	
 	@Query("SELECT e.completo FROM Escursione e WHERE e.id = :id_esc")
 	Boolean findIfCompleto(@Param("id_esc")Long idEsc);
+	
+	@Modifying
+	@Query("UPDATE Escursione e SET e.deletionToken = :del_token, e.deletionTokenEl = :del_token WHERE e.id = :id_esc")
+	Integer setDeletionTokenEscursione(@Param("del_token")UUID deletionToken, @Param("id_esc")Long idEsc);
 }

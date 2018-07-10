@@ -685,31 +685,36 @@ public class RifugioManagementController {
 					List<Camera> camereRif = rif.getCamere();
 					List<PassaPer> passaPer = rif.getPassaPer();
 					List<Possiede> gestoriRif = rif.getPossessori();
-					for(Foto foto : fotoRif) {
+					for(int i=0; i<fotoRif.size(); i++) {
+						Foto foto = fotoRif.remove(i);
 						fotoDAO.delete(foto);
 					}
-					for(Commento com : comRif) {
+					for(int i=0; i<comRif.size(); i++) {
+						Commento com = comRif.remove(i);
 						comDAO.delete(com);
 					}
-					for(Prenotazione pren : prenRif) {
+					for(int i=0; i<prenRif.size(); i++) {
+						Prenotazione pren = prenRif.remove(i);
 						prenDAO.delete(pren);
 					}
-					for(Piatto piatto : piattiRif) {
+					for(int i=0; i<piattiRif.size(); i++) {
+						Piatto piatto = piattiRif.remove(i);
 						piattoDAO.delete(piatto);
 					}
-					for(Camera cam : camereRif) {
+					for(int i=0; i<camereRif.size(); i++) {
+						Camera cam = camereRif.remove(i);
 						camDAO.delete(cam);
 					}
-					for(PassaPer pp : passaPer) {
+					for(int i=0; i<passaPer.size(); i++) {
+						PassaPer pp = passaPer.remove(i);
 						passaPerDAO.delete(pp);
 					}
-					for(Possiede poss : gestoriRif) {
+					for(int i=0; i<gestoriRif.size(); i++) {
+						Possiede poss = gestoriRif.remove(i);
 						possDAO.delete(poss);
 					}
 					UUID delUUID = UUID.randomUUID();
-					rif.setDeletionToken(delUUID);
-					rif.setDeletionTokenEl(delUUID);
-					rifDAO.save(rif);
+					rifDAO.setDeletionTokenRifugio(delUUID, idRif);
 					
 				}
 				return "redirect:/elencoRifugi";

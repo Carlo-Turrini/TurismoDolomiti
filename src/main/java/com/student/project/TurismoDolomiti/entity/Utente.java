@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "UTENTE", uniqueConstraints = @UniqueConstraint(columnNames = {"email", "deletion_token"}))
-@Where(clause = "deletion_token = 0")
+@Where(clause = "deletion_token = 0x00000000000000000000000000000000")
 public class Utente implements Serializable {
 	private static final long serialVersionUID = -4271845821706887137L;
 	

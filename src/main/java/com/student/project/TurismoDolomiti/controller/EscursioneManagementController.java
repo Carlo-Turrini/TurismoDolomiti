@@ -707,19 +707,24 @@ public class EscursioneManagementController {
 					List<PassaPer> passaPer = esc.getPassaPer();
 					List<Foto> fotoEsc = esc.getFoto();
 					List<Commento> commentiEsc = esc.getCommenti();
-					for(Foto foto : fotoEsc) {
+					UUID delUUID = UUID.randomUUID();
+					//esc.setDeletionToken(delUUID);
+					//esc.setDeletionTokenEl(delUUID);
+					//escDAO.save(esc);
+					
+					for(int i=0; i<fotoEsc.size(); i++) {
+						Foto foto = fotoEsc.remove(i);
 						fotoDAO.delete(foto);
 					}
-					for(Commento com : commentiEsc) {
+					for(int i=0; i<commentiEsc.size(); i++) {
+						Commento com = commentiEsc.remove(i);
 						comDAO.delete(com);
 					}
-					for(PassaPer pp : passaPer) {
+					for(int i=0; i<passaPer.size(); i++) {
+						PassaPer pp = passaPer.remove(i);
 						passaPerDAO.delete(pp);
 					}
-					UUID delUUID = UUID.randomUUID();
-					esc.setDeletionToken(delUUID);
-					esc.setDeletionTokenEl(delUUID);
-					escDAO.save(esc);
+					escDAO.setDeletionTokenEscursione(delUUID, idEsc);
 				}
 				
 				return "redirect:/elencoEscursioni";

@@ -6,12 +6,14 @@ import com.student.project.TurismoDolomiti.dto.RifugioCardDto;
 import com.student.project.TurismoDolomiti.entity.Rifugio;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface RifugioDAO extends JpaRepository<Rifugio, Long>, JpaSpecificationExecutor<Rifugio>{
@@ -31,7 +33,7 @@ public interface RifugioDAO extends JpaRepository<Rifugio, Long>, JpaSpecificati
 	String findNomeRifugio(@Param("id_rifugio")Long idRif);
 	Rifugio findByEmail(String email);
 	Rifugio findByTel(String tel);
-	//List<RifugioCardDto> findAllDtoedBy();
+
 	Rifugio findByNome(String nome);
 	@Query("SELECT r.nome FROM Rifugio r")
 	List<String> findRifugiNames();
@@ -45,6 +47,10 @@ public interface RifugioDAO extends JpaRepository<Rifugio, Long>, JpaSpecificati
 	
 	@Query("SELECT r.prezzoPostoLetto FROM Rifugio r WHERE r.id = :id_rif")
 	Integer findPrezzoPostoLetto(@Param("id_rif")Long idRif);
+	
+	@Modifying
+	@Query("UPDATE Rifugio r SET r.deletionToken = :del_token, r.deletionTokenEl = :del_token WHERE r.id = :id_rif")
+	Integer setDeletionTokenRifugio(@Param("del_token")UUID deletionToken, @Param("id_rif")Long idRif);
 	
 	
 }
