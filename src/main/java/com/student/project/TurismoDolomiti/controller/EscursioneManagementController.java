@@ -41,6 +41,7 @@ import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 import com.student.project.TurismoDolomiti.sessionDao.SessionDAOFactory;
 import com.student.project.TurismoDolomiti.specifications.EscursioneSearch;
 import com.student.project.TurismoDolomiti.specifications.EscursioneSpecification;
+import com.student.project.TurismoDolomiti.upload.FolderService;
 import com.student.project.TurismoDolomiti.upload.TipologiaFile;
 import com.student.project.TurismoDolomiti.upload.UploadService;
 import com.student.project.TurismoDolomiti.verifica.VerificaService;
@@ -523,7 +524,7 @@ public class EscursioneManagementController {
 					if(!iconaEsc.equals(Constants.DEF_ICONA_ESC)) {
 						esc.setIconPath(Constants.DEF_ICONA_ESC);
 						escDAO.save(esc);
-						Path iconPath = Paths.get(Constants.ICONA_ESC_RIF_DIR, iconaEsc);
+						Path iconPath = Paths.get(FolderService.icone_esc_rif_dir, iconaEsc);
 						Files.delete(iconPath);
 					}
 					return "redirect:/escursione/" + idEsc + "/modifica/foto";

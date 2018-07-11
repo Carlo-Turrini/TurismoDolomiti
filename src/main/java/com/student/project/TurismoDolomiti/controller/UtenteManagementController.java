@@ -43,6 +43,7 @@ import com.student.project.TurismoDolomiti.formValidation.RegistrazioneForm;
 import com.student.project.TurismoDolomiti.formValidation.UtenteForm;
 import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 import com.student.project.TurismoDolomiti.sessionDao.SessionDAOFactory;
+import com.student.project.TurismoDolomiti.upload.FolderService;
 import com.student.project.TurismoDolomiti.upload.TipologiaFile;
 import com.student.project.TurismoDolomiti.upload.UploadService;
 import com.student.project.TurismoDolomiti.verifica.VerificaService;
@@ -474,7 +475,7 @@ public class UtenteManagementController {
 					if(!fotoProfilo.equals(Constants.profileDef)) {
 						utente.setProfilePhotoPath(Constants.profileDef);
 						utenteDAO.save(utente);
-						Path fotoProfiloPath = Paths.get(Constants.ICONA_UTENTE_DIR, fotoProfilo);
+						Path fotoProfiloPath = Paths.get(FolderService.icone_utente_dir, fotoProfilo);
 						Files.delete(fotoProfiloPath);
 					}
 					return "redirect:/profilo/" + idUtente + "/modifica/foto";

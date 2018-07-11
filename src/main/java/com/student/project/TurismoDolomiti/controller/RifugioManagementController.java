@@ -59,6 +59,7 @@ import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
 import com.student.project.TurismoDolomiti.sessionDao.SessionDAOFactory;
 import com.student.project.TurismoDolomiti.specifications.RifugioSearch;
 import com.student.project.TurismoDolomiti.specifications.RifugioSpecification;
+import com.student.project.TurismoDolomiti.upload.FolderService;
 import com.student.project.TurismoDolomiti.upload.TipologiaFile;
 import com.student.project.TurismoDolomiti.upload.UploadService;
 import com.student.project.TurismoDolomiti.verifica.VerificaService;
@@ -646,7 +647,7 @@ public class RifugioManagementController {
 						if(!iconaRif.equals(Constants.DEF_ICONA_RIF)) {
 							rif.setIconPath(Constants.DEF_ICONA_RIF);
 							rifDAO.save(rif);
-							Path iconPath = Paths.get(Constants.ICONA_ESC_RIF_DIR, iconaRif);
+							Path iconPath = Paths.get(FolderService.icone_esc_rif_dir, iconaRif);
 							Files.delete(iconPath);
 						}
 						return "redirect:/rifugio/" + idRif + "/modifica/foto";

@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,11 @@ import org.apache.commons.lang3.EnumUtils;
 @Service
 public class UploadServiceImpl implements UploadService {
    
+	@Autowired
+	public UploadServiceImpl() {
+		FolderService.init();
+	}
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
     public String store(MultipartFile file, TipologiaFile tipologia, String filename) {
@@ -41,23 +47,23 @@ public class UploadServiceImpl implements UploadService {
 	               
 	               if(tipologia.equals(TipologiaFile.Gpx)) {
 	            	   if(fileExt.equals("gpx")) {
-	            		   dir = Constants.GPX_DIR;
+	            		   dir = FolderService.gpx_dir;
 	            	   }
 	            	   else throw new StorageException("Estensione del file non valida" + uploadedFilename);
 	               }
 	               else {
 	            	   if(EnumUtils.isValidEnum(FotoFileExtensionSupported.class, fileExt)) {
 	            		   if(tipologia.equals(TipologiaFile.Foto)) {
-	            			   dir = Constants.FOTO_DIR;
+	            			   dir = FolderService.foto_dir;
 	            		   }
 	            		   else if(tipologia.equals(TipologiaFile.Altimetria)) {
-	            			   dir = Constants.ALTIMETRIA_DIR;
+	            			   dir = FolderService.altimetria_dir;
 	            		   }
 	            		   else if(tipologia.equals(TipologiaFile.IconaUtente)) {
-	            			   dir = Constants.ICONA_UTENTE_DIR;
+	            			   dir = FolderService.icone_utente_dir;
 	            		   }
 	            		   else if(tipologia.equals(TipologiaFile.IconaEscRif)) {
-	            			   dir = Constants.ICONA_ESC_RIF_DIR;
+	            			   dir = FolderService.icone_esc_rif_dir;
 	            		   }   
 	            	   }
 	            	   else throw new StorageException("Estensione del file non valida" + uploadedFilename);

@@ -101,7 +101,10 @@
 				margin-left:5px;
 				margin-right:5px;
 			}
-			
+			.myHomeCardHref {
+				position:absolute;
+				bottom:20px;
+			}
 
 		</style>
 		<title> Turismo Dolomiti </title>
@@ -130,7 +133,7 @@ le volte di porpora scintillanti di stelle."
 					<div class="card-img-overlay">
 						<h2 class="card-title"> Escursioni </h2>
 						<p class="card-text"> Le più belle escursioni delle dolomiti </p>
-						<a href="/elencoEscursioni" class="btn btn-primary"> Vedi elenco</a>
+						<a href="/elencoEscursioni" class="btn btn-primary myHomeCardHref"> Vedi elenco</a>
 					</div>	
 				</div>
 				<div class="card myCard">
@@ -138,27 +141,27 @@ le volte di porpora scintillanti di stelle."
 					<div class="card-img-overlay">
 						<h2 class="card-title"> Rifugi </h2>
 						<p class="card-text"> I più bei rifugi delle dolomiti </p>
-						<a href="/elencoRifugi" class="btn btn-primary"> Vedi elenco </a>
+						<a href="/elencoRifugi" class="btn btn-primary myHomeCardHref"> Vedi elenco </a>
 					</div>
 					
 				</div>
 				
 				<% if(logged) { %>
 				<div class="card myCard">
-					<img class="card-img-top" src="rifCard.jpg" alt="Card image">
+					<img class="card-img-top" src="leMiePrenotazioni.jpg" alt="Card image">
 					<div class="card-img-overlay">
 						<h2 class="card-title"> Prenotazioni </h2>
 						<p class="card-text"> Controlla i tuoi viaggi </p>
-						<a href="/leMiePrenotazioni" class="btn btn-primary"> Vedi elenco </a>
+						<a href="/leMiePrenotazioni" class="btn btn-primary myHomeCardHref"> Vedi elenco </a>
 					</div>
 				</div>
 				<% if(loggedUser.getCredenziali().compareTo(CredenzialiUtente.GestoreRifugio)>=0) { %>
 				<div class="card myCard">
-					<img class="card-img-top" src="rifCard.jpg" alt="Card image">
+					<img class="card-img-top" src="iMieiRifugi.jpg" alt="Card image">
 					<div class="card-img-overlay">
 						<h2 class="card-title"> I miei rifugi </h2>
 						<p class="card-text"> Controlla i rifugi che gestisci </p>
-						<a href="/elencoRifugi" class="btn btn-primary"> Vedi elenco </a>
+						<a href="/elencoRifugi" class="btn btn-primary myHomeCardHref"> Vedi elenco </a>
 					</div>
 				
 					
@@ -167,19 +170,19 @@ le volte di porpora scintillanti di stelle."
 					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
 				%>
 				<div class="card myCard">
-					<img class="card-img-top" src="rifCard.jpg" alt="Card image">
+					<img class="card-img-top" src="escursioniDaCompletare.jpg" alt="Card image">
 					<div class="card-img-overlay">
 						<h2 class="card-title"> Escursioni incomplete </h2>
 						<p class="card-text"> Completale </p>
-						<a href="/elencoEscursioniDaCompletare" class="btn btn-primary"> Vedi elenco </a>
+						<a href="/elencoEscursioniDaCompletare" class="btn btn-primary myHomeCardHref"> Vedi elenco </a>
 					</div>
 				</div>
 				<div class="card myCard">
-					<img class="card-img-top" src="rifCard.jpg" alt="Card image">
+					<img class="card-img-top" src="elencoUtenti.jpg" alt="Card image">
 					<div class="card-img-overlay">
 						<h2 class="card-title"> Utenti </h2>
 						<p class="card-text"> Monitora gli utenti nel sistema </p>
-						<a href="/elencoUtenti" class="btn btn-primary"> Vedi elenco </a>
+						<a href="/elencoUtenti" class="btn btn-primary myHomeCardHref"> Vedi elenco </a>
 					</div>
 				</div>
 				<% } %>
