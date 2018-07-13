@@ -184,6 +184,9 @@
 				margin-right:auto;
 				
 			}
+			.rifEscLead {
+				font-size:1.05rem;
+			}
 			
 		</style>
     	<script type="text/javascript" src="/webjars/jquery/3.3.1/jquery.min.js"></script>
@@ -330,9 +333,9 @@
 								</div>
 								<% } else for(RifugioCartinaEscursioneCardDto rif : rifugiEscursione) { %>
 									<div class="col-md-8 myCol">
-										<p><%=rif.getNome()%></p>
+										<p class="lead rifEscLead"><%=rif.getNome()%></p>
 									</div>
-									<div class="col-md-4 myCol">
+									<div class="col-md-4 myCol mb-2">
 										<a class="btn btn-primary" href="/rifugio/<%=rif.getIdRifugio()%>">Scopri di più</a>
 									</div>
 								<% } %>

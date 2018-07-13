@@ -58,7 +58,6 @@
    			})
  			$(function() {
 
-			  // We can attach the `fileselect` event to all file inputs on the page
 			  $(document).on('change', ':file', function() {
 			    var input = $(this),
 			        numFiles = input.get(0).files ? input.get(0).files.length : 1,
@@ -66,7 +65,6 @@
 			    input.trigger('fileselect', [numFiles, label]);
 			  });
 
-			  // We can watch for our custom `fileselect` event like this
 			  $(document).ready( function() {
 			      $(':file').on('fileselect', function(event, numFiles, label) {
 
@@ -210,7 +208,6 @@
 			.gal-container .description{
 				position: absolute;
 				bottom: 0px;
-				
 				padding: 10px 25px;
 				background-color: rgba(0,0,0,0.5);
 				color: #fff;
@@ -344,7 +341,7 @@
 						                <img class="gallery" src="<%=foto.get(i).getPhotoPath()%>">
 						              </div>
 						                <div class="col-md-12 description">
-							                 <span>
+							                 <div>
 												<div class="row">
 													<div class="comPhotoCol">
 														<img src="<%=foto.get(i).getProfilePhotoPathUtente()%>" class="rounded-circle fotoCommento">
@@ -355,7 +352,7 @@
 														<p class="labelPhoto"><%=foto.get(i).getLabel()%></p>
 													</div>
 												</div>
-											</span>
+											</div>
 						                </div>
 						            </div>
 						          </div>

@@ -5,8 +5,11 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="springForm"%>
+<%@ page import="java.sql.Date" %>
+<%@ page import="java.time.LocalDate" %>
 <% 
 	String messaggio = (String) request.getAttribute("messaggio");
+	Date oggi = Date.valueOf(LocalDate.now());
 %>
 <!DOCTYPE html>
 <html>
@@ -15,11 +18,8 @@
 		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">	
 		<style>
-			::placeholder {
-				color: white;
-			}
 			.row.reg {
-				margin-top: 50px;
+				padding-top: 50px;
 			}
 			* {
 			  margin: 0;
@@ -37,15 +37,7 @@
 				margin-left:auto;
 				margin-right:auto;
 			}
-			.wrap{
-			    width: 100%;
-			    height: 100%;
-			    min-height: 100%;
-			    position: absolute;
-			    top: 0;
-			    left: 0;
-			    z-index: 99;
-			}
+
 			
 			
 			p.form-title{
@@ -95,7 +87,7 @@
 			}
 			form.login label
 			{
-			    font-size: 12px;
+			    font-size: 14px;
 			    font-weight: 400;
 			    color: #FFFFFF;
 			}
@@ -113,13 +105,25 @@
 				margin-bottom:0px;
 				text-align:center;
 			}
+			a.homeLink {
+				position:absolute;
+				top:5px;
+				right:5px;
+			}
 		</style>
 		
 		<title>Turismo Dolomiti</title>
 	</head>
 	<body>
 	<main>
+		<a class="homeLink" href="/home" title="home">
+				<span class="fa-stack fa-lg">
+					<i class="fa fa-circle fa-stack-2x"></i>
+					<i class="fa fa-home fa-stack-1x fa-inverse"></i>
+				</span>
+		</a>
 		<div class="container">
+			
 			<div class="row reg">
 				<div class="col-md-8 reg">
 					<% if(messaggio != null) { %>
@@ -132,12 +136,12 @@
 						<div class="form-row">
 							<div class="form-group col-md-6">
 								<label for="inputNome">Nome</label>
-								<springForm:input type="text" cssClass="form-control" id="inputNome" placeholder="Nome" path="nome" required="true" minLength="2" maxLength="48"/>
+								<springForm:input type="text" cssClass="form-control" id="inputNome" path="nome" required="true" minLength="2" maxLength="48"/>
 								<springForm:errors path="nome" cssClass="error"/>
 							</div>
 							<div class="form-group col-md-6">
 								<label for="inputCognome">Cognome</label>
-								<springForm:input type="text" cssClass="form-control" id="inputCognome" placeholder="Cognome" path="cognome" required="true" minLength="2" maxLength="48" />
+								<springForm:input type="text" cssClass="form-control" id="inputCognome" path="cognome" required="true" minLength="2" maxLength="48" />
 								<springForm:errors path="cognome" cssClass="error"/>
 							</div>
 						</div>
@@ -145,12 +149,12 @@
 						<div class="form-row">
 						    <div class="form-group col-md-6">
 							      <label for="inputEmail">Email</label>
-							      <springForm:input type="email" cssClass="form-control" id="inputEmail" placeholder="Email" path="email" required="true" minLength="7" maxLength="128"/>
+							      <springForm:input type="email" cssClass="form-control" id="inputEmail" path="email" required="true" minLength="7" maxLength="128"/>
 							      <springForm:errors path="email" cssClass="error"/>
 						    </div>
 						    <div class="form-group col-md-6">
 							      <label for="inputPassword">Password</label>
-							      <springForm:input type="password" class="form-control" id="inputPassword" placeholder="Password" path="password" required="true" minLength="8" maxLength="64"/>
+							      <springForm:input type="password" class="form-control" id="inputPassword" path="password" required="true" minLength="8" maxLength="64"/>
 							      <springForm:errors path="password" cssClass="error"/>
 						    </div>
 					 	</div>
@@ -169,7 +173,7 @@
 					 	</div>
 					 	<div class="form-group col-md-16">
 					 		<label for="inputBDay">Data di nascita</label>
-					 		<springForm:input type="date" cssClass="form-control" id="inputBDay" path="dataNascita"/>
+					 		<springForm:input type="date" cssClass="form-control" id="inputBDay" path="dataNascita" max="<%=oggi.toString()%>"/>
 					 		<springForm:errors path="dataNascita" cssClass="error"/>
 					 	</div>
 					 	<input type="submit" class="btn btn-primary btn-sm"/>

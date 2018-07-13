@@ -28,26 +28,36 @@ public class Escursione extends Elemento implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private TipologiaEscursione tipologia;
+	
 	@Column(nullable = false)
 	private Float durata;
+	
 	@Column(nullable = false)
 	private Integer lunghezza; 
+	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private DifficoltaEscursione difficolta;
+	
 	@Column(name = "dislivello_salita", nullable = false)
 	private Integer dislivelloSalita;
+	
 	@Column(name = "dislivello_discesa", nullable = false)
 	private Integer dislivelloDiscesa;
+	
 	@Column(name = "completo", nullable = false)
 	@ColumnDefault("false")
 	private Boolean completo = false;
+	
 	@Column(name = "gpx_path",length = 256) 
 	private String gpxPath;
+	
 	@Column(name = "altimetria_path", length = 256)
 	private String altimetriaPath;
+	
 	@Column(name = "label", length = 256)
 	private String label;
+	
 	@OneToMany(mappedBy = "escursione", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<PassaPer> passaPer = new LinkedList<PassaPer>();
 	

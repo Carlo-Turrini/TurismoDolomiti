@@ -92,7 +92,7 @@
 					</div>
 					<div class="col-md-9">
 						<div class="row">
-							<div class="col-md-10 myCol">
+							<div class="col-md-11 myCol">
 								<h1>Prenotazione</h1>
 							</div>
 							<div class="col-md-1">

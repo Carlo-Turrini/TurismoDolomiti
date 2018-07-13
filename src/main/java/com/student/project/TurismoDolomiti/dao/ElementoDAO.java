@@ -8,10 +8,12 @@ import com.student.project.TurismoDolomiti.entity.Elemento;
 
 @Repository
 public interface ElementoDAO extends JpaRepository<Elemento, Long>{
-	@Query("SELECT e FROM Elemento e WHERE TYPE(e) = :nomeClass AND e.nome = :nome")
-	<E extends Elemento> E findByNome(@Param("nomeClass") final Class<E> nomeClass, @Param("nome")String nome);
+	/*@Query("SELECT e FROM Elemento e WHERE TYPE(e) = :nomeClass AND e.nome = :nome")
+	<E extends Elemento> E findByNome(@Param("nomeClass") final Class<E> nomeClass, @Param("nome")String nome);*/
+	
 	@Query("SELECT COUNT(e) FROM Elemento e WHERE e.id = :id_el")
-	Integer verificaEsistenzaEl(@Param("id_el")Long idEl);
+	public Integer verificaEsistenzaEl(@Param("id_el")Long idEl);
+	
 	@Query("SELECT e.nome FROM Elemento e WHERE e.id = :id_el")
-	String findNomeEl(@Param("id_el")Long idEl);
+	public String findNomeEl(@Param("id_el")Long idEl);
 }

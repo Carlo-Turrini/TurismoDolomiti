@@ -11,5 +11,5 @@ import com.student.project.TurismoDolomiti.entity.PeriodoPrenotato;
 @Repository
 public interface PeriodoPrenotatoDAO extends JpaRepository<PeriodoPrenotato, Long> {
 	@Query("SELECT DISTINCT pp.prenotazione.id FROM PeriodoPrenotato pp JOIN pp.postoLetto pl WHERE pl.camera.id = :id_camera")
-	List<Long> findPrenotazioniByCamera(@Param("id_camera")Long idCamera);
+	public List<Long> findPrenotazioniByCamera(@Param("id_camera")Long idCamera);
 }

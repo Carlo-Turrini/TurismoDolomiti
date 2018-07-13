@@ -44,7 +44,7 @@
 				background-repeat: no-repeat;
 				background-size: cover;
 				margin-bottom: 20px;
-				border-radius: 5px;
+				border-radius: 0px 0px 5px 5px;
 				
 				
 			}
@@ -55,7 +55,7 @@
 				margin-right: auto;
 				max-width: 600px;
 				background: rgba(255, 255, 255, 0.5);
-				border-radius: 5px;
+				border-radius: 0px 0px 5px 5px;
 				
 			}
 			.title > h1 {

@@ -81,6 +81,10 @@
 				color:#5E5956;
 				z-index:99;
 			}
+			.myCardDelBtnLink:hover {
+				transition: color 0.5s ease;
+				color:#d3d3d3;
+			}
 			.myBtn {
 				width:100%;
 			}
@@ -167,7 +171,7 @@
 							<p class="lead mt-2">Aggiungi rifugio gestito</p>
 							<hr>
 							<springForm:form method="POST" action="/profilo/${idUtente}/elencoRifugiGestiti/aggiungi">
-								<select name="idRif" class="form-control col-md-6" required="true">
+								<select name="idRif" class="form-control col-md-6" required>
 										<option value="" label="Seleziona il rifugio da far gestire"/>
 									<% for(RifugioNomeIdDTO rif : rifugiNomeId ) { %>
 										<option value="<%=rif.getIdRif()%>" label="<%=rif.getNomeRif()%>"/>

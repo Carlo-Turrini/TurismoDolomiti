@@ -117,7 +117,7 @@
 									<% } %>
 									<div class="form-group">
 										<label for="inputDescGroup" class="lead sub">Descrizione del gruppo</label>
-										<textarea name="descGruppo" value="<%=descGruppo%>" rows="7"></textarea>
+										<textarea name="descGruppo" rows="7"><%=descGruppo%></textarea>
 									</div>
 									<input type="hidden" name="checkIn" value="<%=checkIn.toString()%>"/>
 									<input type="hidden" name="checkOut" value="<%=checkOut.toString()%>"/>

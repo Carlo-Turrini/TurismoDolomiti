@@ -27,10 +27,9 @@ public class Utente implements Serializable {
 	@Column
 	private Long id;
 	
-	
 	@ColumnDefault("0")
 	@Column(name = "deletion_token")
-	private UUID deletionToken = new UUID(0L, 0L);
+	private UUID deletionToken = Constants.nilUUID;
 	
 	@Column(length = 48, nullable = false)
 	private String nome;
@@ -70,10 +69,13 @@ public class Utente implements Serializable {
 	
 	@OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Commento> commenti = new LinkedList<Commento>();
+	
 	@OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Foto> foto = new LinkedList<Foto>();
+	
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Prenotazione> prenotazioni = new LinkedList<Prenotazione>();
+	
 	@OneToMany(mappedBy = "proprietario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Possiede> rifGestiti  = new LinkedList<Possiede>();
 	

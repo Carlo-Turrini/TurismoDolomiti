@@ -15,30 +15,43 @@ import com.student.project.TurismoDolomiti.enums.Sesso;
 
 public class UtenteForm {
 	@NotNull
+	@NotEmpty
 	@Email
 	@Size(min=7, max=128)
 	private String email;
+	
 	@NotNull
+	@NotEmpty
 	@Size(min=2, max=48)
 	private String nome;
+	
 	@NotNull
+	@NotEmpty
 	@Size(min=2, max=48)
 	private String cognome;
+	
 	@NotNull
+	@NotEmpty
 	@Size(min=8, max=64)
 	private String password;
+	
 	@NotNull
 	@NotEmpty
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private String dataNascita;
+	
 	@NotNull
 	private Sesso sesso;
+	
 	@Pattern(regexp = "^$|^[0-9]{10}$")
 	private String tel;
+	
 	@Size(min = 0, max = 2048)
 	private String descrizione;
+	
 	@NotNull
 	private CredenzialiUtente credenziali;
+	
 	public String getEmail() {
 		return email;
 	}

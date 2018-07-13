@@ -18,39 +18,50 @@ import java.util.UUID;
 @Repository
 public interface RifugioDAO extends JpaRepository<Rifugio, Long>, JpaSpecificationExecutor<Rifugio>{
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.RifugioCardDto(r.id, r.nome, r.massiccioMontuoso, r.altitudine, r.dataApertura, r.dataChiusura, r.iconPath) FROM Possiede p JOIN p.rifugio r WHERE p.proprietario.id = :id_utente")
-	List<RifugioCardDto> elencoRifugiPosseduti(@Param("id_utente") Long idUtente);
+	public List<RifugioCardDto> elencoRifugiPosseduti(@Param("id_utente") Long idUtente);
+	
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.RifugioCartinaEscursioneCardDto(r.id, r.nome, r.latitude, r.longitude, r.iconPath) FROM Rifugio r JOIN Elemento e ON r.id = e.id JOIN PassaPer pp ON r.id = pp.rifugio.id WHERE pp.escursione.id = :id_escursione")
-	List<RifugioCartinaEscursioneCardDto> findRifugiEscursione(@Param("id_escursione") Long idEscursione);
+	public List<RifugioCartinaEscursioneCardDto> findRifugiEscursione(@Param("id_escursione") Long idEscursione);
+	
 	@Query("SELECT COUNT(r) FROM Rifugio r WHERE r.nome = :nome_rifugio")
-	Integer verificaEsistenzaRifugioByNome(@Param("nome_rifugio")String nomeRifugio);
+	public Integer verificaEsistenzaRifugioByNome(@Param("nome_rifugio")String nomeRifugio);
+	
 	@Query("SELECT COUNT(r) FROM Rifugio r WHERE r.tel = :tel_rifugio")
-	Integer verificaEsistenzaRifugioByTel(@Param("tel_rifugio")String telRifugio);
+	public Integer verificaEsistenzaRifugioByTel(@Param("tel_rifugio")String telRifugio);
+	
 	@Query("SELECT COUNT(r) FROM Rifugio r WHERE r.email = :email_rifugio")
-	Integer verificaEsistenzaRifugioByEmail(@Param("email_rifugio")String emailRifugio);
+	public Integer verificaEsistenzaRifugioByEmail(@Param("email_rifugio")String emailRifugio);
+	
 	@Query("SELECT COUNT(r) FROM Rifugio r WHERE r.id = :id_rifugio")
-	Integer verificaEsistenzaRifugio(@Param("id_rifugio")Long idRif);
+	public Integer verificaEsistenzaRifugio(@Param("id_rifugio")Long idRif);
+	
 	@Query("SELECT r.nome FROM Rifugio r WHERE r.id = :id_rifugio")
-	String findNomeRifugio(@Param("id_rifugio")Long idRif);
-	Rifugio findByEmail(String email);
-	Rifugio findByTel(String tel);
+	public String findNomeRifugio(@Param("id_rifugio")Long idRif);
+	
+	public Rifugio findByEmail(String email);
+	
+	public Rifugio findByTel(String tel);
 
-	Rifugio findByNome(String nome);
+	public Rifugio findByNome(String nome);
+	
 	@Query("SELECT r.nome FROM Rifugio r")
-	List<String> findRifugiNames();
+	public List<String> findRifugiNames();
+	
 	@Query("SELECT COUNT(r) FROM Rifugio r WHERE r.id = :id_rifugio AND r.dataApertura <= :check_in AND r.dataChiusura >= :check_out")
-	Integer verificaRifugioApertoInPeriodo(@Param("id_rifugio")Long idRifugio, @Param("check_in")Date checkIn, @Param("check_out")Date checkOut);
+	public Integer verificaRifugioApertoInPeriodo(@Param("id_rifugio")Long idRifugio, @Param("check_in")Date checkIn, @Param("check_out")Date checkOut);
+	
 	@Query("SELECT r.iconPath FROM Rifugio r WHERE r.id = :id_rif")
-	String findRifugioIconPath(@Param("id_rif")Long idRif);
+	public String findRifugioIconPath(@Param("id_rif")Long idRif);
 	
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.RifugioNomeIdDTO(r.id, r.nome) FROM Rifugio r")
-	List<RifugioNomeIdDTO> findRifugioNomeAndId();
+	public List<RifugioNomeIdDTO> findRifugioNomeAndId();
 	
 	@Query("SELECT r.prezzoPostoLetto FROM Rifugio r WHERE r.id = :id_rif")
-	Integer findPrezzoPostoLetto(@Param("id_rif")Long idRif);
+	public Integer findPrezzoPostoLetto(@Param("id_rif")Long idRif);
 	
 	@Modifying
 	@Query("UPDATE Rifugio r SET r.deletionToken = :del_token, r.deletionTokenEl = :del_token WHERE r.id = :id_rif")
-	Integer setDeletionTokenRifugio(@Param("del_token")UUID deletionToken, @Param("id_rif")Long idRif);
+	public Integer setDeletionTokenRifugio(@Param("del_token")UUID deletionToken, @Param("id_rif")Long idRif);
 	
 	
 }

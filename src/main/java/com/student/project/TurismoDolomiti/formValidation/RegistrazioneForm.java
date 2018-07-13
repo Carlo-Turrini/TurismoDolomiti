@@ -13,24 +13,33 @@ import com.student.project.TurismoDolomiti.enums.Sesso;
 
 public class RegistrazioneForm {
 	@NotNull
+	@NotEmpty
 	@Email
 	@Size(min=7, max=128)
 	private String email;
+	
 	@NotNull
+	@NotEmpty
 	@Size(min=2, max=48)
 	private String nome;
+	
 	@NotNull
+	@NotEmpty
 	@Size(min=2, max=48)
 	private String cognome;
+	
 	@NotNull
 	@Size(min=8, max=64)
 	private String password;
+	
 	@NotNull
 	@NotEmpty
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private String dataNascita;
+	
 	@NotNull
 	private Sesso sesso;
+	
 	public String getEmail() {
 		return email;
 	}

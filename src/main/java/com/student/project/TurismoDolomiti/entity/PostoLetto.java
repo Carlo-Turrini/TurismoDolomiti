@@ -19,6 +19,7 @@ public class PostoLetto implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
+	
 	@Column(name = "deleted", nullable = false)
 	@ColumnDefault("false")
 	private Boolean deleted = false;
@@ -26,6 +27,7 @@ public class PostoLetto implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_camera")
 	private Camera camera;
+	
 	@OneToMany(mappedBy = "postoLetto", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<PeriodoPrenotato> periodiPrenotati = new LinkedList<PeriodoPrenotato>();
 	

@@ -30,31 +30,38 @@ public class Rifugio extends Elemento implements Serializable{
 	
 	@Column(nullable = false) 
 	private Integer altitudine;
+	
 	@Column(nullable = false, name = "data_apertura")
 	private Date dataApertura;
+	
 	@Column(nullable = false, name = "data_chiusura")
 	private Date dataChiusura;
+	
 	@Column(nullable = false, length = 256)
 	@Email
 	private String email;
+	
 	@Column(length = 10, nullable = false)
 	private String tel;
+	
 	@Column(name = "prezzo_posto_letto", nullable = false)
 	private Integer prezzoPostoLetto;
 
 	@OneToMany(mappedBy = "rifugio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Prenotazione> prenotazioni = new LinkedList<Prenotazione>();
+	
 	@OneToMany(mappedBy = "rifugio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Piatto> piatti = new LinkedList<Piatto>();
+	
 	@OneToMany(mappedBy = "rifugio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Camera> camere = new LinkedList<Camera>();
+	
 	@OneToMany(mappedBy = "rifugio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<PassaPer> passaPer = new LinkedList<PassaPer>();
+	
 	@OneToMany(mappedBy = "rifugio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Possiede> possessori = new LinkedList<Possiede>();
 
-	
-	
 	public UUID getDeletionToken() {
 		return deletionToken;
 	}

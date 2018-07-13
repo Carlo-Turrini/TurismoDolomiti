@@ -81,6 +81,9 @@
 				font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 				font-size:100%;
 			}
+			.boldSpan {
+				font-weight:600;
+			}
 		</style>
     	<script type="text/javascript" src="/webjars/jquery/3.3.1/jquery.min.js"></script>
     	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -208,8 +211,8 @@
 								<pre class="myPre">${rif.getDescrizione()}</pre>
 								<p class="lead subtitle">Contatti:</p>
 								<hr>
-								<p>Email: ${rif.getEmail()}</p>
-								<p>Tel: ${rif.getTel()}</p>
+								<p><span class="boldSpan">Email:</span> ${rif.getEmail()}</p>
+								<p><span class="boldSpan">Tel:</span> ${rif.getTel()}</p>
 							</div>
 							<div class="col-md-4 myCol rightCol">
 								<div id="map" class="leftMap"></div>

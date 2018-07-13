@@ -37,13 +37,10 @@ import com.student.project.TurismoDolomiti.dao.PiattoDAO;
 import com.student.project.TurismoDolomiti.dao.PossiedeDAO;
 import com.student.project.TurismoDolomiti.dao.PrenotazioneDAO;
 import com.student.project.TurismoDolomiti.dao.RifugioDAO;
-import com.student.project.TurismoDolomiti.dao.UtenteDAO;
 import com.student.project.TurismoDolomiti.dto.CommentoCardDto;
 import com.student.project.TurismoDolomiti.dto.EscursioneCardDto;
 import com.student.project.TurismoDolomiti.dto.FotoSequenceDTO;
 import com.student.project.TurismoDolomiti.dto.LoggedUserDTO;
-import com.student.project.TurismoDolomiti.dto.RifugioCardDto;
-import com.student.project.TurismoDolomiti.dto.RifugioNomeIdDTO;
 import com.student.project.TurismoDolomiti.entity.Camera;
 import com.student.project.TurismoDolomiti.entity.Commento;
 import com.student.project.TurismoDolomiti.entity.Foto;
@@ -52,7 +49,6 @@ import com.student.project.TurismoDolomiti.entity.Piatto;
 import com.student.project.TurismoDolomiti.entity.Possiede;
 import com.student.project.TurismoDolomiti.entity.Prenotazione;
 import com.student.project.TurismoDolomiti.entity.Rifugio;
-import com.student.project.TurismoDolomiti.entity.Utente;
 import com.student.project.TurismoDolomiti.enums.CredenzialiUtente;
 import com.student.project.TurismoDolomiti.formValidation.RifugioForm;
 import com.student.project.TurismoDolomiti.sessionDao.LoggedUserDAO;
@@ -77,8 +73,6 @@ public class RifugioManagementController {
 	private CommentoDAO comDAO;
 	@Autowired
 	private RifugioDAO rifDAO;
-	@Autowired 
-	private UtenteDAO utenteDAO;
 	@Autowired
 	private PossiedeDAO possDAO;
 	@Autowired 
@@ -110,7 +104,7 @@ public class RifugioManagementController {
 			RifugioSpecification rSpec = new RifugioSpecification(rSearch);
 			List<Rifugio> elencoRifugi = rifDAO.findAll(rSpec);
 			if(elencoRifugi.isEmpty()) {
-				String messaggio = "Non sono state trovati rifugi";
+				String messaggio = "Non sono stati trovati rifugi";
 				request.setAttribute("messaggio", messaggio);
 			}
 			else request.setAttribute("rifugi", elencoRifugi);
@@ -196,133 +190,6 @@ public class RifugioManagementController {
 			else {
 				 throw new ApplicationException((String) request.getAttribute("messaggio"));
 			}
-		}
-		catch(Exception e) {
-			logger.error("Controller error", e);
-			throw new RuntimeException(e);
-		}
-	}
-
-	@RequestMapping("/profilo/{id}/elencoRifugiGestiti")
-	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-	public String elencoRifugiGestiti(@PathVariable("id") Long idUtente, HttpServletRequest request, HttpServletResponse response) {
-		SessionDAOFactory session;
-		LoggedUserDTO loggedUser;
-		
-		try {
-			session = SessionDAOFactory.getSesssionDAOFactory(Constants.SESSION_IMPL);
-			session.initSession(request, response);
-			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
-			loggedUser = loggedUserDAO.find();
-			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(loggedUser.getIdUtente() == idUtente || loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
-					List<RifugioCardDto> rifugiGestiti = rifDAO.elencoRifugiPosseduti(idUtente);
-					if(rifugiGestiti.isEmpty()) {
-						request.setAttribute("messaggio", "Non possiede rifugi!");
-					}
-					else request.setAttribute("rifugiGestiti", rifugiGestiti);
-					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)) {
-						List<RifugioNomeIdDTO> nomiIdRifugi = rifDAO.findRifugioNomeAndId();
-						request.setAttribute("nomiRifugi", nomiIdRifugi);
-					}
-					request.setAttribute("idUtente", idUtente);
-					request.setAttribute("logged", loggedUser != null);
-					request.setAttribute("loggedUser", loggedUser);
-					return "elencoRifugiGestiti";
-				
-				}
-				else {
-					request.setAttribute("redirectUrl", "/home");
-					throw new ApplicationException("Credenziali insufficienti per accedere a questa pagina!");
-				}
-			}
-			else throw new ApplicationException((String) request.getAttribute("messaggio"));
-		}
-		catch(Exception e) {
-			logger.error("Controller error", e);
-			throw new RuntimeException(e);
-		}
-
-	}
-	
-	@RequestMapping("/profilo/{id}/elencoRifugiGestiti/aggiungi")
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String aggiuntaRifugioGestito(@RequestParam("idRif")Long idRif, @PathVariable("id")Long idUtente, HttpServletRequest request, HttpServletResponse response) {
-		SessionDAOFactory session;
-		LoggedUserDTO loggedUser;
-		
-		try {
-			session = SessionDAOFactory.getSesssionDAOFactory(Constants.SESSION_IMPL);
-			session.initSession(request, response);
-			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
-			loggedUser = loggedUserDAO.find();
-			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.Admin)) {
-				if(verificaService.verificaEsistenzaUtente(idUtente, request) && verificaService.verificaCredUtenteGestore(idUtente, request)) { 
-					if(verificaService.verificaEsistenzaRif(idRif, request)) {
-						if(verificaService.verificaNonGestore(idRif, idUtente, request)) {
-							Utente utente = utenteDAO.getOne(idUtente);
-							Rifugio rif = rifDAO.getOne(idRif);
-							Possiede poss = new Possiede();
-							poss.setProprietario(utente);
-							poss.setRifugio(rif);
-							possDAO.save(poss);
-							return "redirect:/profilo/" + idUtente + "/elencoRifugiGestiti";
-						}
-						throw new ApplicationException((String) request.getAttribute("messaggio"));
-					}
-					throw new ApplicationException((String) request.getAttribute("messaggio"));
-				}
-				else throw new ApplicationException((String) request.getAttribute("messaggio"));
-			}
-			else throw new ApplicationException((String) request.getAttribute("messaggio"));
-		}
-		catch(Exception e) {
-			logger.error("Controller error", e);
-			throw new RuntimeException(e);
-		}
-	}
-	
-	@RequestMapping("/profilo/{id}/elencoRifugiGestiti/rimuovi")
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public String rimuoviRifugioGestito(@PathVariable("id")Long idUtente, @RequestParam("idRif")Long idRif, HttpServletRequest request, HttpServletResponse response) {
-		SessionDAOFactory session;
-		LoggedUserDTO loggedUser;
-		
-		try {
-			session = SessionDAOFactory.getSesssionDAOFactory(Constants.SESSION_IMPL);
-			session.initSession(request, response);
-			LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
-			loggedUser = loggedUserDAO.find();
-			if(verificaService.verificaUtente(loggedUser, loggedUserDAO, request, CredenzialiUtente.GestoreRifugio)) {
-				if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin)|| loggedUser.getIdUtente() == idUtente) {
-					if(loggedUser.getCredenziali().equals(CredenzialiUtente.Admin) && loggedUser.getIdUtente() != idUtente) {
-						if(!verificaService.verificaEsistenzaUtente(idUtente, request) && !verificaService.verificaUtenteGestore(idUtente, request)) {
-							throw new ApplicationException((String) request.getAttribute("messaggio"));
-						}
-					}
-
-					if(!verificaService.verificaEsistenzaRif(idRif, request)) {
-						throw new ApplicationException((String) request.getAttribute("messaggio"));
-					}
-					else {
-						if(verificaService.verificaGestore(idRif, idUtente, request)) {
-							Utente utente = utenteDAO.getOne(idUtente);
-							Rifugio rif = rifDAO.getOne(idRif);
-							possDAO.deleteByProprietarioAndRifugio(utente, rif);
-							return "redirect:/profilo/" + idUtente + "/elencoRifugiGestiti";
-						}
-						else {
-							throw new ApplicationException((String) request.getAttribute("messaggio"));
-						}
-					}
-				}
-				else {
-					request.setAttribute("redirectUrl", "/home");
-					throw new ApplicationException("Accesso non consentito!");
-				}
-			
-			}
-			else throw new ApplicationException((String) request.getAttribute("messaggio"));
 		}
 		catch(Exception e) {
 			logger.error("Controller error", e);

@@ -21,25 +21,34 @@ public class Prenotazione implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
+	
 	@Column(name = "num_persone", nullable = false) 
 	private Integer numPersone;
+	
 	@Column(nullable = false)
 	private Date arrivo;
+	
 	@Column(nullable = false)
 	private Date partenza;
+	
 	@Column(nullable = false)
 	private Integer costo;
+	
 	@Column(name = "descrizione_gruppo", length = 2048) 
 	private String descrizioneGruppo;
+	
 	@Column(name = "deleted", nullable = false)
 	@ColumnDefault("false")
 	private Boolean deleted = false;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_cliente")
 	private Utente cliente;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_rifugio")
 	private Rifugio rifugio;
+	
 	@OneToMany(mappedBy = "prenotazione", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<PeriodoPrenotato> periodiPrenotati = new LinkedList<PeriodoPrenotato>();
 	

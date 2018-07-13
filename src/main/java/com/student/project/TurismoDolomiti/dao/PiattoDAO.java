@@ -13,9 +13,11 @@ import java.util.*;
 @Repository
 public interface PiattoDAO extends JpaRepository<Piatto, Long> {
 	@Query("SELECT p FROM Piatto p WHERE p.rifugio.id = :id_rifugio AND p.categoria = :categoria")
-	List<Piatto> findByRifugioIdAndCategoria(@Param("id_rifugio") Long idRifugio,@Param("categoria") CategoriaMenu categoria);
+	public List<Piatto> findByRifugioIdAndCategoria(@Param("id_rifugio") Long idRifugio,@Param("categoria") CategoriaMenu categoria);
+	
 	@Query("SELECT COUNT(p) FROM Piatto p WHERE p.rifugio.id = :id_rifugio AND p.nome = :nome_piatto")
-	Integer findPiattoByNomeAndRifugioId(@Param("id_rifugio")Long idRifugio, @Param("nome_piatto")String nomePiatto);
+	public Integer findPiattoByNomeAndRifugioId(@Param("id_rifugio")Long idRifugio, @Param("nome_piatto")String nomePiatto);
+	
 	@Query("SELECT p FROM Piatto p WHERE p.rifugio.id = :id_rifugio AND p.nome = :nome_piatto")
-	Piatto	getPiattoByNomeAndRifugioId(@Param("id_rifugio")Long idRifugio, @Param("nome_piatto")String nomePiatto);
+	public Piatto	getPiattoByNomeAndRifugioId(@Param("id_rifugio")Long idRifugio, @Param("nome_piatto")String nomePiatto);
 }

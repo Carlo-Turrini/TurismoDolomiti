@@ -13,15 +13,15 @@ import com.student.project.TurismoDolomiti.entity.Camera;
 @Repository
 public interface CameraDAO extends JpaRepository<Camera, Long> {
 	@Query("SELECT COUNT(c) FROM Camera c WHERE c.rifugio.id = :id_rif AND c.numCamera = :num_camera")
-	Integer verificaNumeroCamera(@Param("id_rif")Long idRif, @Param("num_camera")Integer numCamera);
+	public Integer verificaNumeroCamera(@Param("id_rif")Long idRif, @Param("num_camera")Integer numCamera);
 	
 	@Query("SELECT c FROM Camera c WHERE c.rifugio.id = :id_rif ORDER BY c.numCamera ASC")
-	List<Camera> findCamereByRifugioId(@Param("id_rif")Long idRif);
+	public List<Camera> findCamereByRifugioId(@Param("id_rif")Long idRif);
 	
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.CameraPrenInfoDTO(c.numCamera, c.tipologia, COUNT(pl)) FROM Prenotazione p JOIN PeriodoPrenotato pp ON p.id = pp.prenotazione.id JOIN PostoLetto pl ON pp.postoLetto.id = pl.id JOIN Camera c ON pl.camera.id = c.id WHERE p.id = :id_pren GROUP BY c.numCamera")
-	List<CameraPrenInfoDTO> findCamerePrenInfo(@Param("id_pren")Long idPren);
+	public List<CameraPrenInfoDTO> findCamerePrenInfo(@Param("id_pren")Long idPren);
 	
 	@Query("SELECT COUNT(c) FROM Camera c WHERE c.rifugio.id = :id_rif AND c.id = :id_camera")
-	Integer verificaCameraRifugio(@Param("id_rif")Long idRif, @Param("id_camera")Long idCamera);
+	public Integer verificaCameraRifugio(@Param("id_rif")Long idRif, @Param("id_camera")Long idCamera);
 }
 

@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.student.project.TurismoDolomiti.constants.Constants;
 import com.student.project.TurismoDolomiti.customExceptions.StorageException;
 
 import org.apache.commons.lang3.EnumUtils;
@@ -98,16 +96,4 @@ public class UploadServiceImpl implements UploadService {
        }
                
 	}
-	
-    @Override
-    public void deleteAll() {
-    	try {
-    		Path tmpFolder = Paths.get(Constants.TMP_DIR);
-    		FileSystemUtils.deleteRecursively(tmpFolder.toFile());
-    	}
-    	catch(Exception e) {
-    		throw new StorageException("Fallimento cancellazione: " + e.getMessage());
-    	}
-        
-    }
 }

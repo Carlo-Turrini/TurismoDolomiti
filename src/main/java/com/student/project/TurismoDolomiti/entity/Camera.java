@@ -19,18 +19,24 @@ public class Camera implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
+	
 	@Column(length = 128, nullable = false)
 	private String tipologia;
+	
 	@Column(name = "num_camera", nullable = false)
 	private Integer numCamera;
+	
 	@Column(nullable = false)
 	private Integer capienza;
+	
 	@Column(name = "deleted", nullable = false)
 	@ColumnDefault("false")
 	private Boolean deleted = false;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_rifugio")
 	private Rifugio rifugio;
+	
 	@OneToMany(mappedBy = "camera", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<PostoLetto> postiLetto = new LinkedList<PostoLetto>();
 	
@@ -70,7 +76,6 @@ public class Camera implements Serializable {
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
 	}
-	//PostiLetto
 	public List<PostoLetto> getPostiLetto() {
 		return this.postiLetto;
 	}

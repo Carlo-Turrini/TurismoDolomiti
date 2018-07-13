@@ -13,9 +13,5 @@ public class PrenotazioneForm {
 
 	public void setPlByCamera(List<PostiDisponibiliCameraRifugioDto> plByCamera) {
 		this.plByCamera = plByCamera;
-	}
-
-	
-
-	
+	}	
 }

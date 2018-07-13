@@ -19,21 +19,28 @@ public class Piatto implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
+	
 	@Column(length = 64, nullable = false) 
 	private String nome;
+	
 	@Column(nullable = false)
 	private Integer prezzo; //In euro
+	
 	@Column(length = 516, nullable = false)
 	private String descrizione;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private CategoriaMenu categoria;
+	
 	@Column(name = "deleted", nullable = false)
 	@ColumnDefault("false")
 	private Boolean deleted = false;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_rifugio")
 	private Rifugio rifugio;
+	
 	public Long getId() {
 		return id;
 	}

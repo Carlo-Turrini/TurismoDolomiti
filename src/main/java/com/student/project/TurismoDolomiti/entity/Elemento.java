@@ -27,21 +27,29 @@ public abstract class Elemento {
 	
 	@Column(name = "massiccio_montuoso", length = 64, nullable = false)
 	private String massiccioMontuoso;
+	
 	@Column(length = 2048)
 	private String descrizione;
+	
 	@Column(length = 128, nullable = false)
 	private String nome;
+	
 	@Column(name = "latitude", nullable = false)
 	private Double latitude;
+	
 	@Column(name = "longitude", nullable = false)
 	private Double longitude;
+	
 	@Column(name = "icon_path", length = 256)
 	@ColumnDefault("'setICONPATH'")
 	private String iconPath;
+	
 	@OneToMany(mappedBy = "elemento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Commento> commenti = new LinkedList<Commento>();
+	
 	@OneToMany(mappedBy = "elemento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Foto> foto = new LinkedList<Foto>();
+	
 	public Long getId() {
 		return id;
 	}

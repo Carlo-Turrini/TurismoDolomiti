@@ -21,19 +21,25 @@ public class Foto implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
+	
 	@Column(length = 256, nullable = false)
 	private String photoPath;
+	
 	@Column(length = 128)
 	private String label;
+	
 	@Column(nullable = false, updatable = false)
 	@CreatedDate
 	private Timestamp timestamp;
+	
 	@Column(name = "deleted", nullable = false)
 	@ColumnDefault("false")
 	private Boolean deleted = false;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_utente")
 	private Utente utente;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_elemento")
 	private Elemento elemento;

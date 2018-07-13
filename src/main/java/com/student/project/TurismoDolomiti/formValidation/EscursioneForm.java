@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.LinkedList;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -12,38 +13,53 @@ import com.student.project.TurismoDolomiti.enums.TipologiaEscursione;
 
 public class EscursioneForm {
 	@NotNull
+	@NotEmpty
 	@Size(min = 2, max = 128)
 	private String nome;
+	
 	@NotNull
+	@NotEmpty
 	@Size(min = 2, max = 256)
 	private String label;
+	
 	@Size(min = 0, max = 2048)
 	private String descrizione;
+	
 	@NotNull
 	@Digits(integer = 2, fraction = 15)
 	private Double latitude;
+	
 	@NotNull
 	@Digits(integer = 3, fraction = 15)
 	private Double longitude;
+	
 	@NotNull
+	@NotEmpty
 	@Size(min = 2, max = 64)
 	private String massiccioMontuoso;
+	
 	@NotNull
 	@Digits(integer = 3, fraction = 0)
 	private Integer lunghezza;
+	
 	@NotNull
 	@Digits(integer = 3, fraction = 2)
 	private Float durata;
+	
 	@NotNull
 	private TipologiaEscursione tipologia;
+	
 	@NotNull
 	private DifficoltaEscursione difficolta;
+	
 	@NotNull
 	@Digits(integer = 4, fraction = 0)
 	private Integer dislivelloSalita;
+	
 	@NotNull
 	@Digits(integer = 4, fraction = 0)
 	private Integer dislivelloDiscesa;
+	
 	private List<Long> idPuntiRistoro =  new LinkedList<Long>();
 	
 

@@ -13,16 +13,16 @@ import com.student.project.TurismoDolomiti.entity.Utente;
 
 @Repository
 public interface UtenteDAO extends JpaRepository<Utente, Long> {
-	Utente findByEmail(String email);
+	public Utente findByEmail(String email);
 	
 	@Query("SELECT COUNT(u) FROM Utente u WHERE u.id = :id_utente")
-	Integer verificaEsistenzaUtente(@Param("id_utente")Long idUtente);
+	public Integer verificaEsistenzaUtente(@Param("id_utente")Long idUtente);
 	
 	@Query("SELECT u.profilePhotoPath FROM Utente u WHERE u.id = :id_utente")
-	String findProfilePhotoPath(@Param("id_utente")Long idUtente);
+	public String findProfilePhotoPath(@Param("id_utente")Long idUtente);
 	
 	@Modifying
 	@Query("UPDATE Utente u SET u.deletionToken = :del_token WHERE u.id = :id_utente")
-	Integer setDeletionTokenUtente(@Param("del_token")UUID delToken, @Param("id_utente")Long idUtente);	
+	public Integer setDeletionTokenUtente(@Param("del_token")UUID delToken, @Param("id_utente")Long idUtente);	
 	
 }

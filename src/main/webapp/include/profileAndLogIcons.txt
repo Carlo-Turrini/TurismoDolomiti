@@ -9,7 +9,7 @@
 						<i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>
 					</span>
 				</a>
-				<a class="profileLink" href="/profilo/${loggedUser.getIdUtente()}" title="profilo">
+				<a class="logLink" href="/profilo/${loggedUser.getIdUtente()}" title="profilo">
 					<span class="fa-stack fa-lg">
 						<i class="fa fa-circle fa-stack-2x"></i>
 						<i class="fa fa-user fa-stack-1x fa-inverse"></i>

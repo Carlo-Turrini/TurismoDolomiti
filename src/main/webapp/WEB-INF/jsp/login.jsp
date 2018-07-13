@@ -16,12 +16,6 @@
 		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<style>
-			::placeholder {
-				color: white;
-			}
-			.container.myContainer {
-				margin-top:170px;
-			}
 			* {
 			  margin: 0;
 			  padding: 0;
@@ -43,6 +37,7 @@
 			    top: 0;
 			    left: 0;
 			    z-index: 99;
+			    margin-top:170px;
 			}
 			
 			
@@ -102,7 +97,7 @@
 			}
 			form.login label, form.login a
 			{
-			    font-size: 12px;
+			    font-size: 14px;
 			    font-weight: 400;
 			    color: #FFFFFF;
 			}
@@ -125,7 +120,11 @@
 				margin-left:0px;
 				margin-right:0px;
 			}
-			
+			a.homeLink {
+				position:absolute;
+				top:5px;
+				right:5px;
+			}
 			
 			
 		</style>
@@ -133,9 +132,17 @@
 	</head>
 	<body>
 		<main>
-			<div class="container myContainer">
+			<a class="homeLink" href="/home" title="home">
+				<span class="fa-stack fa-lg">
+					<i class="fa fa-circle fa-stack-2x"></i>
+					<i class="fa fa-home fa-stack-1x fa-inverse"></i>
+				</span>
+			</a>
+			<div class="container">
+				
 				<div class="row">
 					<div class="col-md-15">
+						
 						<div class="wrap">
 							<% if(messaggio != null) { %>
 							<div class="alert alert-warning myAlert">
@@ -147,12 +154,12 @@
 								
 								<div class="form-group">
 									<label for="emailInput">Email</label>
-									<springForm:input cssClass="form-control" type="email" require="true" minLength="7" maxLength="64" id="emailInput" path="email" placeholder="Email" />
+									<springForm:input cssClass="form-control" type="email" require="true" minLength="7" maxLength="64" id="emailInput" path="email" />
 									<span><springForm:errors path="email" cssClass="error"/></span>
 								</div>
 								<div class="form-group">
 									<label for="passInput">Password</label>
-									<springForm:input cssClass="form-control" type="password" required="true" minLength="8" maxLength="64" id="passInput" path="password" placeholder="Password"/>
+									<springForm:input cssClass="form-control" type="password" required="true" minLength="8" maxLength="64" id="passInput" path="password" />
 									<span><springForm:errors path="password" cssClass="error"/></span>
 								</div>
 								<input type="submit" class="btn btn-primary btn-sm"/>

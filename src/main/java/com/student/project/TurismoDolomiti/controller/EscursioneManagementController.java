@@ -709,10 +709,6 @@ public class EscursioneManagementController {
 					List<Foto> fotoEsc = esc.getFoto();
 					List<Commento> commentiEsc = esc.getCommenti();
 					UUID delUUID = UUID.randomUUID();
-					//esc.setDeletionToken(delUUID);
-					//esc.setDeletionTokenEl(delUUID);
-					//escDAO.save(esc);
-					
 					for(int i=0; i<fotoEsc.size(); i++) {
 						Foto foto = fotoEsc.remove(i);
 						fotoDAO.delete(foto);

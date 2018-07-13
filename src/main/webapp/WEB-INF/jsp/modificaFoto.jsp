@@ -40,7 +40,6 @@
 		<script>
 		$(function() {
 
-			  // We can attach the `fileselect` event to all file inputs on the page
 			  $(document).on('change', ':file', function() {
 			    var input = $(this),
 			        numFiles = input.get(0).files ? input.get(0).files.length : 1,
@@ -48,7 +47,6 @@
 			    input.trigger('fileselect', [numFiles, label]);
 			  });
 
-			  // We can watch for our custom `fileselect` event like this
 			  $(document).ready( function() {
 			      $(':file').on('fileselect', function(event, numFiles, label) {
 
@@ -139,24 +137,25 @@
 					 	<h1 class="pageTitle">Modifica foto</h1>
 					 	<hr>
 					 	<div class="row">
-					 	<div class="col-md-11">
-					 	<img src="${fotoPath}" class="rounded-circle Photo"> 
-					 	<springForm:form method="POST" action="<%=actionUrl%>" enctype="multipart/form-data">
-					 		<div class="input-group mb-3">
-								<label class="input-group-prepend myFileInput">
-									<span class="btn btn-primary">Sfoglia&hellip; <input type="file" style="display: none;" name="foto" accept=".gif, .jpg, .png, .tiff"></span>
-								</label>
-								<input type="text" class="form-control" placeholder="filename" readonly >
+						 	<div class="col-md-11">
+						 	<img src="${fotoPath}" class="rounded-circle Photo"> 
+						 	<springForm:form method="POST" action="<%=actionUrl%>" enctype="multipart/form-data">
+						 		<div class="input-group mb-3">
+									<label class="input-group-prepend myFileInput">
+										<span class="btn btn-primary">Sfoglia&hellip; <input type="file" style="display: none;" name="foto" accept=".gif, .jpg, .png, .tiff"></span>
+									</label>
+									<input type="text" class="form-control" placeholder="filename" readonly >
+								</div>
+								<input type="submit" class=" col-md-3 btn btn-primary FotoSubButton" value="Salva"/>
+							</springForm:form>
 							</div>
-							<input type="submit" class=" col-md-3 btn btn-primary FotoSubButton" value="Salva"/>
-						</springForm:form>
-					 </div>
-					 <div class="col-md-1">
-					 	<button type="button" class="btn btn-link myDelLink" data-toggle="modal" data-target="#deleteFotoModal">
-							<i class="fa fa-trash-o fa-lg"></i>
-						</button>
-					 </div>
-					 </div>
+							<div class="col-md-1">
+							 	<button type="button" class="btn btn-link myDelLink" data-toggle="modal" data-target="#deleteFotoModal">
+									<i class="fa fa-trash-o fa-lg"></i>
+								</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</main>

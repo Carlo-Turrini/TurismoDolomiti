@@ -13,37 +13,49 @@ public class RifugioForm {
 	@NotNull
 	@Size(min = 2, max = 128)
 	private String nome;
+	
 	@Size(min = 0, max = 2048)
 	private String descrizione;
+	
 	@NotNull
 	@Digits(integer = 2, fraction = 15)
 	private Double latitude;
+	
 	@NotNull
 	@Digits(integer = 3, fraction = 15)
 	private Double longitude;
+	
 	@NotNull
 	@Digits(integer = 3, fraction = 0)
 	private Integer prezzoPostoLetto;
+	
 	@NotNull
 	@NotEmpty
 	@Pattern(regexp = "^[0-9]{10}$")	
 	private String tel;
+	
 	@NotNull
+	@NotEmpty
 	@Email
 	@Size(min = 7, max = 128)
 	private String email;
+	
 	@NotNull
 	@NotEmpty
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private String dataApertura;
+	
 	@NotNull
 	@NotEmpty
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private String dataChiusura;
+	
 	@NotNull
 	@Digits(integer = 4, fraction = 0)
 	private Integer altitudine;
+	
 	@NotNull
+	@NotEmpty
 	@Size(min = 2, max = 64)
 	private String massiccioMontuoso;
 	

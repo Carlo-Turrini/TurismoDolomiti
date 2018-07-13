@@ -15,36 +15,39 @@ import java.util.*;
 
 @Repository
 public interface EscursioneDAO extends JpaRepository<Escursione, Long>, JpaSpecificationExecutor<Escursione> {
-	Optional<Escursione> findById(Long id);
-	
 
-	
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.EscursioneCardDto(esc.id, esc.nome, esc.iconPath, esc.durata, esc.dislivelloSalita, esc.dislivelloDiscesa, esc.lunghezza, esc.difficolta, esc.tipologia, esc.massiccioMontuoso, esc.label) FROM Escursione esc JOIN PassaPer pp ON esc.id = pp.escursione.id WHERE pp.rifugio.id = :id_rifugio AND esc.completo = TRUE")
-	List<EscursioneCardDto> findElencoEscursioniPerRifugio(@Param("id_rifugio")Long rifugioId);
+	public List<EscursioneCardDto> findElencoEscursioniPerRifugio(@Param("id_rifugio")Long rifugioId);
+	
 	@Query("SELECT COUNT(e) FROM Escursione e WHERE e.id = :id_escursione") 
-	Integer verificaEsistenzaEsc(@Param("id_escursione")Long idEsc);
+	public Integer verificaEsistenzaEsc(@Param("id_escursione")Long idEsc);
+	
 	@Query("SELECT e.nome FROM Escursione e WHERE e.id = :id_escursione")
-	String findNomeEscursione(@Param("id_escursione")Long idEsc);
-	Escursione findByNome(String nome);
-	List<Escursione> findAll();
+	public String findNomeEscursione(@Param("id_escursione")Long idEsc);
+	
+	public Escursione findByNome(String nome);
+	
+	public List<Escursione> findAll();
 	
 	@Query("SELECT e.iconPath FROM Escursione e WHERE e.id = :id_escursione")
-	String findEscIconPath(@Param("id_escursione")Long idEsc);
+	public String findEscIconPath(@Param("id_escursione")Long idEsc);
+	
 	@Query("SELECT e.gpxPath FROM Escursione e WHERE e.id = :id_escursione") 
-	String findEscGpxPath(@Param("id_escursione")Long idEsc);
+	public String findEscGpxPath(@Param("id_escursione")Long idEsc);
+	
 	@Query("SELECT e.altimetriaPath FROM Escursione e WHERE e.id = :id_escursione")
-	String findEscAltimetriaPath(@Param("id_escursione")Long idEsc);
+	public String findEscAltimetriaPath(@Param("id_escursione")Long idEsc);
 	
 	@Query("SELECT new com.student.project.TurismoDolomiti.dto.EscursioneCardDto(esc.id, esc.nome, esc.iconPath, esc.durata, esc.dislivelloSalita, esc.dislivelloDiscesa, esc.lunghezza, esc.difficolta, esc.tipologia, esc.massiccioMontuoso, esc.label) FROM Escursione esc WHERE esc.completo = FALSE ")
-	List<EscursioneCardDto> findElencoEscursioniDaCompletare();
+	public List<EscursioneCardDto> findElencoEscursioniDaCompletare();
 	
 	@Query("SELECT e.gpxPath FROM Escursione e WHERE e.id = :id_esc")
-	String findGpxPath(@Param("id_esc")Long idEsc);
+	public String findGpxPath(@Param("id_esc")Long idEsc);
 	
 	@Query("SELECT e.completo FROM Escursione e WHERE e.id = :id_esc")
-	Boolean findIfCompleto(@Param("id_esc")Long idEsc);
+	public Boolean findIfCompleto(@Param("id_esc")Long idEsc);
 	
 	@Modifying
 	@Query("UPDATE Escursione e SET e.deletionToken = :del_token, e.deletionTokenEl = :del_token WHERE e.id = :id_esc")
-	Integer setDeletionTokenEscursione(@Param("del_token")UUID deletionToken, @Param("id_esc")Long idEsc);
+	public Integer setDeletionTokenEscursione(@Param("del_token")UUID deletionToken, @Param("id_esc")Long idEsc);
 }
